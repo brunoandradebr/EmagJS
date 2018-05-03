@@ -89,12 +89,15 @@ class Keyboard {
                 this.keys[code].isDown = true
                 this.keys[code].wasPressed = true
                 this.keys[code].isReleased = false
+                this.keys[code].doublePressed = (window.performance.now() - this.keys[code].lastPressTime < 150)
+                this.keys[code].lastPressTime = window.performance.now()
             } else {
                 // holding a key
                 if (this.keys[code]) {
                     this.keys[code].isDown = true
                     this.keys[code].wasPressed = false
                     this.keys[code].isReleased = false
+                    this.keys[code].doublePressed = false
                 }
             }
         })
@@ -163,6 +166,30 @@ class Keyboard {
 
         if (this.keys[key])
             return this.keys[key].isDown
+
+    }
+
+    /**
+     * Checks if a key was pressed twice
+     * 
+     * @param {integer} key
+     * 
+     * @return {bool}
+     */
+    doublePressed(key) {
+
+        if (!this.keys[key])
+            return false
+
+        let current = false;
+
+        // trigger only once
+        if (this.keys[key].doublePressed) {
+            current = this.keys[key].doublePressed;
+            this.keys[key].doublePressed = false;
+        }
+
+        return current;
 
     }
 

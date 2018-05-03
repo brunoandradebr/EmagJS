@@ -88,7 +88,7 @@ class Button extends Sprite {
          * 
          * @type {bool}
          */
-        this.doublePress = false
+        this.doublePressed = false
     }
 
     /**
@@ -168,7 +168,7 @@ class Button extends Sprite {
         this.holding = this.touchdown
 
         // triggered double press flag
-        this.doublePress = false
+        this.doublePressed = false
 
         // pressed button
         this.pressed = false
@@ -178,7 +178,7 @@ class Button extends Sprite {
 
             // fast press triggers double press
             if (window.performance.now() - this.lastPressTime < 150)
-                this.doublePress = true
+                this.doublePressed = true
 
             // update last press time
             this.lastPressTime = window.performance.now()
