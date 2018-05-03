@@ -78,6 +78,18 @@ class Touch {
     }
 
     /**
+     * Removes a button from buttons pool
+     * 
+     * @param {string} name
+     * 
+     * @return {void}
+     */
+    removeButton(name) {
+        delete this.buttons[name]
+        this.buttons.length--
+    }
+
+    /**
      * Draws all touch buttons
      * 
      * @param {CanvasRenderingContext2D} graphics 
