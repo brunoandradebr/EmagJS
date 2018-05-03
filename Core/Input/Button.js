@@ -56,6 +56,13 @@ class Button extends Sprite {
         this.offsetBottom = 0
 
         /**
+         * last press time
+         * 
+         * @type {DOMHighResTimeStamp}
+         */
+        this.lastPressTime = 0
+
+        /**
          * keep pressing button flag
          * 
          * @type {bool}
@@ -76,6 +83,12 @@ class Button extends Sprite {
          */
         this.triggered = false
 
+        /**
+         * double press
+         * 
+         * @type {bool}
+         */
+        this.doublePress = false
     }
 
     /**
@@ -154,12 +167,23 @@ class Button extends Sprite {
         // holding button
         this.holding = this.touchdown
 
+        // triggered double press flag
+        this.doublePress = false
+
         // pressed button
         this.pressed = false
         if (this.holding && !this.triggered) {
             this.pressed = true
             this.triggered = true
+
+            // fast press triggers double press
+            if (window.performance.now() - this.lastPressTime < 150)
+                this.doublePress = true
+
+            // update last press time
+            this.lastPressTime = window.performance.now()
         }
+
         if (!this.holding)
             this.triggered = false
 
