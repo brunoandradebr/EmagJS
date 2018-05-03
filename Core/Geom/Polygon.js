@@ -11,12 +11,12 @@ class Polygon {
     /**
      * Polygon points
      * 
-     * @param {array<EmagJs.Core.Math.Vector>} points 
+     * @param {array<EmagJS.Core.Math.Vector>} points 
      */
     constructor(points = []) {
 
         /**
-         * @type {array<EmagJs.Core.Math.Vector>}
+         * @type {array<EmagJS.Core.Math.Vector>}
          */
         this.points = points;
 

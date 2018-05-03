@@ -10,18 +10,18 @@ class Line {
 
     /**
      * 
-     * @param {EmagJs.Core.Math.Vector} start 
-     * @param {EmagJs.Core.Math.Vector} end 
+     * @param {EmagJS.Core.Math.Vector} start 
+     * @param {EmagJS.Core.Math.Vector} end 
      */
     constructor(start = new Vector(), end = new Vector()) {
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.start = start;
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.end = end;
 
@@ -42,9 +42,9 @@ class Line {
      * 
      * @param {number} angle 
      * @param {number} length 
-     * @param {EmagJs.Core.Math.Vector} start
+     * @param {EmagJS.Core.Math.Vector} start
      * 
-     * @return {EmagJs.Core.Render.Line} 
+     * @return {EmagJS.Core.Render.Line} 
      */
     static fromAngle(angle = 0, length = 50, start = new Vector()) {
 
@@ -70,7 +70,7 @@ class Line {
     /**
      * get plane - line's plane
      * 
-     * @return {EmagJs.Core.Math.Vector} 
+     * @return {EmagJS.Core.Math.Vector} 
      */
     get plane() {
         return this.end.clone().subtract(this.start);
@@ -79,7 +79,7 @@ class Line {
     /**
      * get normal - line's normal
      * 
-     * @return {EmagJs.Core.Math.Vector} 
+     * @return {EmagJS.Core.Math.Vector} 
      */
     get normal() {
         return this.plane.leftNormal;

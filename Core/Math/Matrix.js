@@ -31,7 +31,7 @@ class Matrix {
     /**
      * clone itself
      * 
-     * @return {EmagJs.Core.Math.Matrix}
+     * @return {EmagJS.Core.Math.Matrix}
      */
     clone() {
         return new Matrix(this.m)
@@ -40,9 +40,9 @@ class Matrix {
     /**
      * Transforms a vector
      * 
-     * @param {EmagJs.Core.Math.Vector} v
+     * @param {EmagJS.Core.Math.Vector} v
      * 
-     * @return {EmagJs.Core.Math.Vector} 
+     * @return {EmagJS.Core.Math.Vector} 
      */
     transform(v) {
 
@@ -58,9 +58,9 @@ class Matrix {
     /**
      * Multiply by another matrix or 2D array
      * 
-     * @param {EmagJs.Core.Math.Matrix | array<array>} m
+     * @param {EmagJS.Core.Math.Matrix | array<array>} m
      * 
-     * @return {EmagJs.Core.Math.Matrix}
+     * @return {EmagJS.Core.Math.Matrix}
      */
     multiply(m) {
 
@@ -113,7 +113,7 @@ class Matrix {
      * @param {number} x 
      * @param {number} y
      * 
-     * @return {EmagJs.Core.Math.Matrix}
+     * @return {EmagJS.Core.Math.Matrix}
      */
     scale(x, y) {
 
@@ -133,7 +133,7 @@ class Matrix {
      * @param {number} x 
      * @param {number} y
      * 
-     * @return {EmagJs.Core.Math.Matrix}
+     * @return {EmagJS.Core.Math.Matrix}
      */
     translate(x, y) {
 
@@ -152,7 +152,7 @@ class Matrix {
      * 
      * @param {number} angle
      * 
-     * @return {EmagJs.Core.Math.Matrix}
+     * @return {EmagJS.Core.Math.Matrix}
      */
     rotateX(angle) {
 
@@ -176,7 +176,7 @@ class Matrix {
      * 
      * @param {number} angle
      * 
-     * @return {EmagJs.Core.Math.Matrix}
+     * @return {EmagJS.Core.Math.Matrix}
      */
     rotateY(angle) {
 
@@ -200,7 +200,7 @@ class Matrix {
      * 
      * @param {number} angle
      * 
-     * @return {EmagJs.Core.Math.Matrix}
+     * @return {EmagJS.Core.Math.Matrix}
      */
     rotateZ(angle) {
 
@@ -222,7 +222,7 @@ class Matrix {
     /**
      * get x - return x axis vector
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     getX() {
         return new Vector(this.m[0][0], this.m[1][0])
@@ -231,7 +231,7 @@ class Matrix {
     /**
      * get y - return y axis vector
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     getY() {
         return new Vector(this.m[0][1], this.m[1][1])

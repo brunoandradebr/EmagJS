@@ -69,28 +69,28 @@ class Gamepad {
         /**
          * First player
          * 
-         * @type {EmagJs.Core.Common.Input.GamepadInterface}
+         * @type {EmagJS.Core.Common.Input.GamepadInterface}
          */
         this.pad1 = new GamepadInterface(this.pads[0])
 
         /**
          * Second player
          * 
-         * @type {EmagJs.Core.Common.Input.GamepadInterface}
+         * @type {EmagJS.Core.Common.Input.GamepadInterface}
          */
         this.pad2 = new GamepadInterface(this.pads[1])
 
         /**
          * Third player
          * 
-         * @type {EmagJs.Core.Common.Input.GamepadInterface}
+         * @type {EmagJS.Core.Common.Input.GamepadInterface}
          */
         this.pad3 = new GamepadInterface(this.pads[2])
 
         /**
          * Fourth player
          * 
-         * @type {EmagJs.Core.Common.Input.GamepadInterface}
+         * @type {EmagJS.Core.Common.Input.GamepadInterface}
          */
         this.pad4 = new GamepadInterface(this.pads[3])
 
@@ -103,7 +103,7 @@ class Gamepad {
     /**
      * Get last connected gamepad
      * 
-     * @return {EmagJs.Core.Input.GamepadInterface} 
+     * @return {EmagJS.Core.Input.GamepadInterface} 
      */
     getLastConnectedPad() {
 

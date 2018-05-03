@@ -10,14 +10,14 @@ class Touch {
 
     /**
      * 
-     * @param {EmagJs.Core.Display.Scene} scene 
+     * @param {EmagJS.Core.Display.Scene} scene 
      */
     constructor(scene) {
 
         /**
          * Scene where butons will be positioned and rendered
          * 
-         * @type {EmagJs.Core.Display.Scene}
+         * @type {EmagJS.Core.Display.Scene}
          */
         this.scene = scene
 
@@ -50,9 +50,9 @@ class Touch {
     /**
      * Add a new button to touch
      * 
-     * @external EmagJs.Core.Input.Button
+     * @external EmagJS.Core.Input.Button
      * 
-     * @param {EmagJs.Core.Display.Scene} scene 
+     * @param {EmagJS.Core.Display.Scene} scene 
      * @param {string} name 
      * @param {number} x 
      * @param {number} y 

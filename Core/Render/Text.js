@@ -11,7 +11,7 @@ class Text {
     /**
      * 
      * @param {string}                  text 
-     * @param {EmagJs.Core.Math.Vector} position 
+     * @param {EmagJS.Core.Math.Vector} position 
      * @param {string}                  font 
      * @param {string}                  color 
      * @param {number}                  size 
@@ -24,7 +24,7 @@ class Text {
         this.text = text || ''
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.position = position || new Vector(0, 0)
 

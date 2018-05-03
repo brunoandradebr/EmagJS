@@ -6,7 +6,7 @@
 /**
  * Rectangle
  * 
- * @extends EmagJs.Core.Geom.Polygon
+ * @extends EmagJS.Core.Geom.Polygon
  */
 class Rectangle extends Polygon {
 
@@ -15,7 +15,7 @@ class Rectangle extends Polygon {
         super();
 
         /**
-         * @type {array<EmagJs.Core.Math.Vector>}
+         * @type {array<EmagJS.Core.Math.Vector>}
          */
         this.points = [
             new Vector(1, 0.4),

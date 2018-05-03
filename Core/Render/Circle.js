@@ -10,7 +10,7 @@ class Circle {
 
     /**
      * 
-     * @param {EmagJs.Core.Math.Vector} position 
+     * @param {EmagJS.Core.Math.Vector} position 
      * @param {number} radius 
      * @param {string} fillColor 
      * @param {number} lineWidth 
@@ -19,7 +19,7 @@ class Circle {
     constructor(position = new Vector(0, 0), radius = 25, fillColor = '#f46', lineWidth = 1, lineColor = 'black') {
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.position = position
 

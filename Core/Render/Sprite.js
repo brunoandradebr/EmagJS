@@ -10,7 +10,7 @@ class Sprite {
 
     /**
      * 
-     * @param {EmagJs.Core.Math.Vector} position 
+     * @param {EmagJS.Core.Math.Vector} position 
      * @param {number} width 
      * @param {number} height 
      * @param {string} fillColor 
@@ -21,7 +21,7 @@ class Sprite {
     constructor(position = new Vector(0, 0), width = 50, height = 50, fillColor = '#f06', lineWidth = 2, lineColor = 'black') {
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.position = position
 
@@ -85,14 +85,14 @@ class Sprite {
         /**
          * transformation matrix
          * 
-         * @type {EmagJs.Core.Math.Matrix}
+         * @type {EmagJS.Core.Math.Matrix}
          */
         this.matrix = new Matrix()
 
         /**
          * sprite's image source
          * 
-         * @type {EmagJs.Core.Common.Image.ImageProcessor}
+         * @type {EmagJS.Core.Common.Image.ImageProcessor}
          */
         this.image = null
 

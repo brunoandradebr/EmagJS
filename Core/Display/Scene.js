@@ -106,7 +106,7 @@ class Scene {
         /**
          * when scene is on debug mode
          * 
-         * @type {EmagJs.Core.Render.Sprite}
+         * @type {EmagJS.Core.Render.Sprite}
          */
         this.cameraDebug = new Sprite(new Vector(0, 0), 0, 0, 'transparent', 2, 'purple')
 

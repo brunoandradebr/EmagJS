@@ -6,7 +6,7 @@
 /**
  * Button
  * 
- * @extends EmagJs.Core.Render.Sprite
+ * @extends EmagJS.Core.Render.Sprite
  */
 class Button extends Sprite {
 
@@ -23,7 +23,7 @@ class Button extends Sprite {
             throw new Error('scene not defined for button constructor')
 
         /**
-         * @type {EmagJs.Core.Display.Scene}
+         * @type {EmagJS.Core.Display.Scene}
          */
         this.scene = scene
 

@@ -10,22 +10,22 @@ class Body {
 
     /**
      * 
-     * @param {EmagJs.Core.Render.Shape | EmagJs.Core.Render.Sprite} representation - Visual representation
+     * @param {EmagJS.Core.Render.Shape | EmagJS.Core.Render.Sprite} representation - Visual representation
      */
     constructor(representation) {
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.acceleration = new Vector();
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.velocity = new Vector();
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.position = new Vector();
 
@@ -40,7 +40,7 @@ class Body {
         this.bounce = 0.5;
 
         /**
-         * @type {EmagJs.Core.Render.Shape | EmagJs.Core.Render.Sprite}
+         * @type {EmagJS.Core.Render.Shape | EmagJS.Core.Render.Sprite}
          */
         this.representation = representation;
 
@@ -54,7 +54,7 @@ class Body {
      * Applies force to it
      * 
      * @param {number}                  - scalar force, applies to both x and y ex: apply(1, 1)  
-     * @param {EmagJs.Core.Math.Vector} - applies a vector force ex: apply(new Vector(1, 1))
+     * @param {EmagJS.Core.Math.Vector} - applies a vector force ex: apply(new Vector(1, 1))
      * 
      * @return {void}
      */

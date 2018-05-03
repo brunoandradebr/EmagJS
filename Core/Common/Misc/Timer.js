@@ -77,7 +77,7 @@ class Timer {
     /**
      * get pause - pause it's timer
      * 
-     * @return {EmagJs.Core.Common.Timer}
+     * @return {EmagJS.Core.Common.Timer}
      */
     get pause() {
 
@@ -89,7 +89,7 @@ class Timer {
     /**
      * get resume - resume it's timer
      * 
-     * @return {EmagJs.Core.Common.Timer}
+     * @return {EmagJS.Core.Common.Timer}
      */
     get resume() {
 
@@ -101,7 +101,7 @@ class Timer {
     /**
      * get reset - reset it's timer
      * 
-     * @return {EmagJs.Core.Common.Timer}
+     * @return {EmagJS.Core.Common.Timer}
      */
     get reset() {
 

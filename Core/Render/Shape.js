@@ -10,8 +10,8 @@ class Shape {
 
     /**
      * 
-     * @param {EmagJs.Core.Geom.Polygon} polygon 
-     * @param {EmagJs.Core.Math.Vector} position 
+     * @param {EmagJS.Core.Geom.Polygon} polygon 
+     * @param {EmagJS.Core.Math.Vector} position 
      * @param {number} size 
      * @param {string} fillColor 
      * @param {number} lineWidth 
@@ -23,12 +23,12 @@ class Shape {
         /**
          * shape's model points
          * 
-         * @type {EmagJs.Core.Geom.Polygon}
+         * @type {EmagJS.Core.Geom.Polygon}
          */
         this.polygon = polygon;
 
         /**
-         * @type {EmagJs.Core.Math.Vector}
+         * @type {EmagJS.Core.Math.Vector}
          */
         this.position = position;
 
@@ -50,7 +50,7 @@ class Shape {
         /**
          * copy it's polygon base points
          * 
-         * @type {array<EmagJs.Core.Math.Vector>}
+         * @type {array<EmagJS.Core.Math.Vector>}
          */
         this.points = polygon.points.slice()
 
@@ -62,7 +62,7 @@ class Shape {
         /**
          * shape's transformation matrix
          * 
-         * @type {EmagJs.Core.Math.Matrix}
+         * @type {EmagJS.Core.Math.Matrix}
          */
         this.matrix = new Matrix()
 
@@ -72,7 +72,7 @@ class Shape {
         /**
          * Temporary shape lines
          * 
-         * @type {array<EmagJs.Core.Render.Line>}
+         * @type {array<EmagJS.Core.Render.Line>}
          */
         this._tmpLines = []
 
@@ -84,7 +84,7 @@ class Shape {
         /**
          * Temporary shape normals
          * 
-         * @type {array<EmagJs.Core.Math.Vector>}
+         * @type {array<EmagJS.Core.Math.Vector>}
          */
         this._tmpNormals = []
 
@@ -133,7 +133,7 @@ class Shape {
     /**
      * get it's normals
      * 
-     * @return {array<EmagJs.Core.Math.Vector>}
+     * @return {array<EmagJS.Core.Math.Vector>}
      */
     getNormals() {
 
@@ -155,7 +155,7 @@ class Shape {
     /**
      * get it's lines
      * 
-     * @return {array<EmagJs.Core.Render.Line>}
+     * @return {array<EmagJS.Core.Render.Line>}
      */
     getLines() {
 

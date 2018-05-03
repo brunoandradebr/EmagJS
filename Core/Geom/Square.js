@@ -6,7 +6,7 @@
 /**
  * Square
  * 
- * @extends EmagJs.Core.Geom.Polygon
+ * @extends EmagJS.Core.Geom.Polygon
  */
 class Square extends Polygon {
 
@@ -15,7 +15,7 @@ class Square extends Polygon {
         super();
 
         /**
-         * @type {array<EmagJs.Core.Math.Vector>}
+         * @type {array<EmagJS.Core.Math.Vector>}
          */
         this.points = [
             new Vector(0.5, 0.5),

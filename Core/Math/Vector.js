@@ -33,7 +33,7 @@ class Vector {
      * @param {number}  angle - angle in dregrees
      * @param {number} length - vector length
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     static fromAngle(angle, length = 50) {
         return new Vector(Math.cos(angle * toRad) * length, -Math.sin(angle * toRad) * length);
@@ -44,7 +44,7 @@ class Vector {
      * 
      * @param {array} arr
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     static fromArray(arr) {
         return new Vector(arr[0], arr[1])
@@ -55,7 +55,7 @@ class Vector {
      * 
      * @param {number} length 
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     static random(length = 1) {
         return this.fromAngle((Math.random() * PI * 2) * toDegree, length);
@@ -64,8 +64,8 @@ class Vector {
     /**
      * Calculates the minimum angle between two vectors
      * 
-     * @param {EmagJs.Core.Math.Vector} v1 
-     * @param {EmagJs.Core.Math.Vector} v2
+     * @param {EmagJS.Core.Math.Vector} v1 
+     * @param {EmagJS.Core.Math.Vector} v2
      * 
      * @return {number} 
      */
@@ -80,9 +80,9 @@ class Vector {
     /**
      * Clones a vector
      * 
-     * @param {EmagJs.Core.Math.Vector} to
+     * @param {EmagJS.Core.Math.Vector} to
      * 
-     * @return {EmagJs.Core.Math.Vector | void}
+     * @return {EmagJS.Core.Math.Vector | void}
      */
     clone(to = null) {
         if (to) {
@@ -96,10 +96,10 @@ class Vector {
     /**
      * Updates a vector by another vector or by two scalars
      * 
-     * @param {EmagJs.Core.Math.Vector} v 
+     * @param {EmagJS.Core.Math.Vector} v 
      * @param {number} ...
      * 
-     * @return {EmagJs.Core.Math.Vector} 
+     * @return {EmagJS.Core.Math.Vector} 
      */
     update(v = new Vector(), ...[]) {
 
@@ -125,10 +125,10 @@ class Vector {
     /**
      * Adds a vector by another vector
      * 
-     * @param {EmagJs.Core.Math.Vector} v 
-     * @param {EmagJs.Core.Math.Vector} to 
+     * @param {EmagJS.Core.Math.Vector} v 
+     * @param {EmagJS.Core.Math.Vector} to 
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     add(v, to = this) {
 
@@ -142,9 +142,9 @@ class Vector {
     * Adds a scalar to vector
     * 
     * @param {number} s 
-    * @param {EmagJs.Core.Math.Vector} to
+    * @param {EmagJS.Core.Math.Vector} to
     * 
-    * @return {EmagJs.Core.Math.Vector} 
+    * @return {EmagJS.Core.Math.Vector} 
     */
     addScalar(s, to = this) {
         to.x = this.x + s;
@@ -155,10 +155,10 @@ class Vector {
     /**
      * Subtracts a vector by another vector
      * 
-     * @param {EmagJs.Core.Math.Vector} v 
-     * @param {EmagJs.Core.Math.Vector} to
+     * @param {EmagJS.Core.Math.Vector} v 
+     * @param {EmagJS.Core.Math.Vector} to
      * 
-     * @return {EmagJs.Core.Math.Vector} 
+     * @return {EmagJS.Core.Math.Vector} 
      */
     subtract(v, to = this) {
         to.x = this.x - v.x;
@@ -170,9 +170,9 @@ class Vector {
      * Subtracts a vector by a scalar
      * 
      * @param {number} s 
-     * @param {EmagJs.Core.Math.Vector} to 
+     * @param {EmagJS.Core.Math.Vector} to 
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     subtractScalar(s, to = this) {
         to.x = this.x - s;
@@ -183,10 +183,10 @@ class Vector {
     /**
      * Multiplies a vector by another vector
      * 
-     * @param {EmagJs.Core.Math.Vector} v 
-     * @param {EmagJs.Core.Math.Vector} to 
+     * @param {EmagJS.Core.Math.Vector} v 
+     * @param {EmagJS.Core.Math.Vector} to 
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     multiply(v, to = this) {
         to.x = this.x * v.x;
@@ -198,9 +198,9 @@ class Vector {
      * Multiplies a vector by a scalar
      * 
      * @param {number} s 
-     * @param {EmagJs.Core.Math.Vector} to
+     * @param {EmagJS.Core.Math.Vector} to
      * 
-     * @return {EmagJs.Core.Math.Vector} 
+     * @return {EmagJS.Core.Math.Vector} 
      */
     multiplyScalar(s, to = this) {
         to.x = this.x * s;
@@ -211,10 +211,10 @@ class Vector {
     /**
      * Divides a vector by another vector
      * 
-     * @param {EmagJs.Core.Math.Vector} v 
-     * @param {EmagJs.Core.Math.Vector} to 
+     * @param {EmagJS.Core.Math.Vector} v 
+     * @param {EmagJS.Core.Math.Vector} to 
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     divide(v, to = this) {
         to.x = this.x / v.x;
@@ -226,9 +226,9 @@ class Vector {
      * Divides a vector by a scalar
      * 
      * @param {number} s 
-     * @param {EmagJs.Core.Math.Vector} to 
+     * @param {EmagJS.Core.Math.Vector} to 
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     divideScalar(s, to = this) {
         to.x = this.x / s;
@@ -239,7 +239,7 @@ class Vector {
     /**
      * Calculates the dot product between two vectors
      * 
-     * @param {EmagJs.Core.Math.Vector} v
+     * @param {EmagJS.Core.Math.Vector} v
      * 
      * @return {number} 
      */
@@ -250,7 +250,7 @@ class Vector {
     /**
      * Calculates the cross product between two vectors - same as perpendicular product
      * 
-     * @param {EmagJs.Core.Math.Vector} v 
+     * @param {EmagJS.Core.Math.Vector} v 
      * 
      * @return {number}
      */
@@ -264,7 +264,7 @@ class Vector {
      * @param {number} angle 
      * @param {number} startAngle 
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     rotate(angle, startAngle = 0) {
 
@@ -284,10 +284,10 @@ class Vector {
     /**
      * Projects a vector into another
      * 
-     * @param {EmagJs.Core.Math.Vector} v 
-     * @param {EmagJs.Core.Math.Vector} to
+     * @param {EmagJS.Core.Math.Vector} v 
+     * @param {EmagJS.Core.Math.Vector} to
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     project(v, to = new Vector()) {
 
@@ -305,7 +305,7 @@ class Vector {
     /**
      * get reverse - reverses vector
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     get reverse() {
         this.x *= -1;
@@ -334,7 +334,7 @@ class Vector {
     /**
      * get normalize - unit vector
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     get normalize() {
         return this.multiplyScalar(1 / this.length);
@@ -343,7 +343,7 @@ class Vector {
     /**
      * get leftNormal - vector's left normal
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     get leftNormal() {
         return new Vector(this.y, -this.x);
@@ -352,7 +352,7 @@ class Vector {
     /**
      * get rightNormal - vector's right normal
      * 
-     * @return {EmagJs.Core.Math.Vector}
+     * @return {EmagJS.Core.Math.Vector}
      */
     get rightNormal() {
         return new Vector(-this.y, this.x);

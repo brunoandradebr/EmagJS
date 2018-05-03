@@ -157,7 +157,7 @@ class Stage {
     /**
      * Adds a new movie to the stage
      * 
-     * @param {EmagJs.Core.Display.Movie} movie
+     * @param {EmagJS.Core.Display.Movie} movie
      * 
      * @return {void}
      */

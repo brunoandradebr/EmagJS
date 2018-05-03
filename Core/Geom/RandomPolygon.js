@@ -6,7 +6,7 @@
 /**
  * Random polygon
  * 
- * @extends EmagJs.Core.Geom.Polygon
+ * @extends EmagJS.Core.Geom.Polygon
  */
 class RandomPolygon extends Polygon {
 
@@ -15,7 +15,7 @@ class RandomPolygon extends Polygon {
         super();
 
         /**
-         * @type {array<EmagJs.Core.Math.Vector>}
+         * @type {array<EmagJS.Core.Math.Vector>}
          */
         this.points = [
             new Vector(Math.random(), Math.random()),
