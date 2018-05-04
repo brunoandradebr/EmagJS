@@ -211,6 +211,10 @@ class Movie {
                     continue
                 }
 
+                // prevent spiral of death!
+                if (accumulatedTime >= 1)
+                    accumulatedTime = 1
+
                 // if scene has loop callback
                 if (scene.onLoop) {
 
