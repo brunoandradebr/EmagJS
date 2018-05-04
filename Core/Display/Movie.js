@@ -202,7 +202,13 @@ class Movie {
 
                 let scene = this.scenes[i];
 
-                accumulatedTime += (time - lastTime) / 1000
+                let frameTime = (time - lastTime) / 1000
+
+                // prevent spiral of death!
+                if (frameTime > 0.25)
+                    frameTime = 0.25
+
+                accumulatedTime += frameTime
 
                 // if scene is paused
                 if (this.paused) {
@@ -210,10 +216,6 @@ class Movie {
                     lastTime = window.performance.now()
                     continue
                 }
-
-                // prevent spiral of death!
-                if (accumulatedTime >= 1)
-                    accumulatedTime = 1
 
                 // if scene has loop callback
                 if (scene.onLoop) {
