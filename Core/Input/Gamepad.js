@@ -351,7 +351,7 @@ class GamepadInterface {
             this.cachedButtons[button] = true
 
             // if pressed twice
-            if (window.performance.now() - pressedButton.lastPressedTime < 150) {
+            if (window.performance.now() - pressedButton.lastPressedTime < 200) {
                 // flag that a double pressed happened
                 doublePressed = true
             }

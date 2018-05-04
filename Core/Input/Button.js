@@ -177,7 +177,7 @@ class Button extends Sprite {
             this.triggered = true
 
             // fast press triggers double press
-            if (window.performance.now() - this.lastPressTime < 150)
+            if (window.performance.now() - this.lastPressTime < 200)
                 this.doublePressed = true
 
             // update last press time

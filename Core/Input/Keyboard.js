@@ -89,7 +89,7 @@ class Keyboard {
                 this.keys[code].isDown = true
                 this.keys[code].wasPressed = true
                 this.keys[code].isReleased = false
-                this.keys[code].doublePressed = (window.performance.now() - this.keys[code].lastPressTime < 150)
+                this.keys[code].doublePressed = (window.performance.now() - this.keys[code].lastPressTime < 200)
                 this.keys[code].lastPressTime = window.performance.now()
             } else {
                 // holding a key
