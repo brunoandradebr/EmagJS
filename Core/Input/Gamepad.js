@@ -326,6 +326,49 @@ class GamepadInterface {
     }
 
     /**
+     * Checks if a button was just pressed twice
+     * 
+     * @param {string} button
+     * 
+     * @return {bool} 
+     */
+    doublePressed(button) {
+
+        // gamepad not connected
+        if (this.gamepad == null)
+            return false
+
+        // button pressed
+        let pressedButton = this.gamepad.buttons[this[this.interface][button]]
+
+        // double pressed flag
+        let doublePressed = false
+
+        // holding button and not yet cached
+        if (pressedButton.pressed && this.cachedButtons[button] == false) {
+
+            // cache pressed button
+            this.cachedButtons[button] = true
+
+            // if pressed twice
+            if (window.performance.now() - pressedButton.lastPressedTime < 150) {
+                // flag that a double pressed happened
+                doublePressed = true
+            }
+
+            // update last pressed time
+            pressedButton.lastPressedTime = window.performance.now()
+        }
+
+        // if not holding button
+        if (!pressedButton.pressed)
+            // update cached button value
+            this.cachedButtons[button] = false
+
+        return doublePressed
+    }
+
+    /**
      * Get gamepad axis by axis id
      * 
      * 0 - left
