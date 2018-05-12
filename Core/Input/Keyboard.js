@@ -111,6 +111,7 @@ class Keyboard {
                 this.keys[code].isReleased = true
                 this.keys[code].isDown = false
                 this.keys[code].wasPressed = false
+                this.keys[code].doublePressed = false
             }
 
         })
