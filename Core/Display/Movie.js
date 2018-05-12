@@ -238,7 +238,11 @@ class Movie {
                         }
 
                         // clear scene's canvas
-                        scene.graphics.clearRect(0, 0, scene.canvas.width, scene.canvas.height);
+                        if (scene.camera){
+                            scene.graphics.clearRect(scene.camera.x, scene.camera.y, scene.camera.width, scene.camera.height);
+                        }else{
+                            scene.graphics.clearRect(0, 0, scene.width, scene.height);
+                        }
 
                         // save scene state
                         scene.graphics.save()
