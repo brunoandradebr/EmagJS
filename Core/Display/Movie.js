@@ -238,9 +238,9 @@ class Movie {
                         }
 
                         // clear scene's canvas
-                        if (scene.camera){
+                        if (scene.camera) {
                             scene.graphics.clearRect(scene.camera.x, scene.camera.y, scene.camera.width, scene.camera.height);
-                        }else{
+                        } else {
                             scene.graphics.clearRect(0, 0, scene.width, scene.height);
                         }
 
@@ -275,7 +275,8 @@ class Movie {
             lastTime = time
 
             //setTimeout(loop, 1000 / 12, window.performance.now())
-            window.requestAnimationFrame(loop);
+            if (!this.paused)
+                window.requestAnimationFrame(loop);
 
         });
 
