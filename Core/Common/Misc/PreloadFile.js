@@ -49,6 +49,11 @@ class PreloadFile {
             let AudioContext = window.AudioContext || window.webkitAudioContext;
             let audioLoader = new AudioContext();
 
+            // there are no files, start oncomplete callback
+            if (!files.length) {
+                checkCompletation([], 0, 0)
+            }
+
             files.forEach((file) => {
 
                 // each file to be loaded
@@ -207,78 +212,86 @@ class PreloadFile {
          */
         function checkCompletation(files, loaded, total) {
 
-            // loaded all files needed
-            if (loaded === total) {
+            if (total == 0) {
+                setTimeout(() => {
+                    _this.oncomplete()
+                }, 11);
+            } else {
 
-                // to order js files
-                let tmpOrder = [];
-                let appended = 0;
-                let toAppend = scripts.length;
+                // loaded all files needed
+                if (loaded === total) {
 
-                // check include order
-                files.forEach((file) => {
+                    // to order js files
+                    let tmpOrder = [];
+                    let appended = 0;
+                    let toAppend = scripts.length;
 
-                    // for each files
-                    for (let key in file) {
+                    // check include order
+                    files.forEach((file) => {
 
-                        // get script file from scripts array
-                        let script = scripts[key];
+                        // for each files
+                        for (let key in file) {
 
-                        // if it's a script, add to order array
-                        if (script)
-                            tmpOrder.push(script);
+                            // get script file from scripts array
+                            let script = scripts[key];
 
-                    }
-
-                });
-
-                // load and include scripts in right order
-                if (tmpOrder.length) {
-                    tmpOrder.forEach((script) => {
-
-                        // append script to head tag
-                        document.querySelector('head').appendChild(script);
-
-                        // waits to load
-                        script.onload = (e) => {
-
-                            appended++;
-
-                            // if all scripts were added, call the function
-                            if (appended === toAppend) {
-                                if (_this.oncomplete) {
-
-                                    if (!lastFileLoaded) {
-                                        throw ('some included file is empty');
-                                    }
-
-                                    // update last progress - 100%
-                                    _this.onprogress({ name: lastFileLoaded.name, bytesLoaded: lastFileLoaded.bytesTotal, bytesTotal: lastFileLoaded.bytesTotal, loaded: lastFileLoaded.total, total: lastFileLoaded.total, percent: 100 });
-
-                                    _this.oncomplete();
-
-                                    // remove all included scripts from head
-                                    let head = document.querySelector('head');
-                                    let scripts = head.querySelectorAll('script');
-                                    scripts.forEach((script) => script.remove())
-
-                                }
-                            }
+                            // if it's a script, add to order array
+                            if (script)
+                                tmpOrder.push(script);
 
                         }
 
                     });
-                } else {
 
-                    // loaded all files, but there is no script file
-                    if (_this.oncomplete) {
+                    // load and include scripts in right order
+                    if (tmpOrder.length) {
+                        tmpOrder.forEach((script) => {
 
-                        // update last progress - 100%
-                        _this.onprogress({ name: lastFileLoaded.name, bytesLoaded: lastFileLoaded.bytesTotal, bytesTotal: lastFileLoaded.bytesTotal, loaded: lastFileLoaded.total, total: lastFileLoaded.total, percent: 100 });
+                            // append script to head tag
+                            document.querySelector('head').appendChild(script);
 
-                        _this.oncomplete();
+                            // waits to load
+                            script.onload = (e) => {
 
+                                appended++;
+
+                                // if all scripts were added, call the function
+                                if (appended === toAppend) {
+                                    if (_this.oncomplete) {
+
+                                        if (!lastFileLoaded) {
+                                            throw ('some included file is empty');
+                                        }
+
+                                        // update last progress - 100%
+                                        _this.onprogress({ name: lastFileLoaded.name, bytesLoaded: lastFileLoaded.bytesTotal, bytesTotal: lastFileLoaded.bytesTotal, loaded: lastFileLoaded.total, total: lastFileLoaded.total, percent: 100 });
+
+                                        _this.oncomplete();
+
+                                        // remove all included scripts from head
+                                        let head = document.querySelector('head');
+                                        let scripts = head.querySelectorAll('script');
+                                        scripts.forEach((script) => script.remove())
+
+                                    }
+                                }
+
+                            }
+
+                        });
+                    } else {
+
+                        // loaded all files, but there is no script file
+                        if (_this.oncomplete) {
+
+                            // update last progress - 100%
+                            _this.onprogress({ name: lastFileLoaded.name, bytesLoaded: lastFileLoaded.bytesTotal, bytesTotal: lastFileLoaded.bytesTotal, loaded: lastFileLoaded.total, total: lastFileLoaded.total, percent: 100 });
+
+                            _this.oncomplete();
+
+                        }
                     }
+
                 }
 
             }
