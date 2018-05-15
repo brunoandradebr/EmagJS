@@ -215,6 +215,7 @@ class PreloadFile {
             if (total == 0) {
                 setTimeout(() => {
                     _this.oncomplete()
+                    window.scrollTo(0, 0)
                 }, 11);
             } else {
 
@@ -272,7 +273,9 @@ class PreloadFile {
                                         let head = document.querySelector('head');
                                         let scripts = head.querySelectorAll('script');
                                         scripts.forEach((script) => script.remove())
-
+                                        
+                                        window.scrollTo(0, 0)
+                                        
                                     }
                                 }
 
@@ -288,6 +291,8 @@ class PreloadFile {
                             _this.onprogress({ name: lastFileLoaded.name, bytesLoaded: lastFileLoaded.bytesTotal, bytesTotal: lastFileLoaded.bytesTotal, loaded: lastFileLoaded.total, total: lastFileLoaded.total, percent: 100 });
 
                             _this.oncomplete();
+
+                            window.scrollTo(0, 0)
 
                         }
                     }
