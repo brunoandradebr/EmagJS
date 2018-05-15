@@ -258,8 +258,8 @@ class Movie {
                         // show camera
                         if (scene.debug) {
                             if (scene.camera) {
-                                scene.cameraDebug.position.x = scene.camera.x + scene.camera.width * 0.5 - scene.cameraDebug.lineWidth * 0.5
-                                scene.cameraDebug.position.y = scene.camera.y + scene.camera.height * 0.5 + scene.cameraDebug.lineWidth * 0.5
+                                scene.cameraDebug.position.x = (scene.camera.x + scene.camera.width * 0.5) + (scene.cameraDebug.lineWidth * 0.5)
+                                scene.cameraDebug.position.y = (scene.camera.y + scene.camera.height * 0.5) + (scene.cameraDebug.lineWidth * 0.5)
                                 scene.cameraDebug.width = scene.camera.width
                                 scene.cameraDebug.height = scene.camera.height
                                 scene.cameraDebug.draw(scene.graphics)
