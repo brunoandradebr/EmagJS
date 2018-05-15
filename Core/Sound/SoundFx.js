@@ -98,4 +98,8 @@ class SoundFx {
 
     }
 
+    playRandomOscillator(frequency = 200, duration = 0.2) {
+        this.playOscillator(100 + ((Math.random() * frequency) | 0), 'sine', 1, duration)
+    }
+
 }
