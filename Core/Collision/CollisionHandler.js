@@ -94,6 +94,39 @@ class CollisionHandler {
     }
 
     /**
+     * Bounces a representation's body away
+     * 
+     * @param {Shape | Sprite} A - Shape or Sprite representation with a body object
+     * @param {EmagJS.Core.Display.Scene} scene
+     * 
+     * @return {void}
+     */
+    static bounceScreen(A, scene = Scene) {
+
+        if (A.constructor.name == 'Shape' || A.constructor.name == 'Sprite') {
+            if (A.body) {
+                if (A.body.position.x > scene.width) {
+                    A.body.position.x = scene.width
+                    A.body.velocity.x *= -1
+                }
+                if (A.body.position.x < 0) {
+                    A.body.position.x = 0
+                    A.body.velocity.x *= -1
+                }
+                if (A.body.position.y > scene.height) {
+                    A.body.position.y = scene.height
+                    A.body.velocity.y *= -1
+                }
+                if (A.body.position.y < 0) {
+                    A.body.position.y = 0
+                    A.body.velocity.y *= -1
+                }
+            }
+        }
+
+    }
+
+    /**
      * SAT - Separating Axis Theorem
      * 
      * @param {EmagJS.Core.Render.Shape} A 
