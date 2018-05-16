@@ -104,3 +104,9 @@ class SoundFx {
     }
 
 }
+
+// registers an touchstart event to initialize web audio api - ios
+window.addEventListener('touchstart', autoDestroyFunction = () => {
+    new SoundFx().play()
+    window.removeEventListener('touchstart', autoDestroyFunction)
+})
