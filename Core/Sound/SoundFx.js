@@ -91,7 +91,8 @@ class SoundFx {
         oscillator.connect(gainNode);
         gainNode.connect(master);
 
-        oscillator.start(audioContext.currentTime);
+        // + 0.000001 - ios fix 
+        oscillator.start(audioContext.currentTime + 0.000001);
         gainNode.gain.value = volume;
 
         oscillator.stop(audioContext.currentTime + duration);
