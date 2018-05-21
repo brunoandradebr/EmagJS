@@ -101,6 +101,9 @@ class Body {
         this.acceleration.x = 0;
         this.acceleration.y = 0;
 
+        this.representation.position.x = this.position.x
+        this.representation.position.y = this.position.y
+
     }
 
 }
