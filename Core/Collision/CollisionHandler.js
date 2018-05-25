@@ -23,7 +23,7 @@ class CollisionHandler {
          * 
          * @type {EmagJS.Core.Math.Vector}
          */
-        this.normal = null;
+        this.normal = new Vector(0, 0);
 
         /**
          * Points of collision
@@ -65,11 +65,16 @@ class CollisionHandler {
         this.closestPoint = null;
         this.mtv.x = this.mtv.y = 0;
         this.overlap = 0;
-        this.normal = null;
+        this.normal.x = 0;
+        this.normal.y = 0;
 
         // collision between Shapes
         if (A.constructor.name == 'Shape' && B.constructor.name == 'Shape')
             return this.SAT(A, B);
+
+        // collision between Sprites
+        if (A.constructor.name == 'Sprite' && B.constructor.name == 'Sprite')
+            return this.spriteToSpriteCollision(A, B)
 
         // collision between Lines
         if (A.constructor.name == 'Line' && B.constructor.name == 'Line')
@@ -284,6 +289,59 @@ class CollisionHandler {
 
         return isColliding;
 
+    }
+
+    /**
+    * Sprite vs Sprite collision
+    * 
+    * @param {EmagJS.Core.Render.Sprite} A 
+    * @param {EmagJS.Core.Render.Sprite} B 
+    * 
+    * @return {bool}
+    */
+    spriteToSpriteCollision(A = Sprite, B = Sprite) {
+
+        let AhalfWidth = A.width * 0.5
+        let AhalfHeight = A.height * 0.5
+
+        let BhalfWidth = B.width * 0.5
+        let BhalfHeight = B.height * 0.5
+
+        let distanceX = Math.abs(B.position.x - A.position.x)
+
+        if (distanceX > AhalfWidth + BhalfWidth)
+            return false
+
+        let distanceY = Math.abs(B.position.y - A.position.y)
+
+        if (distanceY > AhalfHeight + BhalfHeight)
+            return false
+
+        let overlapX = (AhalfWidth + BhalfWidth) - distanceX
+        let overlapY = (AhalfHeight + BhalfHeight) - distanceY
+
+        if (overlapX < overlapY) {
+            if (A.position.x < B.position.x) {
+                this.normal.x = -1
+            } else {
+                this.normal.x = 1
+            }
+            this.normal.y = 0
+            this.overlap = overlapX
+        } else {
+            if (A.position.y < B.position.y) {
+                this.normal.y = -1
+            } else {
+                this.normal.y = 1
+            }
+            this.normal.x = 0
+            this.overlap = overlapY
+        }
+
+        this.mtv.x = this.normal.x * this.overlap
+        this.mtv.y = this.normal.y * this.overlap
+
+        return true
     }
 
     /**
