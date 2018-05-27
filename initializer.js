@@ -54,6 +54,7 @@ preloadFileClassScript.onload = (e) => {
         { stage: root + 'Core/Display/Stage.js' },
         { movie: root + 'Core/Display/Movie.js' },
         { scene: root + 'Core/Display/Scene.js' },
+        { camera: root + 'Core/Display/Camera.js' },
         // RENDER
         { text: root + 'Core/Render/Text.js' },
         { sprite: root + 'Core/Render/Sprite.js' },
