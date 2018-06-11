@@ -17,6 +17,7 @@ class Scene {
 
         // default definitions
         Object.assign(this, {
+            FPS: 60,
             x: 0,                             // scene's position x
             y: 0,                             // scene's position y
             width: definition.parent.width,   // scene's width
@@ -63,10 +64,11 @@ class Scene {
          */
         this.graphics = this.canvas.getContext('2d');
 
-
-        // ******************************************
-        // ******* TODO - create Camera class *******
-        // ******************************************
+        // fixed delta time with variant fps
+        this.dt = 1 / this.FPS
+        this.accumulatedTime = 0
+        this.lastTime = window.performance.now();
+        this.RAF = null
 
         // if scene has a camera
         if (this.camera) {
@@ -109,6 +111,95 @@ class Scene {
          * @type {EmagJS.Core.Render.Sprite}
          */
         this.cameraDebug = new Sprite(new Vector(0, 0), 0, 0, 'transparent', 2, 'purple')
+
+    }
+
+    play() {
+
+        this.onEnter(this)
+
+        this.loop(0)
+
+    }
+
+    pause() {
+        window.cancelAnimationFrame(this.RAF)
+    }
+
+    loop(time) {
+
+        //this.onLoop(this, time)
+        let frameTime = (time - this.lastTime) / 1000
+
+        // prevent spiral of death!
+        if (frameTime > 0.25)
+            frameTime = 0.25
+
+        this.accumulatedTime += frameTime
+
+        // if scene is paused
+        if (this.paused) {
+            this.accumulatedTime = 0
+            this.lastTime = window.performance.now()
+            return false
+        }
+
+        // if scene has loop callback
+        if (this.onLoop) {
+
+            // run the animation at the same time on all hardware speed
+            while (this.accumulatedTime > this.dt) {
+
+                // if scene has a camera, draw to viewport
+                // only what camera is watching
+                if (this.camera) {
+
+                    this.viewport.graphics.clearRect(0, 0, this.viewport.width, this.viewport.height);
+                    this.viewport.graphics.drawImage(this.canvas, this.camera.x, this.camera.y, this.camera.width, this.camera.height, 0, 0, this.camera.width, this.camera.height)
+
+                } else {
+
+                    // if scene has no camera, draw everything inside original scene canvas
+                    this.graphics.drawImage(this.canvas, 0, 0)
+
+                }
+
+                // clear scene's canvas
+                if (this.camera) {
+                    this.graphics.clearRect(this.camera.x, this.camera.y, this.camera.width, this.camera.height);
+                } else {
+                    this.graphics.clearRect(0, 0, this.width, this.height);
+                }
+
+                // save scene state
+                this.graphics.save()
+                // scale scene
+                this.graphics.scale(this.zoom, this.zoom)
+
+                // scene loop callback
+                this.onLoop(this, this.dt * 50);
+
+                // restore scene state
+                this.graphics.restore()
+
+                // show camera
+                if (this.debug) {
+                    if (this.camera) {
+                        this.cameraDebug.position.x = (this.camera.x + this.camera.width * 0.5) + (this.cameraDebug.lineWidth * 0.5)
+                        this.cameraDebug.position.y = (this.camera.y + this.camera.height * 0.5) + (this.cameraDebug.lineWidth * 0.5)
+                        this.cameraDebug.width = this.camera.width
+                        this.cameraDebug.height = this.camera.height
+                        this.cameraDebug.draw(this.graphics)
+                    }
+                }
+
+                this.accumulatedTime -= this.dt
+            }
+        }
+
+        this.lastTime = time
+
+        this.RAF = window.requestAnimationFrame(this.loop.bind(this))
 
     }
 

@@ -84,8 +84,40 @@ class Movie {
          */
         this.scale = keepAspectRatio(this.resolutionWidth, this.resolutionHeight)
 
-    }
 
+        /**
+         * Resize device or change orientation event
+         * 
+         * @return {void}
+         */
+        window.addEventListener('resize', (e) => {
+
+            setTimeout(() => {
+
+                // if movie is on full screen mode
+                if (this.fullscreen)
+                    this.setFullscreen()
+
+                // update movie's scale factor
+                this.scale = keepAspectRatio(this.resolutionWidth, this.resolutionHeight)
+
+                // for each movie's scenes
+                for (let i in this.scenes) {
+
+                    let scene = this.scenes[i]
+
+                    // scale and position scene's viewport canvas
+                    scene.scaleViewport(scene.fullscreen)
+
+                    // scene has resize callback
+                    if (scene.onResize)
+                        // scene's resize callback
+                        scene.onResize(scene)
+                }
+
+            }, 50)
+        })
+    }
 
     /**
      * Instantiates a new scene and adds to movie's scenes
@@ -125,163 +157,15 @@ class Movie {
 
     }
 
-
     /**
      * Plays all scenes
      * 
      * @return {void}
      */
     play() {
-
-        /**
-         * Internal loop function
-         * 
-         * @type {function}
-         */
-        let loop;
-
-
-        // on enter a scene
         for (let i in this.scenes) {
-
-            let scene = this.scenes[i];
-
-            if (scene.onEnter)
-                scene.onEnter(scene);
-
+            this.scenes[i].play()
         }
-
-        // on window resize
-        window.addEventListener('resize', (e) => {
-
-            // for each scene
-            for (let i in this.scenes) {
-
-                let scene = this.scenes[i]
-
-                setTimeout(() => {
-
-                    // if movie is on full screen mode
-                    if (this.fullscreen) {
-                        this.setFullscreen()
-                    }
-
-                    // scale and position scene's viewport canvas
-                    scene.scaleViewport(scene.fullscreen)
-
-                    // update movie's scale factor
-                    this.scale = keepAspectRatio(this.resolutionWidth, this.resolutionHeight)
-
-                    // scene has resize callback
-                    if (scene.onResize) {
-                        // scene's resize callback
-                        scene.onResize(scene)
-                    }
-
-                }, 50)
-            }
-
-        });
-
-
-
-
-
-
-
-
-        // fixed delta time with variant fps
-        let dt = 1 / 60
-        let accumulatedTime = 0
-        let lastTime = window.performance.now();
-
-        // main loop - engine heart
-        (loop = (time) => {
-
-            for (let i in this.scenes) {
-
-                let scene = this.scenes[i];
-
-                let frameTime = (time - lastTime) / 1000
-
-                // prevent spiral of death!
-                if (frameTime > 0.25)
-                    frameTime = 0.25
-
-                accumulatedTime += frameTime
-
-                // if scene is paused
-                if (this.paused) {
-                    accumulatedTime = 0
-                    lastTime = window.performance.now()
-                    continue
-                }
-
-                // if scene has loop callback
-                if (scene.onLoop) {
-
-                    // run the animation at the same time on all hardware speed
-                    while (accumulatedTime > dt) {
-
-                        // if scene has a camera, draw to viewport
-                        // only what camera is watching
-                        if (scene.camera) {
-
-                            scene.viewport.graphics.clearRect(0, 0, scene.viewport.width, scene.viewport.height);
-                            scene.viewport.graphics.drawImage(scene.canvas, scene.camera.x, scene.camera.y, scene.camera.width, scene.camera.height, 0, 0, scene.camera.width, scene.camera.height)
-
-                        } else {
-
-                            // if scene has no camera, draw everything inside original scene canvas
-                            scene.graphics.drawImage(scene.canvas, 0, 0)
-
-                        }
-
-                        // clear scene's canvas
-                        if (scene.camera) {
-                            scene.graphics.clearRect(scene.camera.x, scene.camera.y, scene.camera.width, scene.camera.height);
-                        } else {
-                            scene.graphics.clearRect(0, 0, scene.width, scene.height);
-                        }
-
-                        // save scene state
-                        scene.graphics.save()
-                        // scale scene
-                        scene.graphics.scale(scene.zoom, scene.zoom)
-
-                        // scene loop callback
-                        scene.onLoop(scene, dt * 50);
-
-                        // restore scene state
-                        scene.graphics.restore()
-
-                        // show camera
-                        if (scene.debug) {
-                            if (scene.camera) {
-                                scene.cameraDebug.position.x = (scene.camera.x + scene.camera.width * 0.5) + (scene.cameraDebug.lineWidth * 0.5)
-                                scene.cameraDebug.position.y = (scene.camera.y + scene.camera.height * 0.5) + (scene.cameraDebug.lineWidth * 0.5)
-                                scene.cameraDebug.width = scene.camera.width
-                                scene.cameraDebug.height = scene.camera.height
-                                scene.cameraDebug.draw(scene.graphics)
-                            }
-                        }
-
-                        accumulatedTime -= dt
-                    }
-                }
-
-            }
-
-            lastTime = time
-
-            //setTimeout(loop, 1000 / 12, window.performance.now())
-            if (!this.paused)
-                window.requestAnimationFrame(loop);
-
-        });
-
-        window.requestAnimationFrame(loop);
-
     }
 
     /**
@@ -290,7 +174,9 @@ class Movie {
      * @return {void}
      */
     pause() {
-        this.paused = true;
+        for (let i in this.scenes) {
+            this.scenes[i].pause()
+        }
     }
 
     /**
@@ -299,7 +185,9 @@ class Movie {
      * @return {void}
      */
     resume() {
-        this.paused = false;
+        for (let i in this.scenes) {
+            this.scenes[i].play()
+        }
     }
 
     /**
