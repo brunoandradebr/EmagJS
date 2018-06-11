@@ -17,7 +17,7 @@ class Scene {
 
         // default definitions
         Object.assign(this, {
-            FPS: 60,
+            FPS: 60,                          // scene's fps - render and update
             x: 0,                             // scene's position x
             y: 0,                             // scene's position y
             width: definition.parent.width,   // scene's width
@@ -25,7 +25,7 @@ class Scene {
             camera: null,                     // camera object
             zoom: 1,                          // scene's zoom factor
             scale: 1,                         // scene's scale factor - how much camera resolution(width-height) will be scaled to fit movie's width and height
-            fullscreen: false,                // full screen mode - if true ignores camera, and fit movie's dimensions
+            fullscreen: false,                // full screen mode - if true ignores camera, and fit movie's dimensions - device size
             index: 0,                         // depth order
         })
 
@@ -64,12 +64,6 @@ class Scene {
          */
         this.graphics = this.canvas.getContext('2d');
 
-        // fixed delta time with variant fps
-        this.dt = 1 / this.FPS
-        this.accumulatedTime = 0
-        this.lastTime = window.performance.now();
-        this.RAF = null
-
         // if scene has a camera
         if (this.camera) {
 
@@ -106,6 +100,33 @@ class Scene {
         this.scaleViewport(this.fullscreen)
 
         /**
+         * fixed delta time with variant fps
+         * 
+         * @type {number}
+         */
+        this.dt = 1 / this.FPS
+
+        /**
+         * Accumulates time between frames
+         * 
+         * @type {number}
+         */
+        this.accumulatedTime = 0
+
+        /**
+         * 
+         * @type {DOMHighResTimeStamp}
+         */
+        this.lastTime = window.performance.now();
+
+        /**
+         * Loop id
+         * 
+         * @type {requestAnimationFrame}
+         */
+        this.RAF = null
+
+        /**
          * when scene is on debug mode
          * 
          * @type {EmagJS.Core.Render.Sprite}
@@ -114,44 +135,61 @@ class Scene {
 
     }
 
+    /**
+     * Plays it's loop
+     * 
+     * @return {void}
+     */
     play() {
-
         this.onEnter(this)
-
         this.loop(0)
-
     }
 
+    /**
+     * Pauses it's loop
+     * 
+     * @return {void}
+     */
     pause() {
         window.cancelAnimationFrame(this.RAF)
     }
 
+    /**
+     * Resumes it's loop
+     * 
+     * @return {void}
+     */
+    resume() {
+        this.loop(0)
+    }
+
+    /**
+     * Scene's animation loop
+     * 
+     * @param {DOMHighResTimeStamp} time 
+     */
     loop(time) {
 
-        //this.onLoop(this, time)
+        // calculates delta time between last frame and current frame
         let frameTime = (time - this.lastTime) / 1000
 
         // prevent spiral of death!
         if (frameTime > 0.25)
             frameTime = 0.25
 
+        // accumulates total time between frames
         this.accumulatedTime += frameTime
-
-        // if scene is paused
-        if (this.paused) {
-            this.accumulatedTime = 0
-            this.lastTime = window.performance.now()
-            return false
-        }
 
         // if scene has loop callback
         if (this.onLoop) {
 
             // run the animation at the same time on all hardware speed
+            // executes all accumulated time by this.dt portions
             while (this.accumulatedTime > this.dt) {
 
-                // if scene has a camera, draw to viewport
-                // only what camera is watching
+                // starts render and update logic
+
+                // if scene has a camera, draw to viewport only what camera is watching
                 if (this.camera) {
 
                     this.viewport.graphics.clearRect(0, 0, this.viewport.width, this.viewport.height);
@@ -176,7 +214,7 @@ class Scene {
                 // scale scene
                 this.graphics.scale(this.zoom, this.zoom)
 
-                // scene loop callback
+                // scene loop callback - I'm multiplying by 50 to work with low numbers like gravity = 0.4
                 this.onLoop(this, this.dt * 50);
 
                 // restore scene state
@@ -197,8 +235,10 @@ class Scene {
             }
         }
 
+        // update last time to current time
         this.lastTime = time
 
+        // request a new repaint
         this.RAF = window.requestAnimationFrame(this.loop.bind(this))
 
     }

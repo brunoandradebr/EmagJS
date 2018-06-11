@@ -24,8 +24,7 @@ class Movie {
             height: DEVICE_HEIGHT,           // movie's container height
             resolutionWidth: DEVICE_WIDTH,   // movie's original width resolution
             resolutionHeight: DEVICE_HEIGHT, // movie's original height resolution
-            fullscreen: true,                // full screen mode - default true
-            scale: 1,                        // how much original resolution(resolution) will be scaled to fit movie's width and height
+            scale: 1,                        // how much original resolution(width-height) will be scaled to fit movie's width and height
             backgroundColor: 'transparent',  // background color
         })
 
@@ -94,9 +93,8 @@ class Movie {
 
             setTimeout(() => {
 
-                // if movie is on full screen mode
-                if (this.fullscreen)
-                    this.setFullscreen()
+                // set movie's container to device size
+                this.setFullscreen()
 
                 // update movie's scale factor
                 this.scale = keepAspectRatio(this.resolutionWidth, this.resolutionHeight)
