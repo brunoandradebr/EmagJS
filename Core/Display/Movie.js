@@ -184,7 +184,7 @@ class Movie {
      */
     resume() {
         for (let i in this.scenes) {
-            this.scenes[i].play()
+            this.scenes[i].resume()
         }
     }
 

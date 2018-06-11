@@ -142,7 +142,7 @@ class Scene {
      */
     play() {
         this.onEnter(this)
-        this.loop(0)
+        this.loop(window.performance.now())
     }
 
     /**
@@ -160,7 +160,9 @@ class Scene {
      * @return {void}
      */
     resume() {
-        this.loop(0)
+        this.accumulatedTime = 0
+        this.lastTime = window.performance.now()
+        this.loop(window.performance.now())
     }
 
     /**
