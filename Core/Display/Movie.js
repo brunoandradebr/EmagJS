@@ -67,15 +67,7 @@ class Movie {
 
         // movie's style
         this.container.style.backgroundColor = this.backgroundColor;
-
-        /**
-         * Paused state
-         * 
-         * @type {bool}
-         */
-        this.paused = false;
-
-
+        
         /**
          * Movie's scale factor
          * 
