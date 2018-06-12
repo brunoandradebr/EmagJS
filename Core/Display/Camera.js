@@ -9,12 +9,17 @@ class Camera {
      * @param {number} height 
      */
     constructor(x, y, width, height) {
+
         this.x = x
         this.y = y
         this.width = width
         this.height = height
-        this.target = null
+        this.offsetHorizontal = 40
+        this.offsetVertical = 0
+        this.speed = 0.1
         this.zoom = 1
+
+        this.target = null
     }
 
     /**
@@ -24,15 +29,20 @@ class Camera {
      */
     update() {
 
-        // move camera
-        this.x = this.x + (((this.target.position.x + 40 * this.target.directionX)) - (this.x + this.width * 0.5)) * 0.05
-        this.y = this.y + ((this.target.position.y) - (this.y + this.height * 0.5)) * 0.05
+        let centerX = this.x + this.width * 0.5
+        let centerY = this.y + this.height * 0.5
 
-        // zoom camera to it's target
-        if (this.zoom != 1) {
-            this.x = ((this.target.position.x * this.zoom) - this.width * 0.5)
-            this.y = ((this.target.position.y * this.zoom) - this.height * 0.5)
-        }
+        let targetCenterX = this.target.position.x + this.target.width * 0.5
+        let targetCenterY = this.target.position.y + this.target.height * 0.5
+
+        let targetDirectionX = this.target.directionX || 1
+        let targetDirectionY = this.target.directionY || 1
+
+        let distanceX = (targetCenterX + (targetDirectionX * this.offsetHorizontal)) - centerX
+        let distanceY = (targetCenterY + (targetDirectionY * this.offsetVertical)) - centerY
+
+        this.x += distanceX * this.speed
+        this.y += distanceY * this.speed
 
         // avoid floats
         this.x = this.x | 0
