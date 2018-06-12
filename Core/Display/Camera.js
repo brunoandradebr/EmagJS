@@ -35,8 +35,8 @@ class Camera {
         let targetCenterX = this.target.position.x + this.target.width * 0.5
         let targetCenterY = this.target.position.y + this.target.height * 0.5
 
-        let targetDirectionX = this.target.directionX || 1
-        let targetDirectionY = this.target.directionY || 1
+        let targetDirectionX = this.target.direction.x || 1
+        let targetDirectionY = this.target.direction.y || 1
 
         let distanceX = (targetCenterX + (targetDirectionX * this.offsetHorizontal)) - centerX
         let distanceY = (targetCenterY + (targetDirectionY * this.offsetVertical)) - centerY
