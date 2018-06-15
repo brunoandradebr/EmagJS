@@ -213,8 +213,10 @@ class Scene {
 
                 // save scene state
                 this.graphics.save()
+
                 // scale scene
-                this.graphics.scale(this.zoom, this.zoom)
+                if (this.camera)
+                    this.graphics.scale(this.camera.zoom, this.camera.zoom)
 
                 // scene loop callback - I'm multiplying by 50 to work with low numbers like gravity = 0.4
                 this.onLoop(this, this.dt * 50);
