@@ -191,6 +191,20 @@ class Tween {
     }
 
     /**
+     * Update start and end animation property
+     * 
+     * @param {integer} index 
+     * @param {number} start 
+     * @param {number} end
+     * 
+     * @return {void}
+     */
+    updateAnimation(index, start, end) {
+        this.animations[index].start = start
+        this.animations[index].end = end
+    }
+
+    /**
      * Resets animation initial time
      * 
      * @return {void}
