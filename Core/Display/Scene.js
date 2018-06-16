@@ -23,7 +23,6 @@ class Scene {
             width: definition.parent.width,   // scene's width
             height: definition.parent.height, // scene's height
             camera: null,                     // camera object
-            zoom: 1,                          // scene's zoom factor
             scale: 1,                         // scene's scale factor - how much camera resolution(width-height) will be scaled to fit movie's width and height
             fullscreen: false,                // full screen mode - if true ignores camera, and fit movie's dimensions - device size
             index: 0,                         // depth order
@@ -216,7 +215,7 @@ class Scene {
 
                 // scale scene
                 if (this.camera)
-                    this.graphics.scale(this.camera.zoom, this.camera.zoom)
+                    this.graphics.scale(this.camera.zoomScale, this.camera.zoomScale)
 
                 // scene loop callback - I'm multiplying by 50 to work with low numbers like gravity = 0.4
                 this.onLoop(this, this.dt * 50);
