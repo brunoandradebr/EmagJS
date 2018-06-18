@@ -193,8 +193,11 @@ class Scene {
                 // if scene has a camera, draw to viewport only what camera is watching
                 if (this.camera) {
 
+                    let xDraw = this.camera.x < 0 ? 0 : this.camera.x
+                    let yDraw = this.camera.y < 0 ? 0 : this.camera.y
+
                     this.viewport.graphics.clearRect(0, 0, this.viewport.width, this.viewport.height);
-                    this.viewport.graphics.drawImage(this.canvas, this.camera.x, this.camera.y, this.camera.width, this.camera.height, 0, 0, this.camera.width, this.camera.height)
+                    this.viewport.graphics.drawImage(this.canvas, xDraw, yDraw, this.camera.width, this.camera.height, 0, 0, this.camera.width, this.camera.height)
 
                 } else {
 
