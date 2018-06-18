@@ -18,13 +18,9 @@ class Camera {
         this.offsetVertical = 0
         this.speed = this.originalSpeed = 0.1
         this.zoomScale = 1
+        this.zoomSpeed = .1
 
         this.target = null
-
-        this.zoomInAnimation = new Tween(this)
-        this.zoomInAnimation.animate({ zoomScale: 1 }, 500, 0, 'cubicOut')
-        this.zoomOutAnimation = new Tween(this)
-        this.zoomOutAnimation.animate({ zoomScale: 1 }, 500, 0, 'cubicOut')
 
     }
 
@@ -44,8 +40,8 @@ class Camera {
         let targetDirectionX = this.target.direction ? this.target.direction.x : 1
         let targetDirectionY = this.target.direction ? this.target.direction.y : 1
 
-        let distanceX = (targetCenterX + (targetDirectionX * this.offsetHorizontal)) - centerX
-        let distanceY = (targetCenterY + (targetDirectionY * this.offsetVertical)) - centerY
+        let distanceX = (targetCenterX + ((targetDirectionX || 1) * this.offsetHorizontal)) - centerX
+        let distanceY = (targetCenterY + ((targetDirectionY || 1) * this.offsetVertical)) - centerY
 
         this.x += distanceX * this.speed
         this.y += distanceY * this.speed
@@ -55,16 +51,24 @@ class Camera {
         this.y = this.y | 0
     }
 
-    zoomIn() {
-        // set camera speed to 1 to zoom nicely
-        // double scene height
-        // ver o metodo que reseta a animacao...
-        this.zoomInAnimation.play()
+    zoomIn(factor = 2) {
+
+        this.speed = this.zoomScale != factor ? 1 : this.originalSpeed
+
+        if (this.zoomScale <= factor)
+            this.zoomScale += this.zoomSpeed
+
+        if (this.zoomScale >= factor) this.zoomScale = factor
     }
 
-    zoomOut() {
-        this.zoomOutAnimation.updateAnimation(0, this.zoomScale, 1)
-        this.zoomOutAnimation.play()
+    zoomOut(factor = 1) {
+
+        this.speed = this.zoomScale != factor ? 1 : this.originalSpeed
+
+        if (this.zoomScale >= factor)
+            this.zoomScale -= this.zoomSpeed
+
+        if (this.zoomScale <= factor) this.zoomScale = factor
     }
 
     /**
@@ -82,16 +86,16 @@ class Camera {
             this.x = maxX * this.zoomScale - this.width
         }
 
-        if (this.x < 0) {
-            this.x = 0
+        if (this.x < minX) {
+            this.x = minX
         }
 
         if (this.y + this.height > maxY) {
             this.y = maxY - this.height
         }
 
-        if (this.y < 0) {
-            this.y = 0
+        if (this.y < minY) {
+            this.y = minY
         }
 
     }
