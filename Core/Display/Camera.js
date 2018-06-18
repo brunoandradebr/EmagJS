@@ -10,17 +10,71 @@ class Camera {
      */
     constructor(x, y, width, height) {
 
-        this.x = x
-        this.y = y
-        this.width = width
-        this.height = height
-        this.offsetHorizontal = 40
-        this.offsetVertical = 0
-        this.speed = this.originalSpeed = 0.1
-        this.zoomScale = 1
-        this.zoomSpeed = .1
+        /**
+         * Camera's target
+         * 
+         * @type {object}
+         */
+        this.target = {
+            position: new Vector(0, 0),
+            width: 0,
+            height: 0
+        }
 
-        this.target = null
+        /**
+         * @type {number}
+         */
+        this.x = x
+
+        /**
+         * @type {number}
+         */
+        this.y = y
+
+        /**
+         * @type {number}
+         */
+        this.width = width
+
+        /**
+         * @type {number}
+         */
+        this.height = height
+
+        /**
+         * Camera's horizontal offset to it's target's center
+         * 
+         * @type {number}
+         */
+        this.offsetHorizontal = 40
+
+        /**
+         * Camera's vertical offset to it's target's center
+         * 
+         * @type {number}
+         */
+        this.offsetVertical = 0
+
+        /**
+         * Camera's pan speed - how fast it goes to it's target
+         * 
+         * @type {number}
+         */
+        this.speed = this.originalSpeed = 0.1
+
+        /**
+         * Camera's zoom factor
+         * 
+         * @type {number}
+         */
+        this.zoomScale = 1
+
+        /**
+         * Camera's zoom speed - how fast it zooms
+         * 
+         * @type {number}
+         */
+        this.zoomSpeed = .1
 
     }
 
@@ -51,6 +105,13 @@ class Camera {
         this.y = this.y | 0
     }
 
+    /**
+     * Zoom scene's viewport
+     * 
+     * @param {number} factor
+     * 
+     * @return {void} 
+     */
     zoomIn(factor = 2) {
 
         this.speed = this.zoomScale != factor ? 1 : this.originalSpeed
@@ -61,6 +122,13 @@ class Camera {
         if (this.zoomScale >= factor) this.zoomScale = factor
     }
 
+    /**
+     * Zoom out scene's viewport
+     * 
+     * @param {number} factor
+     * 
+     * @return {void} 
+     */
     zoomOut(factor = 1) {
 
         this.speed = this.zoomScale != factor ? 1 : this.originalSpeed
