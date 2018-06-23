@@ -26,6 +26,7 @@ class Movie {
             resolutionHeight: DEVICE_HEIGHT, // movie's original height resolution
             scale: 1,                        // how much original resolution(width-height) will be scaled to fit movie's width and height
             backgroundColor: 'transparent',  // background color
+            index: 0
         })
 
 
@@ -55,7 +56,7 @@ class Movie {
         this.container.setAttribute('class', 'movie');
 
         // movie's depth order
-        this.container.style.zIndex = window.performance.now() | 0;
+        this.container.style.zIndex = this.index;
 
         // movie's dimensions
         this.container.style.width = this.width + 'px';
@@ -67,7 +68,7 @@ class Movie {
 
         // movie's style
         this.container.style.backgroundColor = this.backgroundColor;
-        
+
         /**
          * Movie's scale factor
          * 
@@ -75,6 +76,12 @@ class Movie {
          */
         this.scale = keepAspectRatio(this.resolutionWidth, this.resolutionHeight)
 
+        /**
+         * Known when a movie already started
+         * 
+         * @type {boolean}
+         */
+        this.started = false
 
         /**
          * Resize device or change orientation event
@@ -153,6 +160,9 @@ class Movie {
      * @return {void}
      */
     play() {
+
+        this.started = true
+
         for (let i in this.scenes) {
             this.scenes[i].play()
         }

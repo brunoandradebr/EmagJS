@@ -126,6 +126,11 @@ class Scene {
         this.RAF = null
 
         /**
+         * @type {boolean}
+         */
+        this.paused = false
+
+        /**
          * when scene is on debug mode
          * 
          * @type {EmagJS.Core.Render.Sprite}
@@ -140,6 +145,7 @@ class Scene {
      * @return {void}
      */
     play() {
+        this.paused = false
         this.onEnter(this)
         this.loop(window.performance.now())
     }
@@ -150,27 +156,29 @@ class Scene {
      * @return {void}
      */
     pause() {
+        this.paused = true
         window.cancelAnimationFrame(this.RAF)
     }
-
+    
     /**
      * Resumes it's loop
      * 
      * @return {void}
      */
     resume() {
+        this.paused = false
         this.accumulatedTime = 0
         this.lastTime = window.performance.now()
         this.loop(window.performance.now())
     }
-
+    
     /**
      * Scene's animation loop
      * 
      * @param {DOMHighResTimeStamp} time 
      */
     loop(time) {
-
+        
         // calculates delta time between last frame and current frame
         let frameTime = (time - this.lastTime) / 1000
 
@@ -245,7 +253,8 @@ class Scene {
         this.lastTime = time
 
         // request a new repaint
-        this.RAF = window.requestAnimationFrame(this.loop.bind(this))
+        if (!this.paused)
+            this.RAF = window.requestAnimationFrame(this.loop.bind(this))
 
     }
 
