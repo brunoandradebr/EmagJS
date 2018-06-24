@@ -231,4 +231,28 @@ class Stage {
 
     }
 
+
+    /**
+     * Brings a movie to front and play or resume it's scenes
+     * 
+     * @param {string} movieID
+     * 
+     * @return {void}
+     */
+    bringToFront(movieID) {
+
+        // pauses all others movies
+        for (let i in this.movies) {
+
+            let movie = this.movies[i]
+
+            movie.pause()
+
+        }
+
+        this.movies[movieID].started ? this.movies[movieID].resume() : this.movies[movieID].play()
+        this.movies[movieID].container.style.zIndex = window.performance.now() | 0
+
+    }
+
 }
