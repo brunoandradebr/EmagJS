@@ -212,6 +212,7 @@ class Tween {
     resetAnimations() {
 
         this.paused = false
+        this.started = false
 
         for (let i = this.animations.length - 1; i >= 0; i--) {
 
