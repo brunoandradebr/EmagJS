@@ -25,6 +25,8 @@ class Scene {
             camera: null,                     // camera object
             scale: 1,                         // scene's scale factor - how much camera resolution(width-height) will be scaled to fit movie's width and height
             fullscreen: false,                // full screen mode - if true ignores camera, and fit movie's dimensions - device size
+            onCreate: function () { },
+            onEnter: function () { },
             index: 0,                         // depth order
         })
 
@@ -146,6 +148,7 @@ class Scene {
      */
     play() {
         this.paused = false
+        this.onCreate(this)
         this.onEnter(this)
         this.loop(window.performance.now())
     }
@@ -159,26 +162,27 @@ class Scene {
         this.paused = true
         window.cancelAnimationFrame(this.RAF)
     }
-    
+
     /**
      * Resumes it's loop
      * 
      * @return {void}
      */
     resume() {
+        this.onEnter(this)
         this.paused = false
         this.accumulatedTime = 0
         this.lastTime = window.performance.now()
         this.loop(window.performance.now())
     }
-    
+
     /**
      * Scene's animation loop
      * 
      * @param {DOMHighResTimeStamp} time 
      */
     loop(time) {
-        
+
         // calculates delta time between last frame and current frame
         let frameTime = (time - this.lastTime) / 1000
 
