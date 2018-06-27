@@ -205,14 +205,22 @@ class Tween {
     }
 
     /**
-     * Resets animation initial time
+     * Resets animation
      * 
      * @return {void}
      */
     resetAnimations() {
-        this.animations.map((animation) => {
+
+        this.paused = false
+
+        for (let i = this.animations.length - 1; i >= 0; i--) {
+
+            let animation = this.animations[i]
+
+            this.target[animation.prop] = animation.start
+
             animation.initialTime = window.performance.now()
-        })
+        }
     }
 
     /**
