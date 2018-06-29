@@ -246,12 +246,13 @@ class Stage {
 
             let movie = this.movies[i]
 
+            movie.container.style.zIndex = 0
             movie.pause()
 
         }
 
         this.movies[movieID].started ? this.movies[movieID].resume() : this.movies[movieID].play()
-        this.movies[movieID].container.style.zIndex = window.performance.now() | 0
+        this.movies[movieID].container.style.zIndex = 1
 
     }
 
