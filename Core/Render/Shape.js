@@ -12,13 +12,14 @@ class Shape {
      * 
      * @param {EmagJS.Core.Geom.Polygon} polygon 
      * @param {EmagJS.Core.Math.Vector} position 
-     * @param {number} size 
+     * @param {number} width 
+     * @param {number} height 
      * @param {string} fillColor 
      * @param {number} lineWidth 
      * @param {string} lineColor
      *  
      */
-    constructor(polygon = new RandomPolygon, position = new Vector(0, 0), size = 50, fillColor = '#f06', lineWidth = 0, lineColor = 'black') {
+    constructor(polygon = new RandomPolygon, position = new Vector(0, 0), width = 50, height = 50, fillColor = '#f06', lineWidth = 0, lineColor = 'black') {
 
         /**
          * shape's model points
@@ -57,7 +58,12 @@ class Shape {
         /**
          * @type {number}
          */
-        this.size = size
+        this.width = width
+
+        /**
+         * @type {number}
+         */
+        this.height = height
 
         /**
          * shape's transformation matrix
@@ -65,6 +71,9 @@ class Shape {
          * @type {EmagJS.Core.Math.Matrix}
          */
         this.matrix = new Matrix()
+
+        // initial scale
+        this.scale(this.width, this.height)
 
         // initial transformation
         this.transform()
@@ -96,14 +105,37 @@ class Shape {
     }
 
     /**
-     * Updates it's size
+     * Scales width and height
      * 
-     * @param {number} size
+     * @param {number} width 
+     * @param {number} height
+     * 
+     * @return {void}
+     */
+    scale(width, height) {
+
+        this.width = width
+        this.height = height
+
+        this.matrix.multiply([
+            [this.width, 0, 0],
+            [0, this.height, 0],
+            [0, 0, 1],
+        ])
+
+    }
+
+    /**
+     * Rotates polygon
+     * 
+     * @param {number} angle
      * 
      * @return {void} 
      */
-    scale(size) {
-        this.size = size
+    rotateZ(angle) {
+        this.matrix.identity()
+        this.scale(this.width, this.height)
+        this.matrix.rotateZ(angle)
     }
 
     /**
@@ -112,13 +144,6 @@ class Shape {
      * @return {void}
      */
     transform() {
-
-        // scale matrix/shape
-        this.matrix.multiply([
-            [this.size, 0, 0],
-            [0, this.size, 0],
-            [0, 0, 1],
-        ])
 
         // transform all points
         this.polygon.points.forEach((point, i) => {
