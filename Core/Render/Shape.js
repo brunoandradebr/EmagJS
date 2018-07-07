@@ -260,7 +260,7 @@ class Shape {
      * 
      * @return {object}
      */
-    getBoundingBox() {
+    getBoundingBox(offsetWidth = 0, offsetHeight = 0) {
 
         let horizontalSupportPoints = this.getSupportPoints(1, 0)
         let verticalSupportPoints = this.getSupportPoints(0, 1)
@@ -275,12 +275,12 @@ class Shape {
         let centerY = startY + height * 0.5
 
         return {
-            startX: startX,
-            startY: startY,
+            startX: startX - offsetWidth * 0.5,
+            startY: startY - offsetHeight * 0.5,
             centerX: centerX,
             centerY: centerY,
-            width: width,
-            height: height
+            width: width + (offsetWidth * 0.5),
+            height: height + (offsetHeight * 0.5)
         }
 
     }
