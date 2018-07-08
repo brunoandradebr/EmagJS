@@ -56,6 +56,13 @@ class Shape {
         this.points = polygon.points.slice()
 
         /**
+         * read only
+         * 
+         * @type {number}
+         */
+        this.angle = 0
+
+        /**
          * @type {number}
          */
         this.width = width
@@ -102,6 +109,13 @@ class Shape {
             this._tmpNormals.push(new Vector())
         }
 
+        /**
+         * Temporary shape normal
+         * 
+         * @type {EmagJS.Core.Render.Line}
+         */
+        this.tmp_normal = Line.fromAngle(this.angle, this.width, this.position)
+
     }
 
     /**
@@ -136,6 +150,7 @@ class Shape {
         this.matrix.identity()
         this.scale(this.width, this.height)
         this.matrix.rotateZ(angle)
+        this.angle = angle
     }
 
     /**
@@ -204,6 +219,16 @@ class Shape {
 
         return this._tmpLines
 
+    }
+
+    /**
+     * get it's normal
+     * 
+     * @return {EmagJS.Core.Math.Vector}
+     */
+    getNormal() {
+        this.tmp_normal.rotate(this.angle)
+        return this.tmp_normal.plane.leftNormal
     }
 
     /**
