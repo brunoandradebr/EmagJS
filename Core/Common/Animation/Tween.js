@@ -63,6 +63,13 @@ class Tween {
          */
         this.completed = false
 
+        /**
+         * Animation current interpolated value
+         * 
+         * @type {number}
+         */
+        this.value = 0
+
     }
 
     /**
@@ -183,6 +190,8 @@ class Tween {
 
                 // animate target
                 this.target[animation.prop] = animation.value
+
+                this.value = animation.value
 
             }
 
