@@ -36,6 +36,7 @@ preloadFileClassScript.onload = (e) => {
         { imageProcessor: root + 'Core/Common/Image/ImageProcessor.js' },
         { spriteSheet: root + 'Core/Common/Image/SpriteSheet.js' },
         // COMMOMN/MISC
+        { frameRate: root + 'Core/Common/Misc/FrameRate.js' },
         { objectPool: root + 'Core/Common/Misc/ObjectPool.js' },
         { spatialSpace: root + 'Core/Common/Misc/SpatialSpace.js' },
         { timer: root + 'Core/Common/Misc/Timer.js' },
