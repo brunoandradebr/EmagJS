@@ -46,10 +46,9 @@ class FrameRate {
         this.label = new Text()
         this.label.font = 'verdana'
         this.label.size = 13
-        this.label.color = 'white'
         this.label.position.x = this.background.position.x - this.background.width * 0.5 + 5
         this.label.position.y = this.label.size
-
+        
         /**
          * object pool to allocate sprites to render fps bars
          */
@@ -63,6 +62,7 @@ class FrameRate {
             bar.lineWidth = 0
             let barColor = this.fps > 30 ? this.fps + 120 : -this.fps
             bar.fillColor = 'hsl(' + barColor + ', 100%, 50%)'
+            this.label.color = bar.fillColor
             return bar
         })
 
