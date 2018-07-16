@@ -95,6 +95,10 @@ class Sprite {
          * @type {EmagJS.Core.Common.Image.ImageProcessor}
          */
         this.image = null
+        this.imageOffsetX = 0
+        this.imageOffsetY = 0
+        this.imageOffsetWidth = null
+        this.imageOffsetHeight = null
 
         /**
          * sprite animations pool
@@ -280,7 +284,7 @@ class Sprite {
 
         // draw static image
         if (this.image && this.image.constructor.name == 'ImageProcessor') {
-            graphics.drawImage(this.image.source, 0, 0, this.image.source.width, this.image.source.height, -this.width * this.anchor.x, -this.height * this.anchor.y, this.width, this.height)
+            graphics.drawImage(this.image.source, this.imageOffsetX, this.imageOffsetY, this.imageOffsetWidth ? this.imageOffsetWidth : this.image.source.width, this.imageOffsetHeight ? this.imageOffsetHeight : this.image.source.height, -this.width * this.anchor.x, -this.height * this.anchor.y, this.width, this.height)
         }
 
         // animate spritesheet
