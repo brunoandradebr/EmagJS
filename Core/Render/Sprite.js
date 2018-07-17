@@ -143,7 +143,7 @@ class Sprite {
      * Adds a new animation object to sprite's animation pool
      * 
      * @param {string}   label 
-     * @param {array}    keyFrames [0, 1, 2, 3, ...]
+     * @param {array}    keyFrames [0, 1, 2, 3, ...] | ['0..3']
      * @param {interger} repeate 
      * @param {integer}  fps
      * @param {integer}  frameDuration
@@ -153,6 +153,20 @@ class Sprite {
     addAnimation(label, keyFrames, repeate = 1, fps = 24, frameDuration = 100) {
 
         let frames = []
+
+        // if keyframes is a range
+        if (typeof (keyFrames[0]) == 'string') {
+
+            let range = keyFrames[0].split('..')
+            let start = range[0]
+            let end = range[1]
+
+            keyFrames.length = 0
+
+            for (let i = start; i < end; i++) {
+                keyFrames.push(i)
+            }
+        }
 
         keyFrames.map((keyFrame) => {
             frames.push(this.image.frames[keyFrame])
