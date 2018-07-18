@@ -96,6 +96,14 @@ class CollisionHandler {
         if (A.constructor.name == 'Circle' && B == 'screen')
             return this.circleToScreenCollision(A)
 
+        // collision between Circle and Shape
+        if (A.constructor.name == 'Circle' && B.constructor.name == 'Shape')
+            return this.circleToShapeCollision(A, B)
+
+        // collision between Circle and Line
+        if (A.constructor.name == 'Circle' && B.constructor.name == 'Line')
+            return this.circleToLineCollision(A, B)
+
     }
 
     /**
@@ -482,6 +490,73 @@ class CollisionHandler {
         }
 
         return false
+
+    }
+
+    /**
+     * 
+     * @param {EmagJS.Core.Render.Circle} A 
+     * @param {EmagJS.Core.Render.Line} B 
+     */
+    circleToLineCollision(A = Circle, B = Line) {
+
+        let linePlane = B.plane
+        let lineNormal = linePlane.normalize.leftNormal
+
+        let circleToLine = A.position.clone().subtract(B.start)
+        let projection = circleToLine.dot(linePlane)
+
+        let isLeft = circleToLine.dot(lineNormal) < 0
+
+        let isVoronoiRegion = projection < 0 || projection * projection > B.lengthSquared
+
+        let overlap
+
+        // circle is colliding with line edges
+        if (isVoronoiRegion) {
+
+            let closestPoint
+
+            // circle is near line start point
+            if (projection < 0) {
+                closestPoint = B.start
+            } else {
+                closestPoint = B.end
+            }
+
+            let distanceToCenter = A.position.clone().subtract(closestPoint)
+
+            let isColliding = distanceToCenter.lengthSquared < A.radius * A.radius
+
+            if (isColliding) {
+                this.points[0] = closestPoint
+                this.normal = distanceToCenter.clone().normalize
+                this.overlap = A.radius - distanceToCenter.length
+                this.mtv.x = this.normal.x * this.overlap
+                this.mtv.y = this.normal.y * this.overlap
+            }
+
+            return isColliding
+
+        } else {
+
+            overlap = circleToLine.dot(lineNormal)
+            overlap = isLeft ? overlap + A.radius : overlap - A.radius
+
+            let isColliding = isLeft && overlap > 0 ? true : !isLeft && overlap < 0 ? true : false
+
+            if (isColliding) {
+                this.points[0] = B.start.clone().add(circleToLine.project(linePlane))
+                this.overlap = overlap ? -overlap : overlap
+                this.normal = lineNormal
+                this.mtv.x = this.normal.x * this.overlap
+                this.mtv.y = this.normal.y * this.overlap
+            }
+
+            return isColliding
+
+        }
+
 
     }
 
