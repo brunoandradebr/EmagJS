@@ -494,9 +494,12 @@ class CollisionHandler {
     }
 
     /**
+     * Collision between circle and line
      * 
-     * @param {EmagJS.Core.Render.Circle} A 
-     * @param {EmagJS.Core.Render.Line} B 
+     * @param {EmagJS.Core.Render.Circle} A
+     * @param {EmagJS.Core.Render.Line} B
+     * 
+     * @return {bool}
      */
     circleToLineCollision(A = Circle, B = Line) {
 
