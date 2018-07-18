@@ -158,8 +158,8 @@ class Sprite {
         if (typeof (keyFrames[0]) == 'string') {
 
             let range = keyFrames[0].split('..')
-            let start = range[0]
-            let end = range[1]
+            let start = range[0] | 0
+            let end = range[1] | 0
 
             keyFrames.length = 0
 
