@@ -96,9 +96,9 @@ class CollisionHandler {
         if (A.constructor.name == 'Circle' && B == 'screen')
             return this.circleToScreenCollision(A)
 
-        // collision between Circle and Shape
-        if (A.constructor.name == 'Circle' && B.constructor.name == 'Shape')
-            return this.circleToShapeCollision(A, B)
+        // collision between Point and Shape
+        if (A.constructor.name == 'Vector' && B.constructor.name == 'Shape')
+            return this.pointToShapeCollision(A, B)
 
         // collision between Circle and Line
         if (A.constructor.name == 'Circle' && B.constructor.name == 'Line')
@@ -561,6 +561,55 @@ class CollisionHandler {
         }
 
 
+    }
+
+    /**
+     * Checks if a point intersects a polygon
+     * 
+     * @param {EmagJS.Core.Math.Vector} A 
+     * @param {EmagJS.Core.Render.Shape} B
+     * 
+     * @return {bool} 
+     */
+    pointToShapeCollision(A = Vector, B = Shape) {
+
+        let lines = B.getLines()
+        let linesLength = lines.length
+
+        let closestLine = lines[0]
+        let minDot = Infinity
+
+        // check if point is inside polygon
+        for (let i = 0; i < linesLength; i++) {
+
+            let line = lines[i]
+
+            let aux = line.start.clone().subtract(A)
+            let dot = aux.dot(line.normal.normalize)
+
+            if (dot < 0)
+                return false
+
+            // closest line to point
+            if (dot < minDot) {
+                minDot = dot
+                closestLine = line
+            }
+        }
+
+        // collision normal
+        let normal = closestLine.normal.normalize
+        this.normal = normal
+
+        // MTV
+        this.overlap = minDot
+        this.mtv = normal.multiplyScalar(minDot)
+
+        // point of collision
+        let point = A.clone().add(this.mtv)
+        this.points[0] = point
+
+        return true
     }
 
     /**
