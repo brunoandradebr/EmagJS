@@ -119,6 +119,33 @@ class Shape {
     }
 
     /**
+     * Checks if a point is inside polygon
+     * 
+     * @param {EmagJS.Core.Math.Vector} point
+     * 
+     * @return {bool} 
+     */
+    contains(point = Vector) {
+
+        let lines = this.getLines()
+        let lineLenght = lines.length
+
+        for (let i = 0; i < lineLenght; i++) {
+
+            let line = lines[i]
+
+            let aux = point.clone().subtract(line.start)
+            let dot = aux.dot(line.normal)
+
+            if (dot > 0)
+                return false
+
+        }
+
+        return true
+    }
+
+    /**
      * Scales width and height
      * 
      * @param {number} width 
