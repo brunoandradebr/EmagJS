@@ -96,6 +96,10 @@ class CollisionHandler {
         if (A.constructor.name == 'Circle' && B == 'screen')
             return this.circleToScreenCollision(A)
 
+        // collision between Circle and Shape
+        if (A.constructor.name == 'Circle' && B.constructor.name == 'Shape')
+            return this.circleToShapeCollision(A, B)
+
         // collision between Point and Shape
         if (A.constructor.name == 'Vector' && B.constructor.name == 'Shape')
             return this.pointToShapeCollision(A, B)
@@ -610,6 +614,10 @@ class CollisionHandler {
         this.points[0] = point
 
         return true
+    }
+
+    circleToShapeCollision(A = Circle, B = Shape) {
+
     }
 
     /**
