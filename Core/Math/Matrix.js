@@ -48,8 +48,8 @@ class Matrix {
 
         let transformed = new Vector()
 
-        transformed.x = v.x * this.m[0][0] + v.y * this.m[1][0] + this.m[0][2];
-        transformed.y = v.x * this.m[0][1] + v.y * this.m[1][1] + this.m[1][2];
+        transformed.x = v.x * this.m[0][0] + v.y * this.m[0][1] + this.m[0][2];
+        transformed.y = v.x * this.m[1][0] + v.y * this.m[1][1] + this.m[1][2];
 
         return transformed
 
@@ -82,10 +82,15 @@ class Matrix {
         let _21 = this.m[2][0] * m.m[1][0] + this.m[2][1] * m.m[1][1] + this.m[2][2] * m.m[1][2];
         let _22 = this.m[2][0] * m.m[2][0] + this.m[2][1] * m.m[2][1] + this.m[2][2] * m.m[2][2];
 
+        // this.m = [
+        //     [_00, _01, _02],
+        //     [_10, _11, _12],
+        //     [_20, _21, _22],
+        // ];
         this.m = [
-            [_00, _01, _02],
-            [_10, _11, _12],
-            [_20, _21, _22],
+            [_00, _10, _20],
+            [_01, _11, _21],
+            [_02, _12, _22],
         ];
 
         return this
@@ -159,7 +164,6 @@ class Matrix {
         let rad = angle * toRad;
 
         let cos = Math.cos(rad);
-        let sin = Math.sin(rad);
 
         let mRotate = [
             [1, 0, 0],
@@ -183,7 +187,6 @@ class Matrix {
         let rad = angle * toRad;
 
         let cos = Math.cos(rad);
-        let sin = Math.sin(rad);
 
         let mRotate = [
             [cos, 0, 0],
@@ -210,8 +213,8 @@ class Matrix {
         let sin = Math.sin(rad);
 
         let mRotate = [
-            [cos, sin, 0],
-            [-sin, cos, 0],
+            [cos, -sin, 0],
+            [sin, cos, 0],
             [0, 0, 1]
         ]
 
@@ -250,6 +253,8 @@ class Matrix {
 
         let center = definition.center
 
+        let scale = definition.scale || 1
+
         let xLineColor = definition.xLineColor || 'red'
         let yLineColor = definition.yLineColor || 'blue'
 
@@ -259,14 +264,14 @@ class Matrix {
         graphics.strokeStyle = xLineColor
         graphics.beginPath()
         graphics.moveTo(center.x | 0, center.y | 0)
-        graphics.lineTo(center.x + m[0][0] * 30, center.y - m[1][0] * 30)
+        graphics.lineTo(center.x + m[0][0] * scale, center.y + m[1][0] * scale)
         graphics.closePath()
         graphics.stroke()
 
         graphics.strokeStyle = yLineColor
         graphics.beginPath()
         graphics.moveTo(center.x | 0, center.y | 0)
-        graphics.lineTo(center.x - m[0][1] * 30, center.y + m[1][1] * 30)
+        graphics.lineTo(center.x - m[0][1] * scale, center.y - m[1][1] * scale)
         graphics.closePath()
         graphics.stroke()
         graphics.restore()
