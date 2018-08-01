@@ -68,25 +68,28 @@ class Matrix {
             m.m = m
 
         // first row
-        let _00 = this.m[0][0] * m.m[0][0] + this.m[0][1] * m.m[0][1] + this.m[0][2] * m.m[0][2];
-        let _01 = this.m[0][0] * m.m[1][0] + this.m[0][1] * m.m[1][1] + this.m[0][2] * m.m[1][2];
-        let _02 = this.m[0][0] * m.m[2][0] + this.m[0][1] * m.m[2][1] + this.m[0][2] * m.m[2][2];
+        let _00 = this.m[0][0] * m.m[0][0] + this.m[0][1] * m.m[1][0] + this.m[0][2] * m.m[2][0];
+        let _01 = this.m[0][0] * m.m[0][1] + this.m[0][1] * m.m[1][1] + this.m[0][2] * m.m[2][1];
+        let _02 = this.m[0][0] * m.m[0][2] + this.m[0][1] * m.m[1][2] + this.m[0][2] * m.m[2][2];
 
         // // second row
-        let _10 = this.m[1][0] * m.m[0][0] + this.m[1][1] * m.m[0][1] + this.m[1][2] * m.m[0][2];
-        let _11 = this.m[1][0] * m.m[1][0] + this.m[1][1] * m.m[1][1] + this.m[1][2] * m.m[1][2];
-        let _12 = this.m[1][0] * m.m[2][0] + this.m[1][1] * m.m[2][1] + this.m[1][2] * m.m[2][2];
+        let _10 = this.m[1][0] * m.m[0][0] + this.m[1][1] * m.m[1][0] + this.m[1][2] * m.m[2][0];
+        let _11 = this.m[1][0] * m.m[0][1] + this.m[1][1] * m.m[1][1] + this.m[1][2] * m.m[2][1];
+        let _12 = this.m[1][0] * m.m[0][2] + this.m[1][1] * m.m[1][2] + this.m[1][2] * m.m[2][2];
 
         // // third row
-        let _20 = this.m[2][0] * m.m[0][0] + this.m[2][1] * m.m[0][1] + this.m[2][2] * m.m[0][2];
-        let _21 = this.m[2][0] * m.m[1][0] + this.m[2][1] * m.m[1][1] + this.m[2][2] * m.m[1][2];
-        let _22 = this.m[2][0] * m.m[2][0] + this.m[2][1] * m.m[2][1] + this.m[2][2] * m.m[2][2];
+        let _20 = this.m[2][0] * m.m[0][0] + this.m[2][1] * m.m[1][0] + this.m[2][2] * m.m[2][0];
+        let _21 = this.m[2][0] * m.m[0][1] + this.m[2][1] * m.m[1][1] + this.m[2][2] * m.m[2][1];
+        let _22 = this.m[2][0] * m.m[0][2] + this.m[2][1] * m.m[1][2] + this.m[2][2] * m.m[2][2];
 
+        // left hand matrix
         // this.m = [
         //     [_00, _01, _02],
         //     [_10, _11, _12],
         //     [_20, _21, _22],
         // ];
+
+        // right hand matrix
         this.m = [
             [_00, _10, _20],
             [_01, _11, _21],
@@ -143,9 +146,9 @@ class Matrix {
     translate(x, y) {
 
         let mTranslate = [
-            [1, 0, 0],
-            [0, 1, 0],
-            [x, y, 1]
+            [1, 0, x],
+            [0, 1, y],
+            [0, 0, 1]
         ]
 
         return this.multiply(mTranslate);

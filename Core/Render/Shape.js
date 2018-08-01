@@ -167,12 +167,7 @@ class Shape {
     }
 
     /**
-     * Rotates polygon abount a point x,y - normalized
-     * ex:
-     *      center : {0, 0}
-     *      left : {-0.5, 0}
-     *      right : {0.5, 0}
-     *      etc
+     * Rotates polygon abount a point x,y
      * 
      * @param {number} angle
      * @param {number} x
@@ -182,10 +177,11 @@ class Shape {
      */
     rotateZ(angle, x = 0, y = 0) {
 
-        this.matrix.identity()
-        this.scale(this.width, this.height)
         this.matrix.translate(x, y)
         this.matrix.rotateZ(angle)
+        this.scale(this.width, this.height)
+        this.matrix.translate(-x, -y)
+
         this.angle = angle
     }
 
