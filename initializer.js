@@ -34,6 +34,7 @@ preloadFileClassScript.onload = (e) => {
         { tween: root + 'Core/Common/Animation/Tween.js' },
         // COMMON/IMAGE
         { imageProcessor: root + 'Core/Common/Image/ImageProcessor.js' },
+        { Pattern: root + 'Core/Common/Image/Pattern.js' },
         { spriteSheet: root + 'Core/Common/Image/SpriteSheet.js' },
         // COMMOMN/MISC
         { frameRate: root + 'Core/Common/Misc/FrameRate.js' },
