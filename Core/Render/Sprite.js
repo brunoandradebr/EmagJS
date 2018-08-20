@@ -304,7 +304,7 @@ class Sprite {
         // draw pattern
         else if (this.image && this.image.constructor.name == 'Pattern') {
             graphics.fillStyle = this.image.fillStyle
-            graphics.fillRect(0, 0, this.width, this.height)
+            graphics.fillRect(-this.width * this.anchor.x, -this.height * this.anchor.y, this.width, this.height)
         }
 
         // animate spritesheet
