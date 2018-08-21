@@ -13,6 +13,13 @@
  */
 let mouse = new Vector(0, 0)
 
+/**
+ * Mouse down flag
+ * 
+ * @type {boolean}
+ * @global
+ */
+let mousedown = false
 
 /**
  * keep track of all touch points
@@ -52,7 +59,6 @@ class Stage {
          */
         this.movies = [];
 
-
         /**
          * @type {HTMLElement}
          */
@@ -62,6 +68,27 @@ class Stage {
         // insert stage container element to the document body
         document.body.appendChild(this.container);
 
+        /**
+         * Mouse down event
+         */
+        this.container.addEventListener('mousedown', (e) => {
+
+            e.preventDefault();
+
+            mousedown = true
+
+        });
+
+        /**
+         * Mouse up event
+         */
+        this.container.addEventListener('mouseup', (e) => {
+
+            e.preventDefault();
+
+            mousedown = false
+
+        });
 
         /**
          * Mouse click event - updates mouse vector
@@ -75,7 +102,6 @@ class Stage {
 
         });
 
-
         /**
          * Mouse move event - updates mouse vector
          */
@@ -87,7 +113,6 @@ class Stage {
             mouse.y = e.clientY;
 
         });
-
 
         /**
          * Touch start event - updates mouse vector and pointers
@@ -112,7 +137,6 @@ class Stage {
 
         });
 
-
         /**
          * Touch move event - updates mouse vector and pointers
          */
@@ -134,7 +158,6 @@ class Stage {
             }
 
         });
-
 
         /**
          * Touch end event - updates pointers
