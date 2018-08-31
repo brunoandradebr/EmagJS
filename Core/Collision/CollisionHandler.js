@@ -68,44 +68,47 @@ class CollisionHandler {
         this.normal.x = 0;
         this.normal.y = 0;
 
+        let AConstructor = A.extends ? A.extends : A.constructor.name
+        let BConstructor = B.extends ? B.extends : B.constructor.name
+
         // collision between Shapes
-        if (A.constructor.name == 'Shape' && B.constructor.name == 'Shape')
+        if (AConstructor == 'Shape' && BConstructor == 'Shape')
             return this.SAT(A, B);
 
         // collision between Sprites
-        if (A.constructor.name == 'Sprite' && B.constructor.name == 'Sprite')
+        if (AConstructor == 'Sprite' && BConstructor == 'Sprite')
             return this.spriteToSpriteCollision(A, B)
 
         // collision between Lines
-        if (A.constructor.name == 'Line' && B.constructor.name == 'Line')
+        if (AConstructor == 'Line' && BConstructor == 'Line')
             return this.lineToLineCollision(A, B)
 
         // collision between Line and Shape
-        if (A.constructor.name == 'Line' && B.constructor.name == 'Shape')
+        if (AConstructor == 'Line' && BConstructor == 'Shape')
             return this.lineToShapeCollision(A, B)
 
         // collision between bounding box
-        if (A.constructor.name == 'Object' && B.constructor.name == 'Object')
+        if (AConstructor == 'Object' && BConstructor == 'Object')
             return this.boundingBoxToBoundingBoxCollision(A, B, offset)
 
         // collision between Circles
-        if (A.constructor.name == 'Circle' && B.constructor.name == 'Circle')
+        if (AConstructor == 'Circle' && BConstructor == 'Circle')
             return this.circleToCircleCollision(A, B)
 
         // collision between Circle and screen boundary
-        if (A.constructor.name == 'Circle' && B == 'screen')
+        if (AConstructor == 'Circle' && B == 'screen')
             return this.circleToScreenCollision(A)
 
         // collision between Circle and Shape
-        if (A.constructor.name == 'Circle' && B.constructor.name == 'Shape')
+        if (AConstructor == 'Circle' && BConstructor == 'Shape')
             return this.circleToShapeCollision(A, B)
 
         // collision between Point and Shape
-        if (A.constructor.name == 'Vector' && B.constructor.name == 'Shape')
+        if (AConstructor == 'Vector' && BConstructor == 'Shape')
             return this.pointToShapeCollision(A, B)
 
         // collision between Circle and Line
-        if (A.constructor.name == 'Circle' && B.constructor.name == 'Line')
+        if (AConstructor == 'Circle' && BConstructor == 'Line')
             return this.circleToLineCollision(A, B)
 
     }
