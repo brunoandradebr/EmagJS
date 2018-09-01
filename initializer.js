@@ -70,6 +70,7 @@ preloadFileClassScript.onload = (e) => {
         { keyboard: root + 'Core/Input/Keyboard.js' },
         { touch: root + 'Core/Input/Touch.js' },
         { button: root + 'Core/Input/Button.js' },
+        { input: root + 'Core/Input/Input.js' },
         // COLLISION
         { collisionHandler: root + 'Core/Collision/CollisionHandler.js' },
         // PHYSICS
