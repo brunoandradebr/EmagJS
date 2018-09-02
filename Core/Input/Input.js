@@ -14,6 +14,9 @@ class Input {
 
     holding(key, touchKey) {
 
+        if (!this.keyboard && !this.touch)
+            return false
+
         if (MOBILE) {
             if (this.touch) {
                 key = touchKey ? touchKey : key
@@ -27,6 +30,9 @@ class Input {
 
     pressed(key, touchKey) {
 
+        if (!this.keyboard && !this.touch)
+            return false
+
         if (MOBILE) {
             if (this.touch) {
                 key = touchKey ? touchKey : key
@@ -39,6 +45,9 @@ class Input {
     }
 
     doublePressed(key, touchKey) {
+
+        if (!this.keyboard && !this.touch)
+            return false
 
         if (MOBILE) {
             if (this.touch) {
