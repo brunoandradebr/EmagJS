@@ -17,13 +17,14 @@ class Input {
         if (!this.keyboard && !this.touch)
             return false
 
-        if (MOBILE) {
+        if (MOBILE && this.touch) {
             if (this.touch) {
                 key = touchKey ? touchKey : key
                 return this.touch.buttons[key].holding
             }
         } else {
-            return this.keyboard.holding(this.keyboard[key])
+            if (this.keyboard)
+                return this.keyboard.holding(this.keyboard[key])
         }
 
     }
@@ -33,13 +34,14 @@ class Input {
         if (!this.keyboard && !this.touch)
             return false
 
-        if (MOBILE) {
+        if (MOBILE && this.touch) {
             if (this.touch) {
                 key = touchKey ? touchKey : key
                 return this.touch.buttons[key].pressed
             }
         } else {
-            return this.keyboard.pressed(this.keyboard[key])
+            if (this.keyboard)
+                return this.keyboard.pressed(this.keyboard[key])
         }
 
     }
@@ -49,13 +51,14 @@ class Input {
         if (!this.keyboard && !this.touch)
             return false
 
-        if (MOBILE) {
+        if (MOBILE && this.touch) {
             if (this.touch) {
                 key = touchKey ? touchKey : key
                 return this.touch.buttons[key].doublePressed
             }
         } else {
-            return this.keyboard.doublePressed(this.keyboard[key])
+            if (this.keyboard)
+                return this.keyboard.doublePressed(this.keyboard[key])
         }
 
     }
