@@ -81,6 +81,9 @@ preloadFileClassScript.onload = (e) => {
         { Commodore: root + 'Resource/Font/Commodore.ttf' },
         { Alagard: root + 'Resource/Font/Alagard.ttf' },
         { Unknown: root + 'Resource/Font/Unknown.ttf' },
+        // PLATFORMER
+        { platformerEntity: root + 'Platformer/Entity.js' },
+        { platformerPlatform: root + 'Platformer/Platform.js' },
     ]);
 
     core.oncomplete = () => {
