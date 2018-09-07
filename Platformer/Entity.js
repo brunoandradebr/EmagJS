@@ -300,6 +300,11 @@ class Entity extends Sprite {
                     this.leavePlatform()
                 }
 
+                // enter fall state
+                if (this.body.velocity.y > 1 && !this.onGround) {
+                    this.state = 'FALL'
+                }
+
                 // enter attack state
                 if (this.input.pressed('X', 'A') && this.equiped) {
                     this.state = 'ATTACK'
