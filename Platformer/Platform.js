@@ -21,7 +21,7 @@ class Platform extends Shape {
      */
     constructor(x, y, width, height, angle = 0, offset = 0) {
 
-        super(new Square, new Vector(x, y), width, height, 'rgba(0, 0, 255, 0.4)', 2)
+        super(new Square, new Vector(x, y), width, height, 'rgba(0, 0, 255, 0.4)', 0)
 
         // to collision handler see platform as a shape
         this.extends = 'Shape'
