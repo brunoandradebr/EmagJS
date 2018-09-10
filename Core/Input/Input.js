@@ -1,7 +1,7 @@
 /**
  * Input interface that encapsules keyboard, touch
- * TODO - add gamepad interface
- *      - fix touch pressed and doublePressed - fire twice... when created in an scene and rendered on another
+ * - fix touch pressed and doublePressed - fire twice...
+ *   when created in an scene and rendered on another
  */
 class Input {
 
@@ -13,6 +13,17 @@ class Input {
 
     }
 
+    /**
+     * Holding button interface
+     * 
+     * touch, keyboard and gamepad
+     * 
+     * @param {string} key 
+     * @param {string} touchKey 
+     * @param {string} gamepadButton 
+     * 
+     * @return {bool}
+     */
     holding(key, touchKey, gamepadButton) {
 
         if (!this.keyboard && !this.touch && !this.gamepad)
@@ -33,6 +44,17 @@ class Input {
 
     }
 
+    /**
+     * Pressed button interface
+     * 
+     * touch, keyboard and gamepad
+     * 
+     * @param {string} key 
+     * @param {string} touchKey 
+     * @param {string} gamepadButton 
+     * 
+     * @return {bool}
+     */
     pressed(key, touchKey, gamepadButton) {
 
         if (!this.keyboard && !this.touch && !this.gamepad)
@@ -53,6 +75,17 @@ class Input {
 
     }
 
+    /**
+     * Double pressed button interface
+     * 
+     * touch, keyboard and gamepad
+     * 
+     * @param {string} key 
+     * @param {string} touchKey 
+     * @param {string} gamepadButton 
+     * 
+     * @return {bool}
+     */
     doublePressed(key, touchKey, gamepadButton) {
 
         if (!this.keyboard && !this.touch && !this.gamepad)
