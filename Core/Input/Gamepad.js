@@ -282,9 +282,63 @@ class GamepadInterface {
         if (this.gamepad == null)
             return false
 
-        button = this.gamepad.buttons[this[this.interface][button]]
+        let padButton = this.gamepad.buttons[this[this.interface][button]]
 
-        return button ? button.pressed : false
+        // if there is no LEFT OR RIGHT button, use thumb axes
+        if (!padButton) {
+            if (button == 'RIGHT') {
+                return this.holdingAxis(0, 0, 1)
+            }
+            if (button == 'LEFT') {
+                return this.holdingAxis(0, 0, -1)
+            }
+        }
+
+        return padButton ? padButton.pressed : false
+
+    }
+
+    /**
+     * Checks if left/right thumb axis is been holding
+     * 
+     * @param {integer} thumbIndex - 0 left thumb | 1 right thumb
+     * @param {integer} axisIndex  - 0 horizontal | 1 vertical 
+     * @param {integer} direction  - 0 left/down  | 1 right/up
+     * 
+     * @return {bool}
+     */
+    holdingAxis(thumbIndex, axisIndex, direction) {
+
+        // left or right thumb
+        let thumb = this.getAxis(thumbIndex)
+
+        // horizontal axis
+        if (axisIndex == 0) {
+
+            // right direction
+            if (direction == 1) {
+                return thumb.x == 1
+            }
+            // left direction
+            else if (direction == -1) {
+                return thumb.x == -1
+            }
+
+            // vertical axis
+        } else if (axisIndex == 1) {
+
+            // down direction
+            if (direction == 1) {
+                return thumb.y == 1
+            }
+            // up direction
+            else if (direction == -1) {
+                return thumb.y == -1
+            }
+
+        }
+
+        return false
 
     }
 
@@ -340,6 +394,8 @@ class GamepadInterface {
 
         // button pressed
         let pressedButton = this.gamepad.buttons[this[this.interface][button]]
+
+        if (!pressedButton) return false
 
         // double pressed flag
         let doublePressed = false
