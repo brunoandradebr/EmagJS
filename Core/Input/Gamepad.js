@@ -192,7 +192,7 @@ class GamepadInterface {
             case 'Xbox 360 Controller (XInput STANDARD GAMEPAD)': this.interface = 'xbox'; break;
             case 'HuiJia  USB GamePad (Vendor: 0e8f Product: 3013)': this.interface = 'HuiJia'; break;
             case 'usb gamepad            (Vendor: 0810 Product: e501)': this.interface = 'usbGamepad'; break;
-            case 'AccModel Extended Gamepad': this.interface = 'gamevice'; break;
+            case 'GV157 Extended Gamepad': this.interface = 'gamevice'; break;
             default:
                 this.interface = 'xbox'
         }
@@ -357,6 +357,8 @@ class GamepadInterface {
 
         // button pressed
         let pressedButton = this.gamepad.buttons[this[this.interface][button]]
+
+        if (!pressedButton) return false
 
         // trigger new press flag
         let newPress = false
