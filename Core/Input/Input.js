@@ -29,14 +29,12 @@ class Input {
         if (!this.keyboard && !this.touch && !this.gamepad)
             return false
 
-        if (MOBILE && this.touch) {
-            if (this.touch) {
-                key = touchKey ? touchKey : key
-                return this.touch.buttons[key].holding
-            }
-        } else if (this.gamepad) {
+        if (this.gamepad) {
             key = gamepadButton ? gamepadButton : key
             return this.gamepad.holding(key)
+        } else if (MOBILE && this.touch) {
+            key = touchKey ? touchKey : key
+            return this.touch.buttons[key].holding
         } else {
             if (this.keyboard)
                 return this.keyboard.holding(this.keyboard[key])
@@ -60,14 +58,12 @@ class Input {
         if (!this.keyboard && !this.touch && !this.gamepad)
             return false
 
-        if (MOBILE && this.touch) {
-            if (this.touch) {
-                key = touchKey ? touchKey : key
-                return this.touch.buttons[key].pressed
-            }
-        } else if (this.gamepad) {
+        if (this.gamepad) {
             key = gamepadButton ? gamepadButton : key
             return this.gamepad.pressed(key)
+        } else if (MOBILE && this.touch) {
+            key = touchKey ? touchKey : key
+            return this.touch.buttons[key].pressed
         } else {
             if (this.keyboard)
                 return this.keyboard.pressed(this.keyboard[key])
@@ -91,14 +87,12 @@ class Input {
         if (!this.keyboard && !this.touch && !this.gamepad)
             return false
 
-        if (MOBILE && this.touch) {
-            if (this.touch) {
-                key = touchKey ? touchKey : key
-                return this.touch.buttons[key].doublePressed
-            }
-        } else if (this.gamepad) {
+        if (this.gamepad) {
             key = gamepadButton ? gamepadButton : key
             return this.gamepad.doublePressed(key)
+        } else if (MOBILE && this.touch) {
+            key = touchKey ? touchKey : key
+            return this.touch.buttons[key].doublePressed
         } else {
             if (this.keyboard)
                 return this.keyboard.doublePressed(this.keyboard[key])
