@@ -147,6 +147,12 @@ class GamepadInterface {
         this.gamepad = gamepad
 
         /**
+         * Special cases buttons, like left and right thumb sticks.
+         * Maps when "pressed" left, right, up or down, on analog
+         */
+        this.specialButtons = {}
+
+        /**
          * keep pressed buttons history
          * 
          * @type {object}
@@ -299,50 +305,6 @@ class GamepadInterface {
     }
 
     /**
-     * Checks if left/right thumb axis is been holding
-     * 
-     * @param {integer} thumbIndex - 0 left thumb | 1 right thumb
-     * @param {integer} axisIndex  - 0 horizontal | 1 vertical 
-     * @param {integer} direction  - 0 left/down  | 1 right/up
-     * 
-     * @return {bool}
-     */
-    holdingAxis(thumbIndex, axisIndex, direction) {
-
-        // left or right thumb
-        let thumb = this.getAxis(thumbIndex)
-
-        // horizontal axis
-        if (axisIndex == 0) {
-
-            // right direction
-            if (direction == 1) {
-                return thumb.x == 1
-            }
-            // left direction
-            else if (direction == -1) {
-                return thumb.x == -1
-            }
-
-            // vertical axis
-        } else if (axisIndex == 1) {
-
-            // down direction
-            if (direction == 1) {
-                return thumb.y == 1
-            }
-            // up direction
-            else if (direction == -1) {
-                return thumb.y == -1
-            }
-
-        }
-
-        return false
-
-    }
-
-    /**
      * Checks if a button was just pressed
      * 
      * @param {string} button
@@ -357,6 +319,21 @@ class GamepadInterface {
 
         // button pressed
         let pressedButton = this.gamepad.buttons[this[this.interface][button]]
+
+        if (!pressedButton) {
+            if (button == 'LEFT') {
+                return this.pressedAxis(0, 0, -1)
+            }
+            if (button == 'RIGHT') {
+                return this.pressedAxis(0, 0, 1)
+            }
+            if (button == 'UP') {
+                return this.pressedAxis(0, 1, -1)
+            }
+            if (button == 'DOWN') {
+                return this.pressedAxis(0, 1, 1)
+            }
+        }
 
         if (!pressedButton) return false
 
@@ -397,6 +374,21 @@ class GamepadInterface {
         // button pressed
         let pressedButton = this.gamepad.buttons[this[this.interface][button]]
 
+        if (!pressedButton) {
+            if (button == 'LEFT') {
+                return this.doublePressedAxis(0, 0, -1)
+            }
+            if (button == 'RIGHT') {
+                return this.doublePressedAxis(0, 0, 1)
+            }
+            if (button == 'UP') {
+                return this.doublePressedAxis(0, 1, -1)
+            }
+            if (button == 'DOWN') {
+                return this.doublePressedAxis(0, 1, 1)
+            }
+        }
+
         if (!pressedButton) return false
 
         // double pressed flag
@@ -420,6 +412,150 @@ class GamepadInterface {
 
         // if not holding button
         if (!pressedButton.pressed)
+            // update cached button value
+            this.cachedButtons[button] = false
+
+        return doublePressed
+    }
+
+    /**
+     * Checks if left/right thumb axis is been holding
+     * 
+     * @param {integer} thumbIndex - 0 left thumb | 1 right thumb
+     * @param {integer} axisIndex  - 0 horizontal | 1 vertical 
+     * @param {integer} direction  - 0 left/down  | 1 right/up
+     * 
+     * @return {bool}
+     */
+    holdingAxis(thumbIndex, axisIndex, direction) {
+
+        // left or right thumb
+        let thumb = this.getAxis(thumbIndex)
+
+        // horizontal axis
+        if (axisIndex == 0) {
+
+            // right direction
+            if (direction == 1) {
+                return thumb.x == 1
+            }
+            // left direction
+            else if (direction == -1) {
+                return thumb.x == -1
+            }
+
+            // vertical axis
+        } else if (axisIndex == 1) {
+
+            // down direction
+            if (direction == 1) {
+                return thumb.y == 1
+            }
+            // up direction
+            else if (direction == -1) {
+                return thumb.y == -1
+            }
+
+        }
+
+        return false
+    }
+
+    /**
+     * Checks if left/right thumb axis was just pressed
+     * 
+     * @param {integer} thumbIndex - 0 left thumb | 1 right thumb
+     * @param {integer} axisIndex  - 0 horizontal | 1 vertical 
+     * @param {integer} direction  - 0 left/down  | 1 right/up
+     * 
+     * @return {bool}
+     */
+    pressedAxis(thumbIndex, axisIndex, direction) {
+
+        // creates an unique name to stick been pressed
+        // like button_0_0_1 that's left thumb, right direction
+        let button = 'button_' + thumbIndex + '_' + axisIndex + '_' + direction
+
+        // register the special button - stick direction based
+        if (!this.specialButtons[button]) {
+            this.specialButtons[button] = {}
+        }
+
+        // left or right thumb
+        let thumb = this.getAxis(thumbIndex)
+        // horizontal or vertical axis
+        let axis = axisIndex == 0 ? 'x' : 'y'
+        // "pressed" state
+        let pressed = thumb[axis] == direction
+
+        // trigger new press flag
+        let newPress = false
+
+        // holding button and not yet cached
+        if (pressed && this.cachedButtons[button] == false) {
+            // cache pressed button
+            this.cachedButtons[button] = true
+            // flag that a new press happened
+            newPress = true
+        }
+
+        // if not holding button
+        if (!pressed)
+            // update cached button value
+            this.cachedButtons[button] = false
+
+        // return new press
+        return newPress
+    }
+
+    /**
+     * Checks if left/right thumb axis was just pressed twice
+     * 
+     * @param {integer} thumbIndex - 0 left thumb | 1 right thumb
+     * @param {integer} axisIndex  - 0 horizontal | 1 vertical 
+     * @param {integer} direction  - 0 left/down  | 1 right/up
+     * 
+     * @return {bool}
+     */
+    doublePressedAxis(thumbIndex, axisIndex, direction) {
+
+        // creates an unique name to stick been pressed
+        // like button_0_0_1 that's left thumb, right direction
+        let button = 'button_' + thumbIndex + '_' + axisIndex + '_' + direction
+
+        // register the special button - stick direction based
+        if (!this.specialButtons[button]) {
+            this.specialButtons[button] = {}
+        }
+
+        // left or right thumb
+        let thumb = this.getAxis(thumbIndex)
+        // horizontal or vertical axis
+        let axis = axisIndex == 0 ? 'x' : 'y'
+        // "pressed" state
+        let pressed = thumb[axis] == direction
+
+        // double pressed flag
+        let doublePressed = false
+
+        // holding button and not yet cached
+        if (pressed && this.cachedButtons[button] == false) {
+
+            // cache pressed button
+            this.cachedButtons[button] = true
+
+            // if pressed twice
+            if (window.performance.now() - this.specialButtons[button].lastPressedTime < 200) {
+                // flag that a double pressed happened
+                doublePressed = true
+            }
+
+            // update last pressed time
+            this.specialButtons[button].lastPressedTime = window.performance.now()
+        }
+
+        // if not holding button
+        if (!pressed)
             // update cached button value
             this.cachedButtons[button] = false
 
