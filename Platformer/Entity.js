@@ -46,9 +46,7 @@ class Entity extends Sprite {
             STAND: true,
             WALK: true,
             JUMP: true,
-            FALL: true,
-            ATTACK: true,
-            ROLL: true,
+            FALL: true
         }
 
         // FSM
@@ -167,24 +165,6 @@ class Entity extends Sprite {
     }
 
     /**
-     * Roll state
-     * 
-     * @return {void}
-     */
-    rollState() {
-        // implement on sub class
-    }
-
-    /**
-     * Attack state
-     * 
-     * @return {void}
-     */
-    attackState() {
-        // implement on sub class
-    }
-
-    /**
      * Handles input
      * 
      * @return {void}
@@ -296,7 +276,7 @@ class Entity extends Sprite {
         this.body.velocity.multiply(this.body.friction)
 
         // state handler
-        switch (this._state) {
+        switch (this.state) {
 
             // stand state
             case 'STAND':
@@ -316,12 +296,8 @@ class Entity extends Sprite {
                     this.state = 'WALK'
                 }
 
-                // enter roll state
-                if (this.input.doublePressed('LEFT') || this.input.doublePressed('RIGHT'))
-                    this.state = 'ROLL'
-
                 // enter jump state
-                if (this.input.pressed('SPACE', 'B', 'CROSS')) {
+                if (this.input.pressed('Z', 'B', 'CROSS')) {
                     this.state = 'JUMP'
                     this.leavePlatform()
                 }
@@ -329,11 +305,6 @@ class Entity extends Sprite {
                 // enter fall state
                 if (this.body.velocity.y > 1 && !this.onGround) {
                     this.state = 'FALL'
-                }
-
-                // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE')) {
-                    this.state = 'ATTACK'
                 }
 
                 break
@@ -363,7 +334,7 @@ class Entity extends Sprite {
                 }
 
                 // enter jump state
-                if (this.input.pressed('SPACE', 'B', 'CROSS')) {
+                if (this.input.pressed('Z', 'B', 'CROSS')) {
                     this.state = 'JUMP'
                     this.leavePlatform()
                 }
@@ -371,11 +342,6 @@ class Entity extends Sprite {
                 // enter fall state
                 if (this.body.velocity.y > 1 && !this.onGround) {
                     this.state = 'FALL'
-                }
-
-                // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE')) {
-                    this.state = 'ATTACK'
                 }
 
                 break
@@ -388,7 +354,7 @@ class Entity extends Sprite {
                 this.jumpState()
 
                 // holding jump button
-                if (this.input.holding('SPACE', 'B', 'CROSS')) {
+                if (this.input.holding('Z', 'B', 'CROSS')) {
 
                     // increase jump time
                     this.body.jumpTime += 1 * dt
@@ -425,11 +391,6 @@ class Entity extends Sprite {
                 // enter fall state
                 if (this.body.velocity.y >= 0) {
                     this.state = 'FALL'
-                }
-
-                // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE')) {
-                    this.state = 'ATTACK'
                 }
 
                 break
@@ -469,94 +430,8 @@ class Entity extends Sprite {
                     this.walkRight()
                 }
 
-                // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE')) {
-                    this.state = 'ATTACK'
-                }
-
                 break
             // fall state
-
-
-            // roll state
-            case 'ROLL':
-
-                // roll behavior
-                this.rollState()
-
-                // only turn at roll begin
-                if (this.currentFrame < 3) {
-                    if (this.input.holding('LEFT')) {
-                        this.turnLeft()
-                    }
-                    if (this.input.holding('RIGHT')) {
-                        this.turnRight()
-                    }
-                }
-
-                // stop rolling
-                if (this.currentAnimation.lastFrame) {
-                    if (this.input.holding('LEFT') || this.input.holding('RIGHT')) {
-                        this.state = 'WALK'
-                    } else {
-                        this.state = 'STAND'
-                    }
-                }
-
-                break
-            // roll state
-
-            // attack state
-            case 'ATTACK':
-
-                this.attackState()
-
-                // finished attack animation
-                if (this.currentAnimation.lastFrame) {
-
-                    // if on ground
-                    if (this.onGround) {
-                        // if holding left or right
-                        if (this.input.holding('LEFT') || this.input.holding('RIGHT')) {
-                            // enter walk state
-                            this.state = 'WALK'
-                        } else {
-                            // enter stand state
-                            this.state = 'STAND'
-                        }
-
-                    } else { // on air
-                        // attack on the air, enter fall state
-                        this.state = 'FALL'
-                    }
-
-                    // finished attacking, reset jump time
-                    this.body.jumpTime = 0
-
-                }
-
-                // landing after attack has started
-                if (this.body.jumpTime > 0 && this.onGround) {
-                    this.body.jumpTime = 0
-                    this.landPlatform()
-                }
-
-                // change direction in the air
-                if (!this.onGround) {
-                    // move left behavior
-                    if (this.input.holding('LEFT')) {
-                        this.turnLeft()
-                        this.walkLeft()
-                    }
-                    // move right behavior
-                    if (this.input.holding('RIGHT')) {
-                        this.turnRight()
-                        this.walkRight()
-                    }
-                }
-
-                break
-            // attack state
 
         } // FSM
 
