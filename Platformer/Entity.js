@@ -41,9 +41,35 @@ class Entity extends Sprite {
         // flags
         this.onGround = false
 
+        // possibles states
+        this.states = {
+            STAND: true,
+            WALK: true,
+            JUMP: true,
+            FALL: true,
+            ATTACK: true,
+            ROLL: true,
+        }
+
         // FSM
         this.state = 'STAND'
 
+    }
+
+    /**
+     * get state
+     */
+    get state() {
+        return this._state
+    }
+
+    /**
+     * set state - checks if state been set is active then update state property
+     */
+    set state(state) {
+        if (this.states[state]) {
+            this._state = state
+        }
     }
 
     /**
@@ -270,7 +296,7 @@ class Entity extends Sprite {
         this.body.velocity.multiply(this.body.friction)
 
         // state handler
-        switch (this.state) {
+        switch (this._state) {
 
             // stand state
             case 'STAND':
@@ -306,7 +332,7 @@ class Entity extends Sprite {
                 }
 
                 // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE') && this.equiped) {
+                if (this.input.pressed('X', 'A', 'SQUARE')) {
                     this.state = 'ATTACK'
                 }
 
@@ -348,7 +374,7 @@ class Entity extends Sprite {
                 }
 
                 // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE') && this.equiped) {
+                if (this.input.pressed('X', 'A', 'SQUARE')) {
                     this.state = 'ATTACK'
                 }
 
@@ -402,7 +428,7 @@ class Entity extends Sprite {
                 }
 
                 // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE') && this.equiped) {
+                if (this.input.pressed('X', 'A', 'SQUARE')) {
                     this.state = 'ATTACK'
                 }
 
@@ -444,7 +470,7 @@ class Entity extends Sprite {
                 }
 
                 // enter attack state
-                if (this.input.pressed('X', 'A', 'SQUARE') && this.equiped) {
+                if (this.input.pressed('X', 'A', 'SQUARE')) {
                     this.state = 'ATTACK'
                 }
 
