@@ -61,6 +61,7 @@ preloadFileClassScript.onload = (e) => {
         // RENDER
         { text: root + 'Core/Render/Text.js' },
         { sprite: root + 'Core/Render/Sprite.js' },
+        { spriteFont: root + 'Core/Render/SpriteFont.js' },
         { spriteText: root + 'Core/Render/SpriteText.js' },
         { line: root + 'Core/Render/Line.js' },
         { circle: root + 'Core/Render/Circle.js' },
