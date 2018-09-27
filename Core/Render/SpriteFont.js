@@ -55,7 +55,7 @@ class SpriteFont {
         /**
          * descend number
          */
-        this.descend = descend || this.height * 0.5 | 0
+        this.descend = descend || this.height * 0.25 | 0
 
         /**
          * maps all letters
