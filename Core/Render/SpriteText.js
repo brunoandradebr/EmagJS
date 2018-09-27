@@ -1,99 +1,135 @@
+/**
+ * @author Bruno Andrade <bruno.faria.andrade@gmail.com>
+ */
+
+/**
+ * Sprite Text
+ */
 class SpriteText {
 
+    /**
+     * 
+     * @param {EmagJs.Core.Render.SpriteFont} spriteFont 
+     */
     constructor(spriteFont) {
 
+        /**
+         * sprite font that holds a sprite sheet with letters
+         */
         this.spriteFont = spriteFont
 
+        /**
+         * all created sprite letters to render
+         */
         this.letters = []
 
-        this._charPool = new ObjectPool(() => {
-            let char = new Sprite(new Vector(0, 0), this.spriteFont.width, this.spriteFont.height, 'transparent', 0)
-            char.image = this.spriteFont.image.clone()
-            // animation - TODO - move to dialog class
-            char.interpolation = 0
-            char.tween = new Tween(char)
-            char.tween.animate({ interpolation: 1 })
-            return char
-        }, (char) => {
-            char.imageOffsetX = 0
-            char.imageOffsetY = 0
-            char.imageOffsetWidth = this.spriteFont.width
-            char.imageOffsetHeight = this.spriteFont.height
-            // animation - TODO - move to dialog class
-            char.tween.animations[0].ease = 'elasticOut'
-            // TODO - delay based on string length not this.letters
-            char.tween.animations[0].delay = (this.letters.length) * 80 // letter spawn speed
-            char.tween.animations[0].duration = 1400 // letter animation time - can be a big number
-            char.tween.resetAnimations()
-
-            return char
+        /**
+         * sprite characters pool
+         */
+        this.letterPool = new ObjectPool(() => {
+            let letter = new Sprite(new Vector(0, 0), this.spriteFont.width, this.spriteFont.height, 'transparent', 0)
+            letter.image = this.spriteFont.image.clone()
+            return letter
+        }, (letter) => {
+            // reset implemented in write method
+            return letter
         })
 
     }
 
+    /**
+     * Creates all sprite letters based on passed string
+     * 
+     * @param {string} string 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {number} width 
+     * @param {number} height
+     * 
+     * @return {void} 
+     */
     write(string, x, y, width, height) {
 
-        let fontScaleFactor = width / this.spriteFont.width
-        let letterPos = 0
+        // calculates font recoil scale factor based on passed width
+        // to correct positon
+        let recoilScaleFactor = width / this.spriteFont.width
+
+        // letter horizontal position
+        let xPosition = 0
+        // next letter recoil number
         let nextRecoil = 0
 
+        // read each character
         string.split('').map((char) => {
 
-            letterPos++
+            // increment x position
+            xPosition++
 
+            // if new line, increment y and reset x position and recoil
             if (char == '\n') {
+                xPosition = nextRecoil = 0
                 y += height
-                letterPos = 0
             }
 
-            if (this.spriteFont.map[char]) {
-
-                let letter = this._charPool.create()
-
-                letter.position.x = ((x - nextRecoil * fontScaleFactor) + (letterPos * width))
-                letter.position.y = (y * 1.3) + height
-                
-                letter.width = letter.initialWidth = width
-                letter.height = letter.initialHeight = height
-                letter.imageOffsetX = this.spriteFont.map[char].x
-                letter.imageOffsetY = this.spriteFont.map[char].y
-                letter.imageOffsetWidth = this.spriteFont.width
-                letter.imageOffsetHeight = this.spriteFont.height
-
-                this.letters.push(letter)
-
-                nextRecoil += this.spriteFont.map[char].recoil
-
-            }
-
-            if (char == '\n') {
-                nextRecoil = 0
-            }
+            // increment recoil when white space
             if (char == ' ') {
                 nextRecoil += this.spriteFont.width * 0.5
             }
 
-        })
+            // if there is a sprite letter
+            if (this.spriteFont.map[char]) {
 
+                let spriteFont = this.spriteFont.map[char]
+
+                // create or get from pool
+                let letter = this.letterPool.create()
+                // position letter
+                letter.position.x = ((x - nextRecoil * recoilScaleFactor) + (xPosition * width))
+                letter.position.y = (y * 1.3) + height
+                // letter size
+                letter.width = width
+                letter.height = height
+                // set letter image crop
+                letter.imageOffsetX = spriteFont.x
+                letter.imageOffsetY = spriteFont.y
+                letter.imageOffsetWidth = this.spriteFont.width
+                letter.imageOffsetHeight = this.spriteFont.height
+                // add created letter to letters container
+                this.letters.push(letter)
+
+                // increment recoil to position next letter
+                nextRecoil += spriteFont.recoil
+            }
+
+        })
     }
 
+    /**
+     * Clear letter container
+     * 
+     * @return {void}
+     */
     clear() {
+
+        // destroy all created sprite letter
         this.letters.map((letter) => {
-            this._charPool.destroy(letter)
+            this.letterPool.destroy(letter)
         })
+
+        // clear letter container
         this.letters.length = 0
     }
 
+    /**
+     * Draw all letters
+     * 
+     * @param {CanvasRenderingContext2D} graphics
+     * 
+     * @return {void}
+     */
     draw(graphics) {
 
         this.letters.map((letter) => {
-
-            // animation - TODO - move to dialog class
-            letter.tween.play()
-            
-            letter.width = letter.initialWidth * letter.interpolation
-            letter.height = letter.initialHeight * letter.interpolation
-
             letter.draw(graphics)
         })
 
