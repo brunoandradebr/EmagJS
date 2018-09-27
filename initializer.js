@@ -36,12 +36,6 @@ preloadFileClassScript.onload = (e) => {
         { imageProcessor: root + 'Core/Common/Image/ImageProcessor.js' },
         { Pattern: root + 'Core/Common/Image/Pattern.js' },
         { spriteSheet: root + 'Core/Common/Image/SpriteSheet.js' },
-        // COMMOMN/MISC
-        { frameRate: root + 'Core/Common/Misc/FrameRate.js' },
-        { objectPool: root + 'Core/Common/Misc/ObjectPool.js' },
-        { spatialSpace: root + 'Core/Common/Misc/SpatialSpace.js' },
-        { timer: root + 'Core/Common/Misc/Timer.js' },
-        { eventEmmiter: root + 'Core/Common/Misc/EventEmitter.js' },
         // MATH
         { vector: root + 'Core/Math/Vector.js' },
         { matrix: root + 'Core/Math/Matrix.js' },
@@ -66,6 +60,13 @@ preloadFileClassScript.onload = (e) => {
         { line: root + 'Core/Render/Line.js' },
         { circle: root + 'Core/Render/Circle.js' },
         { shape: root + 'Core/Render/Shape.js' },
+        // COMMOMN/MISC
+        { frameRate: root + 'Core/Common/Misc/FrameRate.js' },
+        { objectPool: root + 'Core/Common/Misc/ObjectPool.js' },
+        { spatialSpace: root + 'Core/Common/Misc/SpatialSpace.js' },
+        { timer: root + 'Core/Common/Misc/Timer.js' },
+        { eventEmmiter: root + 'Core/Common/Misc/EventEmitter.js' },
+        { dialogSystem: root + 'Core/Common/Misc/DialogSystem.js' },
         // INPUT
         { gamepad: root + 'Core/Input/Gamepad.js' },
         { keyboard: root + 'Core/Input/Keyboard.js' },
