@@ -14,7 +14,7 @@ class SpriteFont {
      * @param {number} height - original letter height
      * @param {string} chars  - all possible characters
      */
-    constructor(sprite, width, height, chars) {
+    constructor(sprite, width, height, chars, exceptionLetterDescend = [], descend = 0) {
 
         /**
          * creates a image processor object
@@ -47,6 +47,19 @@ class SpriteFont {
          */
         this.map = []
 
+        /**
+         * letters that will descend
+         */
+        this.exceptionLetterDescend = exceptionLetterDescend
+
+        /**
+         * descend number
+         */
+        this.descend = descend || this.height * 0.5 | 0
+
+        /**
+         * maps all letters
+         */
         this.mapChars()
 
     }
@@ -64,6 +77,8 @@ class SpriteFont {
         let x = 0
         // character position y
         let y = 0
+        // line height factor
+        let descend
 
         // read each character
         for (let i = 0; i < this.chars.length; i++) {
@@ -113,11 +128,18 @@ class SpriteFont {
             // avoid line break
             if (char != '\n') {
 
+                if (this.exceptionLetterDescend.includes(char)) {
+                    descend = this.descend
+                } else {
+                    descend = 0
+                }
+
                 // add mapped letter
                 this.map[char] = {
                     x: posX,
                     y: posY,
-                    recoil: recoil
+                    recoil: recoil,
+                    descend: descend
                 }
 
             }
@@ -130,7 +152,7 @@ class SpriteFont {
                 y++
                 x = 0
             }
-            
+
         }
 
     }

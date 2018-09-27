@@ -85,7 +85,7 @@ class SpriteText {
                 let letter = this.letterPool.create()
                 // position letter
                 letter.position.x = ((x - nextRecoil * recoilScaleFactor) + (xPosition * width))
-                letter.position.y = (y * 1.3) + height
+                letter.position.y = (y * 1.3) + height + spriteFont.descend
                 // letter size
                 letter.width = width
                 letter.height = height
