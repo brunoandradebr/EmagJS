@@ -48,7 +48,7 @@ class SpriteText {
      * 
      * @return {void} 
      */
-    write(string, x, y, width, height) {
+    write(string, x, y, width, height, maxWidth = 0) {
 
         // calculates font recoil scale factor based on passed width
         // to correct positon
@@ -59,8 +59,16 @@ class SpriteText {
         // next letter recoil number
         let nextRecoil = 0
 
+        let lastLetterPosition = 0
+
         // read each character
         string.split('').map((char) => {
+
+            // if is set max width and letter passed it
+            if (maxWidth && lastLetterPosition > x + maxWidth && char != ' ') {
+                xPosition = nextRecoil = 0
+                y += height
+            }
 
             // increment x position
             xPosition++
@@ -84,8 +92,8 @@ class SpriteText {
                 // create or get from pool
                 let letter = this.letterPool.create()
                 // position letter
-                letter.position.x = ((x - nextRecoil * recoilScaleFactor) + (xPosition * width))
-                letter.position.y = (y * 1.3) + height + (spriteFont.descend * recoilScaleFactor)
+                letter.position.x = (((x - (width * 0.5) + 0/*padding left*/) - (nextRecoil * recoilScaleFactor)) + (xPosition * 1/*letter space*/ * width))
+                letter.position.y = (y + (height * 0.5) + 0/*padding top*/) + (spriteFont.descend * recoilScaleFactor)
                 // letter size
                 letter.width = width
                 letter.height = height
@@ -99,6 +107,9 @@ class SpriteText {
 
                 // increment recoil to position next letter
                 nextRecoil += spriteFont.recoil
+
+                lastLetterPosition = letter.position.x
+
             }
 
         })
