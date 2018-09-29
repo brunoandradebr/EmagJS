@@ -65,7 +65,7 @@ class SpriteText {
         string.split('').map((char) => {
 
             // if is set max width and letter passed it
-            if (maxWidth && lastLetterPosition > x + maxWidth && char != ' ') {
+            if (maxWidth && lastLetterPosition > x + maxWidth - (width + (nextRecoil / xPosition)) && char != ' ') {
                 xPosition = nextRecoil = 0
                 y += height
             }
@@ -108,7 +108,8 @@ class SpriteText {
                 // increment recoil to position next letter
                 nextRecoil += spriteFont.recoil
 
-                lastLetterPosition = letter.position.x
+                // update last letter position
+                lastLetterPosition = letter.position.x + width * 0.5
 
             }
 
