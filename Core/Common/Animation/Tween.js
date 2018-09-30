@@ -223,6 +223,7 @@ class Tween {
         this.paused = false
         this.started = false
         this.frameCount = 0
+        this.completed = false
 
         for (let i = this.animations.length - 1; i >= 0; i--) {
 
