@@ -29,9 +29,15 @@ class SpriteText {
         this.letterPool = new ObjectPool(() => {
             let letter = new Sprite(new Vector(0, 0), this.spriteFont.width, this.spriteFont.height, 'transparent', 0)
             letter.image = this.spriteFont.image.clone()
+            letter.interpolation = 0
+            letter.tween = new Tween(letter)
+            letter.tween.animate({ interpolation: 1 })
             return letter
         }, (letter) => {
-            // reset implemented in write method
+            letter.tween.animations[0].ease = 'elasticOut'
+            letter.tween.animations[0].delay = (this.letters.length) * 80 // letter spawn speed
+            letter.tween.animations[0].duration = 1400 // letter animation time - can be a big number
+            letter.tween.resetAnimations()
             return letter
         })
 
@@ -92,11 +98,11 @@ class SpriteText {
                 // create or get from pool
                 let letter = this.letterPool.create()
                 // position letter
-                letter.position.x = (((x - (width * 0.5) + 0/*padding left*/) - (nextRecoil * recoilScaleFactor)) + (xPosition * 1/*letter space*/ * width))
-                letter.position.y = (y + (height * 0.5) + 0/*padding top*/) + (spriteFont.descend * recoilScaleFactor)
+                letter.position.x = (((x - (width * 0.5) + this.spriteFont.width/*padding left*/) - (nextRecoil * recoilScaleFactor)) + (xPosition * 1/*letter space*/ * width))
+                letter.position.y = (y + (height * 0.5) + this.spriteFont.height/*padding top*/) + (spriteFont.descend * recoilScaleFactor)
                 // letter size
-                letter.width = width
-                letter.height = height
+                letter.width = letter.initialWidth = width
+                letter.height = letter.initialHeight = height
                 // set letter image crop
                 letter.imageOffsetX = spriteFont.x
                 letter.imageOffsetY = spriteFont.y
@@ -142,6 +148,7 @@ class SpriteText {
     draw(graphics) {
 
         this.letters.map((letter) => {
+            letter.tween.play()
             letter.draw(graphics)
         })
 
