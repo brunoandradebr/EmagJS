@@ -7,6 +7,17 @@ class DialogSystem extends SpriteText {
         this.width = width
         this.height = height
         this.position = position
+        this.alpha = 0
+
+        /**
+         * All dialogs
+         */
+        this.dialogs = []
+
+        /**
+         * Current dialog index
+         */
+        this.currentDialogIndex = -1
 
         // corner properties
         this.cornerWidth = 4
@@ -61,18 +72,128 @@ class DialogSystem extends SpriteText {
         this.arrow.image = new ImageProcessor(assets.files.dialog_arrow)
         this.arrow.matrix.rotateZ(this.arrowAngle)
 
-        // last write properties
-        this._lastText = null
-        this._lastTextWidth = null
-        this._lastTextHeight = null
-        this._lastArrowPositionX = this.arrowPosition.x
-
+        // open animation
         this.openAnimation = new Tween(this)
+        this.openAnimation.animate({ alpha: 1 }, 200, 0, 'cubicInOut')
         this.openAnimation.animate({ width: -width + this.arrowWidth }, 0, 0)
         this.openAnimation.animate({ height: -height + this.arrowHeight }, 0, 0)
         this.openAnimation.animate({ width: width - this.arrowWidth }, 800, 100, 'elasticInOut')
         this.openAnimation.animate({ height: height - this.arrowHeight }, 500, 100, 'elasticInOut')
-        
+
+    }
+
+    /**
+     * Adds a dialog object
+     * 
+     * @param {string} text 
+     * @param {number} letterWidth 
+     * @param {number} letterHeight 
+     * @param {number} arrowPoisitionX 
+     * @param {bool}   reopen 
+     * 
+     * @return {void}
+     */
+    addDialog(text, letterWidth, letterHeight, arrowPoisitionX, reopen = false) {
+
+        // calculate total letter
+        let length = ((this.width * this.height) / ((letterWidth * letterHeight) + (5 * 5))) | 0
+
+        // divide text
+        let sentenses = text.match(new RegExp('(.|[\r\n]){1,' + length + '}', 'g'))
+
+        // total sentenses
+        let totalSentenses = sentenses.length
+
+        // for each sentense, create a dialog object
+        sentenses.map((sentense, i) => {
+
+            // to add as more text at each sentense end
+            let more = '-'
+
+            // if there is no more sentenses
+            if (i == totalSentenses - 1)
+                more = ''
+
+            if (i > 0)
+                reopen = false
+
+            // add a dialog object to system
+            this.dialogs.push({
+                text: sentense + more,
+                letterWidth: letterWidth,
+                letterHeight: letterHeight,
+                arrowPoisitionX: arrowPoisitionX,
+                reopen: reopen
+            })
+        })
+    }
+
+    /**
+     * Create all letters to be drawn
+     * 
+     * @param {string} string 
+     * @param {number} width 
+     * @param {number} height
+     * 
+     * @return {void}
+     */
+    _write(string, width, height, arrowPoisitionX = 0.5) {
+
+        // clear letters
+        this.clear()
+
+        // decides font size, passed or last one
+        let fontWidth = width || this._lastTextWidth
+        let fontHeight = height || this._lastTextHeight
+
+        this.arrowPosition.x = arrowPoisitionX
+
+        // create letters needed to be drawn
+        super.write(string, this.position.x + this.top_left_corner.width, this.position.y + this.top_left_corner.height, fontWidth, fontHeight, this.width)
+
+    }
+
+    /**
+     * Show next dialog
+     * 
+     * @return {void}
+     */
+    next() {
+
+        // clar all letters
+        this.clear()
+
+        // increment current dialog index
+        this.currentDialogIndex++
+
+        if (this.currentDialogIndex >= this.dialogs.length) {
+            this.currentDialogIndex = 0
+            this.reopen()
+        }
+
+        // if there is remaining dialog to show
+        if (this.dialogs[this.currentDialogIndex]) {
+
+            // current dialog
+            let dialog = this.dialogs[this.currentDialogIndex]
+
+            // if reopen
+            if (dialog.reopen)
+                this.reopen()
+
+            // creates all letters
+            this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPoisitionX)
+        }
+    }
+
+    /**
+     * Restart open animation
+     * 
+     * @return {void}
+     */
+    reopen() {
+        this.clear()
+        this.openAnimation.resetAnimations()
     }
 
     /**
@@ -91,8 +212,8 @@ class DialogSystem extends SpriteText {
         // update ui positions
         this._updateUIPosition(x, y)
 
-        // rewrite actual text
-        this.write(this._lastText, this._lastTextWidth, this._lastTextHeight, this._lastArrowPositionX)
+        // rewrite actual dialog
+        this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPoisitionX)
     }
 
     /**
@@ -104,8 +225,10 @@ class DialogSystem extends SpriteText {
      * @return {void}
      */
     updateSize(width, height) {
+
         this.width = width
         this.height = height
+
         // update ui size
         this.text_box.width = width
         this.text_box.height = height
@@ -115,8 +238,9 @@ class DialogSystem extends SpriteText {
         // update ui position
         this._updateUIPosition(this.position.x, this.position.y)
 
-        // rewrite actual text
-        this.write(this._lastText, this._lastTextWidth, this._lastTextHeight, this._lastArrowPositionX)
+        // rewrite actual dialog
+        this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPoisitionX)
+
     }
 
     /**
@@ -140,41 +264,6 @@ class DialogSystem extends SpriteText {
     }
 
     /**
-     * Create all letters to be drawn
-     * 
-     * @param {string} string 
-     * @param {number} width 
-     * @param {number} height
-     * 
-     * @return {void}
-     */
-    write(string, width, height, arrowPoisitionX = 0.5) {
-
-        // clear letters
-        this.clear()
-
-        // decides font size, passed or last one
-        let fontWidth = width || this._lastTextWidth
-        let fontHeight = height || this._lastTextHeight
-
-        this.arrowPosition.x = arrowPoisitionX
-
-        // create letters needed to be drawn
-        super.write(string, this.position.x + this.top_left_corner.width, this.position.y + this.top_left_corner.height, fontWidth, fontHeight, this.width)
-
-        // update last text properties
-        this._lastText = string
-        this._lastTextWidth = fontWidth
-        this._lastTextHeight = fontHeight
-        this._lastArrowPositionX = arrowPoisitionX
-
-    }
-
-    close() {
-        this.openAnimation.resetAnimations()
-    }
-
-    /**
      * Draw all letters and UI components
      * 
      * @param {CanvasRenderingContext2D} graphics
@@ -183,23 +272,34 @@ class DialogSystem extends SpriteText {
      */
     draw(graphics) {
 
+        if (!this.dialogs[this.currentDialogIndex]) return
+
         // draw top left corner
+        this.top_left_corner.alpha = this.alpha
         this.top_left_corner.draw(graphics)
         // draw top corner
+        this.top_corner.alpha = this.alpha
         this.top_corner.draw(graphics)
         // draw top right corner
+        this.top_right_corner.alpha = this.alpha
         this.top_right_corner.draw(graphics)
         // draw right corner
+        this.right_corner.alpha = this.alpha
         this.right_corner.draw(graphics)
         // draw bottom right corner
+        this.bottom_right_corner.alpha = this.alpha
         this.bottom_right_corner.draw(graphics)
         // draw bottom corner
+        this.bottom_corner.alpha = this.alpha
         this.bottom_corner.draw(graphics)
         // draw bottom left corner
+        this.bottom_left_corner.alpha = this.alpha
         this.bottom_left_corner.draw(graphics)
         // draw left corner
+        this.left_corner.alpha = this.alpha
         this.left_corner.draw(graphics)
         // draw text box
+        this.text_box.alpha = this.alpha
         this.text_box.draw(graphics)
 
         // start open animation
