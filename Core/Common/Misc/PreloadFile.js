@@ -66,7 +66,7 @@ class PreloadFile {
                     let request = new XMLHttpRequest();
 
                     // if loading sound file
-                    if (type == 'mp3') {
+                    if (type == 'mp3' || type == 'WAV') {
                         request.responseType = 'arraybuffer';
                     }
 
@@ -104,7 +104,7 @@ class PreloadFile {
                     request.onload = (e) => {
 
                         // force preload for each file type
-                        switch (type) {
+                        switch (type.toLowerCase()) {
                             case 'js':
 
                                 let script = document.createElement('script');
