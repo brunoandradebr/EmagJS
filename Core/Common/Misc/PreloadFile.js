@@ -128,20 +128,28 @@ class PreloadFile {
 
                             case 'ttf':
 
-                                let font = new FontFace(key, `url(${path})`);
+                                try {
+                                    let font = new FontFace(key, `url(${path})`);
 
-                                font.load().then((fontLoaded) => {
+                                    font.load().then((fontLoaded) => {
 
-                                    document.fonts.add(fontLoaded);
+                                        document.fonts.add(fontLoaded);
 
-                                    _files[key] = fontLoaded;
-                                    _files.length++;
+                                        _files[key] = fontLoaded;
+                                        _files.length++;
 
-                                    loaded++;
+                                        loaded++;
 
-                                    checkCompletation(files, loaded, total);
+                                        checkCompletation(files, loaded, total);
 
-                                });
+                                    });
+                                } catch (e) {
+
+                                    // skip preloading font face
+                                    loaded++
+
+                                    throw ("Navigator can't preload font face")
+                                }
 
                                 break;
 
@@ -273,9 +281,9 @@ class PreloadFile {
                                         let head = document.querySelector('head');
                                         let scripts = head.querySelectorAll('script');
                                         scripts.forEach((script) => script.remove())
-                                        
+
                                         window.scrollTo(0, 0)
-                                        
+
                                     }
                                 }
 

@@ -97,11 +97,10 @@ class Vector {
      * Updates a vector by another vector or by two scalars
      * 
      * @param {EmagJS.Core.Math.Vector} v 
-     * @param {number} ...
      * 
      * @return {EmagJS.Core.Math.Vector} 
      */
-    update(v = new Vector(), ...[]) {
+    update(v = new Vector()) {
 
         if (arguments.length > 1) {
 
