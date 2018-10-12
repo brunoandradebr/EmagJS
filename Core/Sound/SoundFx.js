@@ -7,17 +7,29 @@
 /**
  * @type {AudioContext}
  */
-let audioContext = window.AudioContext ? new window.AudioContext() : new window.webkitAudioContext();
+let audioContext = window.AudioContext ? new window.AudioContext() : new window.webkitAudioContext()
 
 /**
  * @type {GainNode}
  */
-let master = audioContext.createGain();
+let master = audioContext.createGain()
 
-// connect master gain node to global audio context
-master.connect(audioContext.destination);
+/**
+ * @type {GainNode}
+ */
+let music = audioContext.createGain()
 
+/**
+ * @type {GainNode}
+ */
+let sound = audioContext.createGain()
 
+// connect master gain node to speaker
+master.connect(audioContext.destination)
+// connect music gain node to master
+music.connect(master)
+// connect sound gain node to master
+sound.connect(master)
 
 
 /**
@@ -36,37 +48,49 @@ class SoundFx {
      * 
      * @return {void}
      */
-    play(buffer, volume = 1, loop = false) {
+    play(buffer, volume = 1, output = 'music', loop = false, delayFx = false) {
 
-        let bufferSource = audioContext.createBufferSource();
+        let bufferSource = audioContext.createBufferSource()
         bufferSource.buffer = buffer;
         bufferSource.loop = loop;
 
-        let gainNode = audioContext.createGain();
-        gainNode.gain.value = volume;
+        let gainNode = audioContext.createGain()
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.setTargetAtTime(volume, audioContext.currentTime, 0.3);
 
-        //let delay = audioContext.createDelay();
-        //delay.delayTime.value = 0.3;
+        bufferSource.connect(gainNode)
 
-        //let delayGain = audioContext.createGain();
-        //delayGain.gain.value = 0.5;
+        if (delayFx) {
 
-        //let filter = audioContext.createBiquadFilter();
-        //filter.frequency.value = 600;
-        //filter.type = 'highpass';
+            let delay = audioContext.createDelay()
+            delay.delayTime.value = .25;
 
-        bufferSource.connect(gainNode);
-        //bufferSource.connect(delay);
+            let delayGain = audioContext.createGain()
+            delayGain.gain.value = 0.2;
 
-        //delay.connect(delayGain);
-        //delayGain.connect(filter);
-        //filter.connect(delay);
+            let filter = audioContext.createBiquadFilter()
+            filter.frequency.value = 300;
+            filter.type = 'highpass';
 
-        //delayGain.connect(gainNode);
+            bufferSource.connect(delay)
 
-        gainNode.connect(master);
+            delay.connect(delayGain)
+            delayGain.connect(filter)
+            filter.connect(delay)
 
-        bufferSource.start();
+            delayGain.connect(gainNode)
+
+        }
+
+        if (output == 'music') {
+            gainNode.connect(music)
+        } else if (output == 'sound') {
+            gainNode.connect(sound)
+        } else {
+            gainNode.connect(master)
+        }
+
+        bufferSource.start()
 
     }
 
@@ -80,22 +104,22 @@ class SoundFx {
      * 
      * @return {void} 
      */
-    playOscillator(frequency = 450, type = 'sine', volume = 1, duration = 0.4) {
+    playOscillator(frequency = 450, type = 'sine', volume = 1, duration = 0.5) {
 
-        let oscillator = audioContext.createOscillator();
-        let gainNode = audioContext.createGain();
+        let oscillator = audioContext.createOscillator()
+        let gainNode = audioContext.createGain()
 
         oscillator.type = type;
         oscillator.frequency.value = frequency;
 
-        oscillator.connect(gainNode);
-        gainNode.connect(master);
+        oscillator.connect(gainNode)
+        gainNode.connect(master)
 
         // + 0.000001 - ios fix 
-        oscillator.start(audioContext.currentTime + 0.000001);
+        oscillator.start(audioContext.currentTime + 0.000001)
         gainNode.gain.value = volume;
 
-        oscillator.stop(audioContext.currentTime + duration);
+        oscillator.stop(audioContext.currentTime + duration)
 
     }
 
