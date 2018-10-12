@@ -317,7 +317,7 @@ class DialogSystem extends SpriteText {
             // animate letters
             this.letters.map((letter, i) => {
                 letter.width = letter.initialWidth * letter.interpolation
-                letter.height = letter.initialHeight * letter.interpolation
+                //letter.height = letter.initialHeight * letter.interpolation
             })
 
             // draw letters
