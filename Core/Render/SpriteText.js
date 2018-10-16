@@ -100,8 +100,8 @@ class SpriteText {
                 // create or get from pool
                 let letter = this.letterPool.create()
                 // position letter
-                letter.position.x = (((x - (width * 0.5) + this.spriteFont.width/*padding left*/) - (nextRecoil * recoilScaleFactor)) + (xPosition * 1/*letter space*/ * width))
-                letter.position.y = (y + (height * 0.5) + this.spriteFont.height/*padding top*/) + (spriteFont.descend * recoilScaleFactor)
+                letter.position.x = letter.initialPositionX = (((x - (width * 0.5) + this.spriteFont.width/*padding left*/) - (nextRecoil * recoilScaleFactor)) + (xPosition * 1/*letter space*/ * width))
+                letter.position.y = letter.initialPositionY = (y + (height * 0.5) + this.spriteFont.height/*padding top*/) + (spriteFont.descend * recoilScaleFactor)
                 // letter size
                 letter.width = letter.initialWidth = width
                 letter.height = letter.initialHeight = height

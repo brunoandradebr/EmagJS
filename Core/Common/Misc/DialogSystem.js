@@ -118,7 +118,7 @@ class DialogSystem extends SpriteText {
         sentenses.map((sentense, i) => {
 
             // to add as more text at each sentense end
-            let more = '-'
+            let more = '...'
 
             // if there is no more sentenses
             if (i == totalSentenses - 1)
@@ -159,7 +159,7 @@ class DialogSystem extends SpriteText {
         this.arrowPosition.x = arrowPoisitionX
 
         // create letters needed to be drawn
-        super.write(string, this.position.x + this.top_left_corner.width, this.position.y + this.top_left_corner.height, fontWidth, fontHeight, this.width)
+        super.write(string, this.position.x, this.position.y - fontHeight * 0.5, fontWidth, fontHeight, this.width)
 
     }
 
