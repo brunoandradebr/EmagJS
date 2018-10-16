@@ -19,6 +19,16 @@ class DialogSystem extends SpriteText {
          */
         this.currentDialogIndex = -1
 
+        /**
+         * Count current dialog rendered letters
+         */
+        this.renderedLettersCount = 0
+
+        /**
+         * Flag - already rendered all letters
+         */
+        this.talking = false
+
         // corner properties
         this.cornerWidth = 4
         this.cornerHeight = 4
@@ -160,8 +170,20 @@ class DialogSystem extends SpriteText {
      */
     next() {
 
+        // if still talking, skip letters animation
+        if (this.talking) {
+
+            this.letters.map((letter) => {
+                letter.animation.animations[0].delay = 0
+            })
+
+            return false
+        }
+
         // clar all letters
         this.clear()
+
+        this.renderedLettersCount = 0
 
         // increment current dialog index
         this.currentDialogIndex++
@@ -308,6 +330,8 @@ class DialogSystem extends SpriteText {
             this.updateSize(this.width, this.height)
         }
 
+        this.talking = true
+
         // open animation completed
         if (this.openAnimation.completed) {
 
@@ -316,8 +340,22 @@ class DialogSystem extends SpriteText {
 
             // animate letters
             this.letters.map((letter, i) => {
-                letter.width = letter.initialWidth * letter.interpolation
-                //letter.height = letter.initialHeight * letter.interpolation
+
+                letter.alpha = letter.interpolation
+
+                // completed letter render
+                if (letter.animation.completed && !letter.alreadyRendered) {
+                    this.renderedLettersCount++
+                    letter.alreadyRendered = true
+                }
+
+                // completed sentense render
+                if (this.renderedLettersCount === this.letters.length) {
+                    this.talking = false
+                } else {
+                    this.talking = true
+                }
+
             })
 
             // draw letters
