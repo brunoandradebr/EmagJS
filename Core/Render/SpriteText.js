@@ -56,7 +56,7 @@ class SpriteText {
      * 
      * @return {void} 
      */
-    write(string, x, y, width, height, maxWidth = 0) {
+    write(string, x, y, width, height, maxWidth = 0, lineHeight = 2) {
 
         // calculates font recoil scale factor based on passed width
         // to correct positon
@@ -75,7 +75,7 @@ class SpriteText {
             // if is set max width and letter passed it
             if (maxWidth && lastLetterPosition > x + maxWidth - (width + (nextRecoil / xPosition)) && char != ' ') {
                 xPosition = nextRecoil = 0
-                y += height
+                y += height + lineHeight
             }
 
             // increment x position
@@ -84,7 +84,7 @@ class SpriteText {
             // if new line, increment y and reset x position and recoil
             if (char == '\n') {
                 xPosition = nextRecoil = 0
-                y += height
+                y += height + lineHeight
             }
 
             // increment recoil when white space

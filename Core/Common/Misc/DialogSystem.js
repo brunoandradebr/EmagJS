@@ -1,6 +1,6 @@
 class DialogSystem extends SpriteText {
 
-    constructor(spriteFont, position = new Vector(0, 0), width = 200, height = 200) {
+    constructor(spriteFont, position = new Vector(0, 0), width = 200, height = 200, lineHeight = 2) {
         super(spriteFont)
 
         // dialog properties
@@ -28,6 +28,11 @@ class DialogSystem extends SpriteText {
          * Flag - already rendered all letters
          */
         this.talking = false
+
+        /**
+         * Dialog line height
+         */
+        this.lineHeight = lineHeight
 
         // corner properties
         this.cornerWidth = 4
@@ -159,7 +164,7 @@ class DialogSystem extends SpriteText {
         this.arrowPosition.x = arrowPoisitionX
 
         // create letters needed to be drawn
-        super.write(string, this.position.x, this.position.y - fontHeight * 0.5, fontWidth, fontHeight, this.width)
+        super.write(string, this.position.x, this.position.y - fontHeight * 0.5, fontWidth, fontHeight, this.width, this.lineHeight)
 
     }
 
