@@ -58,70 +58,59 @@ class SpriteText {
      */
     write(string, x, y, width, height, maxWidth = 0, lineHeight = 2) {
 
-        // calculates font recoil scale factor based on passed width
-        // to correct positon
-        let recoilScaleFactor = width / this.spriteFont.width
+        let currentY, startY, currentX, startX
 
-        // letter horizontal position
-        let xPosition = 0
-        // next letter recoil number
+        currentX = startX = x + width + 3
+        currentY = startY = y + height + 3 + lineHeight
+
+        // next letter recoil
         let nextRecoil = 0
 
-        let lastLetterPosition = 0
+        string.split(' ').map((word) => {
 
-        // read each character
-        string.split('').map((char) => {
-
-            // if is set max width and letter passed it
-            if (maxWidth && lastLetterPosition > x + maxWidth - (width + (nextRecoil / xPosition)) && char != ' ') {
-                xPosition = nextRecoil = 0
-                y += height + lineHeight
+            if (currentX + (word.length * width) > startX + maxWidth + nextRecoil) {
+                currentX = startX
+                currentY += height + lineHeight
+                nextRecoil = 0
             }
 
-            // increment x position
-            xPosition++
+            word.split('').map((char) => {
 
-            // if new line, increment y and reset x position and recoil
-            if (char == '\n') {
-                xPosition = nextRecoil = 0
-                y += height + lineHeight
-            }
+                // if there is a sprite letter
+                if (this.spriteFont.map[char]) {
+
+                    let spriteFont = this.spriteFont.map[char]
+
+                    // create or get from pool
+                    let letter = this.letterPool.create()
+                    // position letter
+                    letter.position.x = letter.initialPositionX = currentX - nextRecoil
+                    letter.position.y = letter.initialPositionY = currentY + spriteFont.descend
+                    // letter size
+                    letter.width = letter.initialWidth = width
+                    letter.height = letter.initialHeight = height
+                    // set letter image crop
+                    letter.imageOffsetX = spriteFont.x
+                    letter.imageOffsetY = spriteFont.y
+                    letter.imageOffsetWidth = this.spriteFont.width
+                    letter.imageOffsetHeight = this.spriteFont.height
+                    // add created letter to letters container
+                    this.letters.push(letter)
+
+                    // increment recoil to position next letter
+                    nextRecoil += spriteFont.recoil
+
+                    currentX += width
+
+                }
+
+            })
 
             // increment recoil when white space
-            if (char == ' ') {
-                nextRecoil += this.spriteFont.width * 0.5
-            }
-
-            // if there is a sprite letter
-            if (this.spriteFont.map[char]) {
-
-                let spriteFont = this.spriteFont.map[char]
-
-                // create or get from pool
-                let letter = this.letterPool.create()
-                // position letter
-                letter.position.x = letter.initialPositionX = (((x - (width * 0.5) + this.spriteFont.width/*padding left*/) - (nextRecoil * recoilScaleFactor)) + (xPosition * 1/*letter space*/ * width))
-                letter.position.y = letter.initialPositionY = (y + (height * 0.5) + this.spriteFont.height/*padding top*/) + (spriteFont.descend * recoilScaleFactor)
-                // letter size
-                letter.width = letter.initialWidth = width
-                letter.height = letter.initialHeight = height
-                // set letter image crop
-                letter.imageOffsetX = spriteFont.x
-                letter.imageOffsetY = spriteFont.y
-                letter.imageOffsetWidth = this.spriteFont.width
-                letter.imageOffsetHeight = this.spriteFont.height
-                // add created letter to letters container
-                this.letters.push(letter)
-
-                // increment recoil to position next letter
-                nextRecoil += spriteFont.recoil
-
-                // update last letter position
-                lastLetterPosition = letter.position.x + width * 0.5
-
-            }
+            nextRecoil -= this.spriteFont.width * 0.5
 
         })
+
     }
 
     /**

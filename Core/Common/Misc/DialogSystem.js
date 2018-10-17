@@ -266,7 +266,8 @@ class DialogSystem extends SpriteText {
         this._updateUIPosition(this.position.x, this.position.y)
 
         // rewrite actual dialog
-        this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPoisitionX)
+        if (this.openAnimation.completed)
+            this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPoisitionX)
 
     }
 

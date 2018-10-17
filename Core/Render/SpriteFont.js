@@ -34,7 +34,7 @@ class SpriteFont {
         /**
          * all possible characters to be mapped
          */
-        this.chars = chars || `ABCDEFGHIJKLM\nNOPQRSTUVWXYZ\nabcdefghijklm\nnopqrstuvwxyz\n1234567890+-=\n.,:;!?´~'\"@#$\n&¢£€*()<>%≪≫/`
+        this.chars = chars || `ABCDEFGHIJKLM\nNOPQRSTUVWXYZ\nabcdefghijklm\nnopqrstuvwxyz\n1234567890+-=\n.,:;!?´~\`^'\"@\n&#£€*()<>%≪≫/`
 
         /**
          * sprite to data map
