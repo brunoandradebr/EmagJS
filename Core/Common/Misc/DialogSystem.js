@@ -46,45 +46,56 @@ class DialogSystem extends SpriteText {
         this.arrowPosition = { x: 0.5, y: 1 }
         this.arrowAngle = 90
 
+        this.top_left_corner_image = new ImageProcessor(core.images.dialog_top_left)
+        this.top_corner_image = new Pattern(core.images.dialog_top, 'repeat-x')
+        this.top_right_corner_image = new ImageProcessor(core.images.dialog_top_right)
+        this.right_corner_image = new Pattern(core.images.dialog_right, 'repeat-y')
+        this.bottom_right_corner_image = new ImageProcessor(core.images.dialog_bottom_right)
+        this.bottom_corner_image = new Pattern(core.images.dialog_bottom, 'repeat-x')
+        this.bottom_left_corner_image = new ImageProcessor(core.images.dialog_bottom_left)
+        this.left_corner_image = new Pattern(core.images.dialog_left, 'repeat-y')
+        this.text_box_image = new Pattern(core.images.dialog_box)
+        this.arrow_image = new ImageProcessor(core.images.dialog_arrow)
+
         // dialog top left corner
         this.top_left_corner = new Sprite(this.position, this.cornerWidth, this.cornerHeight, this.cornerFillColor, this.cornerLineWidth)
         this.top_left_corner.anchor.x = this.top_left_corner.anchor.y = 0
-        this.top_left_corner.image = new ImageProcessor(assets.files.dialog_top_left)
+        this.top_left_corner.image = this.top_left_corner_image
         // dialog top corner
         this.top_corner = new Sprite(new Vector(this.top_left_corner.position.x + this.top_left_corner.width, this.top_left_corner.position.y), this.width, this.cornerHeight, this.cornerFillColor, this.cornerLineWidth)
         this.top_corner.anchor.x = this.top_corner.anchor.y = 0
-        this.top_corner.image = new Pattern(assets.files.dialog_top, 'repeat-x')
+        this.top_corner.image = this.top_corner_image
         // dialog top right corner
         this.top_right_corner = new Sprite(new Vector(this.top_left_corner.position.x + this.top_left_corner.width + this.width, this.top_left_corner.position.y), this.cornerWidth, this.cornerHeight, this.cornerFillColor, this.cornerLineWidth)
         this.top_right_corner.anchor.x = this.top_right_corner.anchor.y = 0
-        this.top_right_corner.image = new ImageProcessor(assets.files.dialog_top_right)
+        this.top_right_corner.image = this.top_right_corner_image
         // dialog right corner
         this.right_corner = new Sprite(new Vector(this.top_left_corner.position.x + this.width + this.top_left_corner.width, this.top_left_corner.position.y + this.top_left_corner.height), this.cornerWidth, this.height, this.cornerFillColor, this.cornerLineWidth)
         this.right_corner.anchor.x = this.right_corner.anchor.y = 0
-        this.right_corner.image = new Pattern(assets.files.dialog_right, 'repeat-y')
+        this.right_corner.image = this.right_corner_image
         // dialog bottom right corner
         this.bottom_right_corner = new Sprite(new Vector(this.top_left_corner.position.x + this.width + this.top_left_corner.width, this.top_left_corner.position.y + this.height + this.top_left_corner.height), this.cornerWidth, this.cornerHeight, this.cornerFillColor, this.cornerLineWidth)
         this.bottom_right_corner.anchor.x = this.bottom_right_corner.anchor.y = 0
-        this.bottom_right_corner.image = new ImageProcessor(assets.files.dialog_bottom_right)
+        this.bottom_right_corner.image = this.bottom_right_corner_image
         // dialog bottom corner
         this.bottom_corner = new Sprite(new Vector(this.top_left_corner.position.x + this.top_left_corner.width, this.top_left_corner.position.y + this.height + this.top_left_corner.height), this.width, this.cornerHeight, this.cornerFillColor, this.cornerLineWidth)
         this.bottom_corner.anchor.x = this.bottom_corner.anchor.y = 0
-        this.bottom_corner.image = new Pattern(assets.files.dialog_bottom, 'repeat-x')
+        this.bottom_corner.image = this.bottom_corner_image
         // dialog bottom left corner
         this.bottom_left_corner = new Sprite(new Vector(this.top_left_corner.position.x, this.top_left_corner.position.y + this.height + this.top_left_corner.height), this.cornerWidth, this.cornerHeight, this.cornerFillColor, this.cornerLineWidth)
         this.bottom_left_corner.anchor.x = this.bottom_left_corner.anchor.y = 0
-        this.bottom_left_corner.image = new ImageProcessor(assets.files.dialog_bottom_left)
+        this.bottom_left_corner.image = this.bottom_left_corner_image
         // dialog left corner
         this.left_corner = new Sprite(new Vector(this.top_left_corner.position.x, this.top_left_corner.position.y + this.top_left_corner.height), this.cornerWidth, this.height, this.cornerFillColor, this.cornerLineWidth)
         this.left_corner.anchor.x = this.left_corner.anchor.y = 0
-        this.left_corner.image = new Pattern(assets.files.dialog_left, 'repeat-y')
+        this.left_corner.image = this.left_corner_image
         // dialog text box
         this.text_box = new Sprite(new Vector(this.top_left_corner.position.x + this.top_left_corner.width, this.top_left_corner.position.y + this.top_left_corner.height), this.width, this.height, 'transparent', 0)
         this.text_box.anchor.x = this.text_box.anchor.y = 0
-        this.text_box.image = new Pattern(assets.files.dialog_box)
+        this.text_box.image = this.text_box_image
         // dialog arrow
         this.arrow = new Sprite(new Vector(this.top_left_corner.position.x + this.top_left_corner.width + this.width * this.arrowPosition.x | 0, (this.top_left_corner.position.y + this.top_corner.height + this.bottom_corner.height + this.arrowHeight * 0.5) + this.height * this.arrowPosition.y - 3), this.arrowWidth, this.arrowHeight, 'transparent', 0)
-        this.arrow.image = new ImageProcessor(assets.files.dialog_arrow)
+        this.arrow.image = this.arrow_image
         this.arrow.matrix.rotateZ(this.arrowAngle)
 
         // open animation

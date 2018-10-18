@@ -25,10 +25,13 @@ document.head.appendChild(preloadFileClassScript);
 // global stage object - manager framework movies
 let stage;
 
+// global resources
+let core
+
 preloadFileClassScript.onload = (e) => {
 
     // preload framework classes
-    let core = new PreloadFile([
+    core = new PreloadFile([
         { utils: root + 'Utils/Utils.js' },
         // COMMON/ANIMATION
         { tween: root + 'Core/Common/Animation/Tween.js' },
@@ -79,6 +82,19 @@ preloadFileClassScript.onload = (e) => {
         { body: root + 'Core/Physics/Body.js' },
         // RESOURCE/IMAGE
         { background: root + 'Resource/Image/Background.png' },
+        // RESOURCE/IMAGE FONT
+        { alagard_font: root + 'Resource/Image/Font/alagard.png' },
+        // RESOURCE/DIALOG IMAGES
+        { dialog_top_left: root + 'Resource/Image/Dialog/dialog_top_left.png' },
+        { dialog_top: root + 'Resource/Image/Dialog/dialog_top.png' },
+        { dialog_top_right: root + 'Resource/Image/Dialog/dialog_top_right.png' },
+        { dialog_right: root + 'Resource/Image/Dialog/dialog_right.png' },
+        { dialog_bottom_right: root + 'Resource/Image/Dialog/dialog_bottom_right.png' },
+        { dialog_bottom: root + 'Resource/Image/Dialog/dialog_bottom.png' },
+        { dialog_bottom_left: root + 'Resource/Image/Dialog/dialog_bottom_left.png' },
+        { dialog_left: root + 'Resource/Image/Dialog/dialog_left.png' },
+        { dialog_box: root + 'Resource/Image/Dialog/dialog_box.png' },
+        { dialog_arrow: root + 'Resource/Image/Dialog/dialog_arrow.png' },
         // RESOURCE/FONT
         { Commodore: root + 'Resource/Font/Commodore.ttf' },
         { Alagard: root + 'Resource/Font/Alagard.ttf' },
