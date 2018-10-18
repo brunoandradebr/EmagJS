@@ -30,6 +30,11 @@ class DialogSystem extends SpriteText {
         this.talking = false
 
         /**
+         * Flag - when dialog is close or open
+         */
+        this.closed = true
+
+        /**
          * Dialog line height
          */
         this.lineHeight = lineHeight
@@ -122,7 +127,7 @@ class DialogSystem extends SpriteText {
     addDialog(text, letterWidth, letterHeight, arrowPoisitionX, reopen = false) {
 
         // calculate total letter
-        let length = ((this.width * this.height) / ((letterWidth * letterHeight) + (5 * 5))) | 0
+        let length = ((this.width * this.height) / ((letterWidth * letterHeight) + (5 * 5) + (this.lineHeight * this.lineHeight))) | 0
 
         // divide text
         let sentenses = text.match(new RegExp('(.|[\r\n]){1,' + length + '}', 'g'))
@@ -169,8 +174,8 @@ class DialogSystem extends SpriteText {
         this.clear()
 
         // decides font size, passed or last one
-        let fontWidth = width || this._lastTextWidth
-        let fontHeight = height || this._lastTextHeight
+        let fontWidth = width
+        let fontHeight = height
 
         this.arrowPosition.x = arrowPoisitionX
 
@@ -201,16 +206,17 @@ class DialogSystem extends SpriteText {
 
         this.renderedLettersCount = 0
 
+        // if there is no more dialogs to render
+        if (this.dialogs.length == 0)
+            return false
+
         // increment current dialog index
         this.currentDialogIndex++
 
-        if (this.currentDialogIndex >= this.dialogs.length) {
-            this.currentDialogIndex = 0
-            this.reopen()
-        }
-
         // if there is remaining dialog to show
         if (this.dialogs[this.currentDialogIndex]) {
+
+            this.closed = false
 
             // current dialog
             let dialog = this.dialogs[this.currentDialogIndex]
@@ -221,7 +227,11 @@ class DialogSystem extends SpriteText {
 
             // creates all letters
             this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPoisitionX)
+        } else {
+            this.dialogs.length = 0
+            this.closed = true
         }
+
     }
 
     /**
@@ -343,6 +353,7 @@ class DialogSystem extends SpriteText {
 
         // start open animation
         if (!this.openAnimation.completed) {
+            this.closed = false
             this.openAnimation.play()
             this.updateSize(this.width, this.height)
         }

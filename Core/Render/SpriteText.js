@@ -43,6 +43,10 @@ class SpriteText {
             return letter
         })
 
+        // pre create all sprite letter
+        this.write(this.spriteFont.chars)
+        this.clear()
+
     }
 
     /**
