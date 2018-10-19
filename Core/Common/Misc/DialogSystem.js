@@ -124,7 +124,7 @@ class DialogSystem extends SpriteText {
      * 
      * @return {void}
      */
-    addDialog(text, letterWidth, letterHeight, arrowPoisitionX, reopen = false) {
+    addDialog(text, position, letterWidth, letterHeight, arrowPoisitionX, reopen = false) {
 
         // calculate total letter
         let length = ((this.width * this.height) / ((letterWidth * letterHeight) + (5 * 5) + (this.lineHeight * this.lineHeight))) | 0
@@ -151,6 +151,7 @@ class DialogSystem extends SpriteText {
             // add a dialog object to system
             this.dialogs.push({
                 text: sentense + more,
+                position: position,
                 letterWidth: letterWidth,
                 letterHeight: letterHeight,
                 arrowPoisitionX: arrowPoisitionX,
@@ -221,6 +222,10 @@ class DialogSystem extends SpriteText {
             // current dialog
             let dialog = this.dialogs[this.currentDialogIndex]
 
+            // update position before open
+            if (dialog.position)
+                this.updatePosition(dialog.position.x, dialog.position.y)
+
             // if reopen
             if (dialog.reopen)
                 this.reopen()
@@ -230,6 +235,7 @@ class DialogSystem extends SpriteText {
         } else {
             this.dialogs.length = 0
             this.closed = true
+            this.currentDialogIndex = -1
         }
 
     }
