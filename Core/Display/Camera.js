@@ -46,14 +46,14 @@ class Camera {
          * 
          * @type {number}
          */
-        this.offsetHorizontal = 40
+        this.offsetHorizontal = this.initialOffsetHorizontal = 40
 
         /**
          * Camera's vertical offset to it's target's center
          * 
          * @type {number}
          */
-        this.offsetVertical = 0
+        this.offsetVertical = this.initialOffsetVertical = 0
 
         /**
          * Camera's pan speed - how fast it goes to it's target
