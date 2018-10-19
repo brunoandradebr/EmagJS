@@ -117,6 +117,7 @@ class DialogSystem extends SpriteText {
      * Adds a dialog object
      * 
      * @param {string} text 
+     * @param {EmagJS.Core.Math.Vector} position  
      * @param {number} letterWidth 
      * @param {number} letterHeight 
      * @param {number} arrowPoisitionX 
