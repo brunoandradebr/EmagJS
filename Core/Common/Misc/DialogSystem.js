@@ -235,8 +235,10 @@ class DialogSystem extends SpriteText {
             this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPoisitionX)
         } else {
             this.dialogs.length = 0
-            this.closed = true
             this.currentDialogIndex = -1
+            setTimeout(() => {
+                this.closed = true
+            }, 100);
         }
 
     }
