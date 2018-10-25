@@ -35,6 +35,13 @@ class DialogSystem extends SpriteText {
         this.closed = true
 
         /**
+         * Callback function to be called when dialog ended
+         * 
+         * @type {function}
+         */
+        this.callback = () => { }
+
+        /**
          * Dialog line height
          */
         this.lineHeight = lineHeight
@@ -125,7 +132,7 @@ class DialogSystem extends SpriteText {
      * 
      * @return {void}
      */
-    addDialog(text, position, letterWidth, letterHeight, arrowPoisitionX, reopen = false) {
+    addDialog(text, position, letterWidth, letterHeight, arrowPoisitionX, reopen = false, callback = null) {
 
         // calculate total letter
         let length = ((this.width * this.height) / ((letterWidth * letterHeight) + (5 * 5) + (this.lineHeight * this.lineHeight))) | 0
@@ -156,7 +163,8 @@ class DialogSystem extends SpriteText {
                 letterWidth: letterWidth,
                 letterHeight: letterHeight,
                 arrowPoisitionX: arrowPoisitionX,
-                reopen: reopen
+                reopen: reopen,
+                callback: callback
             })
         })
     }
@@ -215,13 +223,13 @@ class DialogSystem extends SpriteText {
         // increment current dialog index
         this.currentDialogIndex++
 
+        // current dialog
+        let dialog = this.dialogs[this.currentDialogIndex]
+
         // if there is remaining dialog to show
-        if (this.dialogs[this.currentDialogIndex]) {
+        if (dialog) {
 
             this.closed = false
-
-            // current dialog
-            let dialog = this.dialogs[this.currentDialogIndex]
 
             // update position before open
             if (dialog.position)
@@ -233,12 +241,31 @@ class DialogSystem extends SpriteText {
 
             // creates all letters
             this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPoisitionX)
+
+            // dialog callback 
+            this.callback = dialog.callback
+
         } else {
+
+            // ended dialogs
+
+            // clear dialogs
             this.dialogs.length = 0
+            // reset dialog index
             this.currentDialogIndex = -1
+
+            // timeout after ended dialog
             setTimeout(() => {
+
+                // set closed flag
                 this.closed = true
-            }, 100);
+
+                // ended callback
+                if (this.callback)
+                    this.callback()
+
+            }, 100)
+
         }
 
     }
