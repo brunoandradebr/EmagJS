@@ -58,8 +58,19 @@ let toDegree = 180 / PI;
 
 
 
+/**
+ * Generates a random number in the range - signed as default
+ * 
+ * @type {number}
+ * @global
+ */
+const random = (range, signed = true) => {
 
+    let random = signed ? (Math.random() * 2 - 1) * range : Math.random() * range
 
+    return Math.round(random)
+
+}
 
 
 
