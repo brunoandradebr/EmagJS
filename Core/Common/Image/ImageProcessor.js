@@ -120,7 +120,7 @@ class ImageProcessor {
      * 
      * @return {EmagJS.Core.Common.Image.ImageProcessor}
      */
-    grayscale() {
+    grayscale(factor = 1) {
 
         for (let i = 0; i < this.imageArray.length; i += 4) {
 
@@ -129,7 +129,7 @@ class ImageProcessor {
             let _b = this.imageArray[i + 2];
             let _a = this.imageArray[i + 2];
 
-            let middle = _r + _b + _g / 3;
+            let middle = (_r + _b + _g) / (3 * factor);
 
             this.imageArray[i + 0] = middle;
             this.imageArray[i + 1] = middle;
