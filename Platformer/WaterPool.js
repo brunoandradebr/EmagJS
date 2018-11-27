@@ -47,6 +47,11 @@ class WaterPool {
         this.alpha = 1
 
         /**
+         * @type {string}
+         */
+        this.globalCompositeOperation = 'lighter'
+
+        /**
          * Projected light on surface
          * 
          * @type {object}
@@ -278,6 +283,8 @@ class WaterPool {
      * @return {void}
      */
     draw(graphics) {
+
+        graphics.globalCompositeOperation = this.globalCompositeOperation
 
         // create line gradient
         let linearGradient = graphics.createLinearGradient(this.light.x, 0, this.light.x + this.light.width, 0);
