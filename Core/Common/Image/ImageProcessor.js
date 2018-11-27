@@ -116,6 +116,83 @@ class ImageProcessor {
     }
 
     /**
+     * Replaces a target color to change color
+     * factor will take neighbor colors in account
+     * no factor will only take exact target color
+     * 
+     * @param {array<number>} target 
+     * @param {array<number>} change 
+     * @param {number} factor
+     * 
+     * @return {EmagJS.Core.Common.Image.ImageProcessor}
+     */
+    replaceColor(target = [], change = [], factor = 0) {
+
+        let targetR = target[0]
+        let targetG = target[1]
+        let targetB = target[2]
+
+        // tint pixels
+        for (let i = 0; i < this.imageArray.length; i += 4) {
+
+            let imageR = this.imageArray[i + 0];
+            let imageG = this.imageArray[i + 1];
+            let imageB = this.imageArray[i + 2];
+
+            let redRange = imageR >= targetR - (255 * factor) && imageR <= targetR + (255 * factor)
+            let greenRange = imageG >= targetG - (255 * factor) && imageG <= targetG + (255 * factor)
+            let blueRange = imageB >= targetB - (255 * factor) && imageB <= targetB + (255 * factor)
+
+            if (redRange && greenRange && blueRange) {
+                this.imageArray[i + 0] = change[0]
+                this.imageArray[i + 1] = change[1]
+                this.imageArray[i + 2] = change[2]
+            }
+
+        }
+
+        return this.modifyPixels()
+
+    }
+
+    /**
+     * Removes a target color
+     * factor will take neighbor colors in account
+     * no factor will only take exact target color
+     * 
+     * @param {array<number>} target 
+     * @param {number} factor
+     * 
+     * @return {EmagJS.Core.Common.Image.ImageProcessor}
+     */
+    removeColor(target = [], factor = 0) {
+
+        let targetR = target[0]
+        let targetG = target[1]
+        let targetB = target[2]
+
+        // tint pixels
+        for (let i = 0; i < this.imageArray.length; i += 4) {
+
+            let imageR = this.imageArray[i + 0];
+            let imageG = this.imageArray[i + 1];
+            let imageB = this.imageArray[i + 2];
+
+            let redRange = imageR >= targetR - (255 * factor) && imageR <= targetR + (255 * factor)
+            let greenRange = imageG >= targetG - (255 * factor) && imageG <= targetG + (255 * factor)
+            let blueRange = imageB >= targetB - (255 * factor) && imageB <= targetB + (255 * factor)
+
+            if (redRange && greenRange && blueRange) {
+                this.imageArray[i + 3] = 0
+            }
+
+        }
+
+        return this.modifyPixels()
+
+    }
+
+    /**
      * Applies grayscale effect
      * 
      * @return {EmagJS.Core.Common.Image.ImageProcessor}
