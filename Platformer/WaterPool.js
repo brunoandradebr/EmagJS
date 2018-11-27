@@ -27,14 +27,35 @@ class WaterPool {
         this.anchor = { x: 0.5, y: 0.5 }
 
         /**
-         * @type {string}
+         * @type {number}
          */
-        this.lineColor = 'black'
+        this.lineWidth = 2
 
         /**
          * @type {string}
          */
-        this.fillColor = 'transparent'
+        this.lineColor = 'rgba(30,120,255,0.3)'
+
+        /**
+         * @type {string}
+         */
+        this.fillColor = 'rgba(30,120,255,0.3)'
+
+        /**
+         * @type {number}
+         */
+        this.alpha = 1
+
+        /**
+         * Projected light on surface
+         * 
+         * @type {object}
+         */
+        this.light = {
+            x: this.width * 0.5,
+            width: 100,
+            color: 'rgba(255, 255, 255, 0.8)'
+        }
 
         /**
          * Container that holds pooled objects
@@ -51,7 +72,7 @@ class WaterPool {
         /**
          * @type {number}
          */
-        this.nodeSpace = 30
+        this.nodeSpace = 20
 
         /**
          * Object Pool to manager nodes creation
@@ -69,6 +90,33 @@ class WaterPool {
             node.static = false
             return node
         })
+
+        /**
+         * How much propagates wave
+         * Lower numbers (0.005) less propagation
+         * Higher numbers (0.025) more propagation
+         * 
+         * @type {number}
+         */
+        this.propagation = 0.025
+
+        /**
+         * How much jelly water behavior is
+         * Lower numbers (0.025) less jelly
+         * Higher numbers (0.25) more jelly
+         * 
+         * @type {number}
+         */
+        this.jelly = 0.025
+
+        /**
+         * How fast water back to rest position
+         * Lower numbers (0.91) fast rest
+         * Higher numbers (0.99) slow rest
+         * 
+         * @type {number}
+         */
+        this.recover = .97
 
         // create nodes
         this.createNodes()
@@ -134,6 +182,47 @@ class WaterPool {
 
     }
 
+    /**
+     * Creates a wave based on node index
+     * 
+     * @param {number} nodeIndex 
+     * @param {number} force 
+     * @param {number} influence 
+     * 
+     * @return {void}
+     */
+    createWave(nodeIndex, force = 5, influence = 1) {
+
+        for (let i = nodeIndex - influence; i <= nodeIndex + influence; i++) {
+            this.nodes[i].body.applyForce(new Vector(0, force))
+        }
+
+    }
+
+    /**
+     * Creates a random wave
+     * 
+     * @param {number} force 
+     * @param {number} influence 
+     * 
+     * @return {void}
+     */
+    createRandomWave(force, influence) {
+
+        let index = random(this.nNodes, false)
+
+        if (index > 2 && index < this.nNodes - 3)
+            this.createWave(index, force, influence)
+
+    }
+
+    /**
+     * Calculates spring force and integrate nodes
+     * 
+     * @param {number} dt 
+     * 
+     * @return {void}
+     */
     update(dt) {
 
         // each node
@@ -145,11 +234,11 @@ class WaterPool {
             // distance from rest position
             let heightDiff = node.body.position.y - node.startPosition.y
             // calculate spring force
-            let springForce = heightDiff * -0.025
+            let springForce = heightDiff * -this.jelly
             // accelerate node body
             node.body.acceleration.y += springForce * dt
             // apply friction to stop node from infinity oscillation
-            node.body.velocity.y *= .99
+            node.body.velocity.y *= this.recover
 
         })
 
@@ -163,7 +252,7 @@ class WaterPool {
             if (i > 1) {
                 let leftNode = this.nodes[i - 1]
 
-                let springForce = .025 * (currentNode.body.position.y - leftNode.body.position.y)
+                let springForce = this.propagation * (currentNode.body.position.y - leftNode.body.position.y)
 
                 leftNode.body.acceleration.y += springForce
                 leftNode.body.position.y += springForce
@@ -172,7 +261,7 @@ class WaterPool {
             if (i < this.nNodes - 2) {
                 let rightNode = this.nodes[i + 1]
 
-                let springForce = .025 * (currentNode.body.position.y - rightNode.body.position.y)
+                let springForce = this.propagation * (currentNode.body.position.y - rightNode.body.position.y)
 
                 rightNode.body.acceleration.y += springForce
                 rightNode.body.position.y += springForce
@@ -190,9 +279,16 @@ class WaterPool {
      */
     draw(graphics) {
 
+        // create line gradient
+        let linearGradient = graphics.createLinearGradient(this.light.x, 0, this.light.x + this.light.width, 0);
+        linearGradient.addColorStop(0, this.fillColor);
+        linearGradient.addColorStop(0.5, this.light.color);
+        linearGradient.addColorStop(1, this.fillColor);
+
         // draw outlines
-        graphics.strokeStyle = this.lineColor
+        graphics.strokeStyle = linearGradient
         graphics.fillStyle = this.fillColor
+        graphics.lineWidth = this.lineWidth
         graphics.beginPath()
         for (let i = 0; i < this.nNodes; i++) {
 
@@ -205,16 +301,15 @@ class WaterPool {
 
         }
         graphics.closePath()
-        graphics.fill()
+        graphics.globalAlpha = this.alpha + 0.5
         graphics.stroke()
+        graphics.globalAlpha = this.alpha
+        graphics.fill()
 
         // draw nodes
         // this.nodes.map((node) => {
-
         //     if (node.static) node.fillColor = 'grey'
-
         //     node.draw(graphics)
-
         // })
 
     }
