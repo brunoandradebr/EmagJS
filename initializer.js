@@ -100,6 +100,7 @@ preloadFileClassScript.onload = (e) => {
         { Alagard: root + 'Resource/Font/Alagard.ttf' },
         { Unknown: root + 'Resource/Font/Unknown.ttf' },
         // PLATFORMER
+        { platformerWaterPool: root + 'Platformer/WaterPool.js' },
         { platformerEntity: root + 'Platformer/Entity.js' },
         { platformerPlatform: root + 'Platformer/Platform.js' },
     ]);
