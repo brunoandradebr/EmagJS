@@ -106,6 +106,18 @@ class Camera {
     }
 
     /**
+     * Fixes a object inside camera
+     * 
+     * @param {object} object 
+     * 
+     * @return {void}
+     */
+    fix(object) {
+        if (this.x > 0) object.position.x += this.x
+        if (this.y > 0) object.position.y += this.y
+    }
+
+    /**
      * Zoom scene's viewport
      * 
      * @param {number} factor
