@@ -284,15 +284,16 @@ class WaterPool {
      */
     draw(graphics) {
 
-        graphics.globalCompositeOperation = this.globalCompositeOperation
-
+        
         // create line gradient
         let linearGradient = graphics.createLinearGradient(this.light.x, 0, this.light.x + this.light.width, 0);
         linearGradient.addColorStop(0, this.fillColor);
         linearGradient.addColorStop(0.5, this.light.color);
         linearGradient.addColorStop(1, this.fillColor);
-
+        
         // draw outlines
+        graphics.save()
+        graphics.globalCompositeOperation = this.globalCompositeOperation
         graphics.strokeStyle = linearGradient
         graphics.fillStyle = this.fillColor
         graphics.lineWidth = this.lineWidth
@@ -312,6 +313,7 @@ class WaterPool {
         graphics.stroke()
         graphics.globalAlpha = this.alpha
         graphics.fill()
+        graphics.restore()
 
         // draw nodes
         // this.nodes.map((node) => {
