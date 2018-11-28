@@ -97,9 +97,6 @@ class Scene {
 
         }
 
-        // scale and position viewport canvas
-        this.scaleViewport(this.fullscreen)
-
         /**
          * Horizontal scene offset from left edge
          * 
@@ -113,6 +110,9 @@ class Scene {
          * @type {number}
          */
         this.offsetY = 0
+
+        // scale and position viewport canvas
+        this.scaleViewport(this.fullscreen)
 
         /**
          * fixed delta time with variant fps
