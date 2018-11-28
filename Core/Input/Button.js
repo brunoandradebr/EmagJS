@@ -114,19 +114,6 @@ class Button extends Sprite {
         let buttonWidth = this.width * sceneScale
         let buttonHeight = this.height * sceneScale
 
-        // viewport offset
-        let viewportLeft,
-            viewportTop
-
-        // viewport or scene original canvas offset
-        if (this.scene.viewport) {
-            viewportLeft = parseFloat(window.getComputedStyle(this.scene.viewport).left)
-            viewportTop = parseFloat(window.getComputedStyle(this.scene.viewport).top)
-        } else {
-            viewportLeft = parseFloat(window.getComputedStyle(this.scene.canvas).left)
-            viewportTop = parseFloat(window.getComputedStyle(this.scene.canvas).top)
-        }
-
         // for each touch pointer
         for (let i in touches) {
 
@@ -137,8 +124,8 @@ class Button extends Sprite {
                 continue
 
             // offset touch position
-            let x = touch.clientX - viewportLeft
-            let y = touch.clientY - viewportTop
+            let x = touch.clientX - this.scene.offsetX
+            let y = touch.clientY - this.scene.offsetY
 
             // touching button area
             if (x > ((buttonX - buttonWidth * 0.5) - this.offsetLeft) && x < ((buttonX + buttonWidth * 0.5) + this.offsetRight)) {

@@ -101,6 +101,20 @@ class Scene {
         this.scaleViewport(this.fullscreen)
 
         /**
+         * Horizontal scene offset from left edge
+         * 
+         * @type {number}
+         */
+        this.offsetX = 0
+
+        /**
+         * Vertical scene offset from top edge
+         * 
+         * @type {number}
+         */
+        this.offsetY = 0
+
+        /**
          * fixed delta time with variant fps
          * 
          * @type {number}
@@ -281,19 +295,24 @@ class Scene {
             this.canvas.height = this.height
             this.canvas.style.width = this.width + 'px'
             this.canvas.style.height = this.height + 'px'
+            this.offsetX = this.offsetY = 0
         } else {
             if (this.camera) {
                 this.scale = keepAspectRatio(this.camera.width, this.camera.height)
                 this.viewport.style.width = this.camera.width * this.scale + 'px'
                 this.viewport.style.height = this.camera.height * this.scale + 'px'
-                this.viewport.style.left = ((this.parent.width - this.camera.width * this.scale) * 0.5) + 'px'
-                this.viewport.style.top = ((this.parent.height - this.camera.height * this.scale) * 0.5) + 'px'
+                this.offsetX = ((this.parent.width - this.camera.width * this.scale) * 0.5)
+                this.offsetY = ((this.parent.height - this.camera.height * this.scale) * 0.5)
+                this.viewport.style.left = this.offsetX + 'px'
+                this.viewport.style.top = this.offsetY + 'px'
             } else {
                 this.scale = keepAspectRatio(this.width, this.height)
                 this.canvas.style.width = this.width * this.scale + 'px'
                 this.canvas.style.height = this.height * this.scale + 'px'
-                this.canvas.style.left = ((this.parent.width - this.width * this.scale) * 0.5) + 'px'
-                this.canvas.style.top = ((this.parent.height - this.height * this.scale) * 0.5) + 'px'
+                this.offsetX = ((this.parent.width - this.width * this.scale) * 0.5)
+                this.offsetY = ((this.parent.height - this.height * this.scale) * 0.5)
+                this.canvas.style.left = this.offsetX + 'px'
+                this.canvas.style.top = this.offsetY + 'px'
             }
         }
     }
