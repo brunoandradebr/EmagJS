@@ -73,8 +73,20 @@ const random = (range, signed = true) => {
 }
 
 
-
-
+/**
+ * Converts local canvas vector to viewport
+ * 
+ * @param {EmagJS.Core.Math.Vector} 
+ * @param {EmagJS.Core.Display.Scene}
+ * 
+ * @return {void}
+ */
+let _tmp_mouse = { x: 0, y: 0 }
+const localToGlobal = (vector, scene) => {
+    _tmp_mouse.x = (vector.x / scene.scale - scene.offsetX / scene.scale)
+    _tmp_mouse.y = (vector.y / scene.scale - scene.offsetY / scene.scale)
+    return _tmp_mouse
+}
 
 
 
