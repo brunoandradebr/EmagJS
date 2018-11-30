@@ -619,7 +619,35 @@ class CollisionHandler {
         return true
     }
 
+    /**
+     * Checks if a circle collided with a polygon
+     * 
+     * TODO - improve nearest line check
+     * 
+     * @param {EmagJS.Core.Render.Circle} A 
+     * @param {EmagJS.Core.Render.Shape} B
+     * 
+     * @return {bool}
+     */
     circleToShapeCollision(A = Circle, B = Shape) {
+
+        let lines = B.getLines()
+        let maxProjection = -Infinity
+        let closestLine = lines[0]
+
+        lines.map((line) => {
+
+            let circleToLineStart = A.position.clone().subtract(line.start)
+            let projection = circleToLineStart.dot(line.plane.leftNormal)
+
+            if (projection >= maxProjection) {
+                maxProjection = projection
+                closestLine = line
+            }
+
+        })
+
+        return this.circleToLineCollision(A, closestLine)
 
     }
 
