@@ -64,6 +64,11 @@ class Keyboard {
          * @type {integer}
          */
         this.W = 87
+        
+        /**
+         * @type {integer}
+         */
+        this.R = 82
 
         /**
          * keys pool
@@ -84,6 +89,7 @@ class Keyboard {
         this.addKey(this.X)
         this.addKey(this.D)
         this.addKey(this.W)
+        this.addKey(this.R)
 
         // keydown listener
         window.addEventListener('keydown', (e) => {
