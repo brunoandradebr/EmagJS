@@ -25,6 +25,7 @@ class Scene {
             camera: null,                     // camera object
             scale: 1,                         // scene's scale factor - how much camera resolution(width-height) will be scaled to fit movie's width and height
             fullscreen: false,                // full screen mode - if true ignores camera, and fit movie's dimensions - device size
+            blend: 'none',
             onCreate: function () { },
             onEnter: function () { },
             index: 0,                         // depth order
@@ -47,6 +48,7 @@ class Scene {
         this.canvas.height = this.height || this.parent.height;
         this.canvas.style.width = (this.width || this.parent.width) + 'px';
         this.canvas.style.height = (this.height || this.parent.height) + 'px';
+        this.canvas.style.mixBlendMode = this.blend
 
         // scene's depth order
         this.canvas.style.zIndex = this.index
