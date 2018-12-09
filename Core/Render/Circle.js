@@ -59,9 +59,7 @@ class Circle {
         graphics.strokeStyle = this.lineColor
         graphics.lineWidth = this.lineWidth
 
-        let halfLine = this.lineWidth * 0.5 | 0
-
-        graphics.arc(this.position.x + halfLine, this.position.y + halfLine, this.radius, 0, Math.PI * 2)
+        graphics.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
 
         graphics.fill()
 
