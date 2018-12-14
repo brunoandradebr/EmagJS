@@ -46,6 +46,30 @@ class Circle {
     }
 
     /**
+     * get it's bounding box object
+     * 
+     * @return {object}
+     */
+    getBoundingBox(offsetWidth = 0, offsetHeight = 0) {
+
+        let startX = this.position.x - this.radius
+        let startY = this.position.y - this.radius
+        let centerX = this.position.x
+        let centerY = this.position.y
+        let width = this.radius * 2
+        let height = this.radius * 2
+
+        return {
+            startX: startX - offsetWidth * 0.5,
+            startY: startY - offsetHeight * 0.5,
+            centerX: centerX,
+            centerY: centerY,
+            width: width + (offsetWidth * 0.5),
+            height: height + (offsetHeight * 0.5)
+        }
+    }
+
+    /**
      * 
      * @param {CanvasRenderingContext2D} graphics 
      * 
