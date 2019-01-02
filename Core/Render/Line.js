@@ -68,6 +68,24 @@ class Line {
     }
 
     /**
+     * Scales
+     * 
+     * @param {number} size
+     * 
+     * @return {void} 
+     */
+    scale(size) {
+
+        let plane = this.plane.normalize
+
+        let scaled = plane.multiplyScalar(size)
+
+        this.end.x = this.start.x + scaled.x
+        this.end.y = this.start.y + scaled.y
+
+    }
+
+    /**
      * get plane - line's plane
      * 
      * @return {EmagJS.Core.Math.Vector} 
