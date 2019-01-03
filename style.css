@@ -11,13 +11,13 @@
 
 body {
     overflow: hidden;
-    background: url('./Resource/Image/Background.png')
 }
 
 #stage {
     width: 100vw;
     height: 100vh;
     position: absolute;
+    background: url('./Resource/Image/Background.png')
 }
 
 .movie {
