@@ -5,9 +5,10 @@
 
 
 // framework root and initializer script
-let EmagScriptInitializer = document.querySelector('script');
+let EmagScriptInitializer = document.querySelector('script[initscript]');
 let file = EmagScriptInitializer.src.split('/').pop();
 let root = EmagScriptInitializer.src.replace(file, '');
+let target = EmagScriptInitializer.getAttribute('target')
 let initScript = EmagScriptInitializer.getAttribute('initScript') || '';
 
 // add style.css
@@ -107,7 +108,7 @@ preloadFileClassScript.onload = (e) => {
 
     core.oncomplete = () => {
 
-        stage = new Stage();
+        stage = new Stage(target);
 
         new PreloadFile([{ initScript: initScript }]);
     }

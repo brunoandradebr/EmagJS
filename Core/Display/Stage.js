@@ -41,23 +41,30 @@ touches.length = 0
  * Stage - The main object that holds all objects.
  *         Has one or more movie handlers that has one or more scenes.
  * 
- *         structure : <div id="stage">
- *                          <div id="id-movie">
- *                              <canvas id="id-scene"></canvas>
+ *         structure : <target>
+ *                          <div id="stage">
+ *                              <div id="id-movie">
+ *                                  <canvas id="id-scene"></canvas>
+ *                              </div>
  *                          </div>
- *                     </div>
+ *                     </target>
+ *                  
+ * 
+ * @param {HTMLElement} target - target element where to place stage (main canvas)
  */
 class Stage {
 
     /**
      * Constructor
      */
-    constructor() {
+    constructor(target = null) {
 
         /**
          * @type {array}
          */
         this.movies = [];
+
+        this.target = target
 
         /**
          * @type {HTMLElement}
@@ -65,8 +72,13 @@ class Stage {
         this.container = document.createElement('div');
         // set it's id
         this.container.setAttribute('id', 'stage');
-        // insert stage container element to the document body
-        document.body.appendChild(this.container);
+
+        // insert stage container element to the target
+        if (this.target) {
+            document.querySelector(this.target).appendChild(this.container);
+        } else {
+            document.body.appendChild(this.container);
+        }
 
         /**
          * Mouse down event
