@@ -131,6 +131,16 @@ class Line {
     }
 
     /**
+     * Clone
+     */
+    clone() {
+        let clone = new Line(this.start.clone(), this.end.clone())
+        clone.lineWidth = this.lineWidth
+        clone.lineColor = this.lineColor
+        return clone
+    }
+
+    /**
      * 
      * @param {CanvasRenderingContext2D} graphics
      * 
