@@ -11,7 +11,7 @@
  * @type {EmagJS.Core.Math.Vector}
  * @global
  */
-let mouse = new Vector(0, 0)
+let mouse = new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y)
 
 /**
  * Mouse down flag
