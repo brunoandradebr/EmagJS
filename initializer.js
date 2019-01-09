@@ -62,6 +62,7 @@ preloadFileClassScript.onload = (e) => {
         { line: root + 'Core/Render/Line.js' },
         { circle: root + 'Core/Render/Circle.js' },
         { shape: root + 'Core/Render/Shape.js' },
+        { visibilityPolygon: root + 'Core/Render/VisibilityPolygon.js' },
         // COMMOMN/MISC
         { frameRate: root + 'Core/Common/Misc/FrameRate.js' },
         { objectPool: root + 'Core/Common/Misc/ObjectPool.js' },
