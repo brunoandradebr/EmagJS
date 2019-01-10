@@ -98,6 +98,18 @@ class Shape {
         }
 
         /**
+         * Temporary shape vertices
+         * 
+         * @type {array<EmagJS.Core.Math.Vector>}
+         */
+        this._tmpVertex = []
+
+        // creates and cache all shape's vertices
+        for (let i = 0; i < this.points.length; i++) {
+            this._tmpVertex.push(new Vector())
+        }
+
+        /**
          * Temporary shape normals
          * 
          * @type {array<EmagJS.Core.Math.Vector>}
@@ -250,6 +262,29 @@ class Shape {
         }
 
         return this._tmpLines
+
+    }
+
+    /**
+     * get it's vertices
+     * 
+     * @return {array<EmagJS.Core.Math.Vector>}
+     */
+    getVertices() {
+
+        let points = this.points
+        let pointsLength = points.length
+        for (let i = 0; i < pointsLength; i++) {
+
+            let point = points[i]
+
+            let vertex = this._tmpVertex[i]
+            vertex.x = point.x + this.position.x
+            vertex.y = point.y + this.position.y
+
+        }
+
+        return this._tmpVertex
 
     }
 
