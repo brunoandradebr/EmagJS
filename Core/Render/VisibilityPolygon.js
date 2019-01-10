@@ -192,6 +192,18 @@ class VisibilityPolygon {
         this.polygons[0].fillColor = this.shadowColor
         this.polygons[0].draw(graphics)
 
+        if (this.compositeOperation || this.shadowBlur)
+            graphics.save()
+
+        if (this.compositeOperation) {
+            graphics.globalCompositeOperation = this.compositeOperation
+        }
+
+        if (this.shadowBlur) {
+            graphics.shadowBlur = 40
+            graphics.shadowColor = 'white'
+        }
+
         let gradient = graphics.createRadialGradient(this.position.x, this.position.y, this.colorRadius0, this.position.x, this.position.y, this.colorRadius1)
         gradient.addColorStop(0, this.fillColor);
         gradient.addColorStop(1, "rgba(255,255,255,0)");
@@ -203,6 +215,9 @@ class VisibilityPolygon {
         })
         graphics.closePath()
         graphics.fill()
+
+        if (this.compositeOperation || this.shadowBlur)
+            graphics.restore()
 
     }
 
