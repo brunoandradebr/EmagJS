@@ -86,6 +86,15 @@ class Line {
     }
 
     /**
+     * get line center
+     * 
+     * @return {EmagJS.Core.Math.Vector}
+     */
+    get center() {
+        return this.start.clone().add(this.plane.multiplyScalar(0.5))
+    }
+
+    /**
      * get plane - line's plane
      * 
      * @return {EmagJS.Core.Math.Vector} 
