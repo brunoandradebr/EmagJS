@@ -363,6 +363,8 @@ class Shape {
         graphics.lineWidth = this.lineWidth;
         graphics.strokeStyle = this.lineColor;
 
+        if (this.compositeOperation)
+            graphics.globalCompositeOperation = this.compositeOperation
 
         // line shape
         graphics.beginPath();
