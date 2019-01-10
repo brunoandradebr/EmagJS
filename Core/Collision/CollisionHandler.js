@@ -425,7 +425,7 @@ class CollisionHandler {
 
                 let dot = collisionPoint.clone().subtract(line.start).dot(line.plane);
 
-                if (dot >= 0 && dot <= line.plane.lengthSquared) {
+                if (dot >= 0.1 && dot <= line.plane.lengthSquared - 1) {
 
                     this.points.push(collisionPoint);
 

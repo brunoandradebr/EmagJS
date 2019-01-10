@@ -149,7 +149,7 @@ class Shape {
             let aux = point.clone().subtract(line.start)
             let dot = aux.dot(line.normal)
 
-            if (dot > 0)
+            if (dot > -0.1)
                 return false
 
         }
