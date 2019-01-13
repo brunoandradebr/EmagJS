@@ -68,12 +68,18 @@ class VisibilityPolygon {
     /**
      * Adds a polygon to polygons pool
      * 
-     * @param {EmagJS.Core.Render.Shape} polygon
+     * @param {EmagJS.Core.Render.Shape | array<EmagJS.Core.Render.Shape>} polygon
      * 
      * @return {void} 
      */
     addPolygon(polygon) {
-        this.polygons.push(polygon)
+
+        if (polygon.constructor.name == 'Array') {
+            polygon.map((p) => this.polygons.push(p))
+        } else {
+            this.polygons.push(polygon)
+        }
+
     }
 
     /**
