@@ -43,7 +43,7 @@ class FieldView {
          * 
          * @type {EmagJS.Core.Render.Shape}
          */
-        this.polygon = new Shape(new Triangle, this.position, this.width, this.height, 'transparent', 2, 'rgba(0, 0, 0, 0.1)')
+        this.polygon = new Shape(new Triangle, this.position, this.width, this.height, 'transparent', 2, this.fillColor)
 
         /**
          * Polygons to cast rays at
