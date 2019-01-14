@@ -206,7 +206,7 @@ class VisibilityPolygon {
         }
 
         if (this.shadowBlur) {
-            graphics.shadowBlur = 40
+            graphics.shadowBlur = this.shadowBlur
             graphics.shadowColor = 'white'
         }
 
