@@ -1,6 +1,6 @@
 class VisibilityPolygon {
 
-    constructor(position = new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y), fillColor = 'rgba(255, 255, 255, 0.7)', collisionHandler = new CollisionHandler()) {
+    constructor(position = new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y), fillColor = 'rgba(255, 255, 255, 0.7)', width = DEVICE_WIDTH, height = DEVICE_HEIGHT, collisionHandler = new CollisionHandler()) {
 
         /**
          * light color
@@ -43,7 +43,7 @@ class VisibilityPolygon {
          * @type {array<EmagJS.Core.Render.Shape>}
          */
         this.polygons = [
-            new Shape(new Square, new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y), DEVICE_WIDTH, DEVICE_HEIGHT, this.shadowColor)
+            new Shape(new Square, new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y), width, height, this.shadowColor)
         ]
 
         /**
