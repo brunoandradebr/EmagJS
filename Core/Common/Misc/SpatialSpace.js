@@ -17,6 +17,8 @@ class SpatialSpace {
      */
     constructor(rows = 3, columns = 3, width = DEVICE_WIDTH, height = DEVICE_HEIGHT) {
 
+        // TODO - add a update method passing an object and update it's index only
+
         /**
          * @type {integer}
          */
@@ -256,7 +258,7 @@ class SpatialSpace {
         })
 
         // after added objects to areas, check if there are possible collisions
-        this.collisionAreas = this.getCollisionAreas()
+        //this.collisionAreas = this.getCollisionAreas()
 
     }
 
@@ -269,7 +271,7 @@ class SpatialSpace {
      * @return {array}
      */
     getArea(x, y) {
-        return this.areas[x * this.iBlockWidth | 0, y * this.iBlockHeight | 0][x * this.iBlockWidth | 0]
+        return this.areas[x * this.iBlockWidth | 0][y * this.iBlockHeight | 0]
     }
 
     /**
@@ -309,8 +311,50 @@ class SpatialSpace {
         }
 
         // return all areas that possible collisions will happen
-        return this.tmpCollisionAreas
+        return this.collisionAreas = this.tmpCollisionAreas
 
+    }
+
+    /**
+     * Gets all objects inside an grid based on x and y position
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * 
+     * @return {array}
+     */
+    getObjectsAt(x, y) {
+
+        let area = this.getArea(x, y)
+
+        let arrID = []
+
+        area.map((object) => {
+            if (!arrID[object.spatialID]) {
+                arrID[object.spatialID] = object
+            }
+        })
+
+        return arrID
+
+    }
+
+    /**
+     * Gets all objects near passed object from spatial space grids
+     * 
+     * TODO - Get nearest grids from object center
+     * 
+     * @param {EmagJS.Core.Render.Sprite | EmagJS.Core.Render.Shape} object
+     * 
+     * @return {array} 
+     */
+    getObjectsNear(object) {
+
+        // terminar de fazer esse metodo...
+        // pegar todos os objetos dentro de uma grid especifica
+
+        let area = this.getArea(object.position.x, object.position.y)
+        
     }
 
     /**
