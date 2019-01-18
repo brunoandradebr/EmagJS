@@ -15,7 +15,7 @@ class SpatialSpace {
      * @param {number}  width   - Max width of the spatial area 
      * @param {number}  height  - Max height of the spatial area
      */
-    constructor(rows = 3, columns = 2, width = DEVICE_WIDTH, height = DEVICE_HEIGHT) {
+    constructor(rows = 3, columns = 3, width = DEVICE_WIDTH, height = DEVICE_HEIGHT) {
 
         /**
          * @type {integer}
@@ -62,7 +62,7 @@ class SpatialSpace {
         this.iBlockHeight = 1 / this.blockHeight
 
         /**
-         * dynamic 2d grid
+         * Dynamic 2d grid
          * 
          * @type {array}
          */
@@ -84,7 +84,28 @@ class SpatialSpace {
         this.collisionAreas = []
 
         /**
-         * debug only
+         * Temporary array to be used to get all objects colliding
+         * 
+         * @type {array}
+         */
+        this.tmpCollisionAreas = []
+
+        /**
+         * Temporary object to be used to hold object bounding box
+         * 
+         * @type {object}
+         */
+        this.tmpObjectStructure = {}
+
+        /**
+         * Flag indicating to create debug block tiles
+         * 
+         * @type {bool}
+         */
+        this.debug = false
+
+        /**
+         * Debug only
          * 
          * @type {array<integer>}
          */
@@ -136,11 +157,11 @@ class SpatialSpace {
      *    |  *  |
      *    *-----*
      * 
-     * @param {array<*>} objects - Array with any interactive object that has a position vector
+     * @param {array<EmagJS.Core.Render.Sprite | EmagJS.Core.Render.Shape>} objects - Array with any interactive object that has a position vector
      * 
-     * @return {void} 
+     * @return {array} 
      */
-    addObjects(objects, boundingBox = false) {
+    addObjects(objects) {
 
         // clear all before add objects
         this.clearAreas()
@@ -153,10 +174,10 @@ class SpatialSpace {
 
             let objectStructure
 
-            if (boundingBox) {
+            if (object.constructor.name == 'Shape') {
                 objectStructure = object.getBoundingBox()
             } else {
-                objectStructure = {}
+                objectStructure = this.tmpObjectStructure
                 objectStructure.width = object.width
                 objectStructure.height = object.height
                 objectStructure.centerX = object.position.x
@@ -258,7 +279,7 @@ class SpatialSpace {
      */
     getCollisionAreas() {
 
-        let collisionAreas = []
+        this.tmpCollisionAreas.length = 0
 
         for (let x = 0; x < this.areas.length; x++) {
             for (let y = 0; y < this.areas.length; y++) {
@@ -278,16 +299,17 @@ class SpatialSpace {
                 // if two or more objects inside area, push area to possible colliding area
                 if (filteredObjects.length > 1) {
 
-                    collisionAreas.push(filteredObjects)
+                    this.tmpCollisionAreas.push(filteredObjects)
 
                     // debug only - debug area sprite to highlight
-                    this.collidingDebugAreas.push({ x: x, y: y })
+                    if (this.debug)
+                        this.collidingDebugAreas.push({ x: x, y: y })
                 }
             }
         }
 
         // return all areas that possible collisions will happen
-        return collisionAreas
+        return this.tmpCollisionAreas
 
     }
 
@@ -339,41 +361,44 @@ class SpatialSpace {
      * 
      * @return {void} 
      */
-    debug(graphics) {
+    draw(graphics) {
 
-        // create blocks only once
-        if (!this.debugBlocks.initialized) {
+        if (this.debug) {
 
-            this.debugBlocks.initialized = true
+            // create blocks only once
+            if (!this.debugBlocks.initialized) {
 
-            for (let i = 0; i < this.rows; i++) {
-                for (let j = 0; j < this.columns; j++) {
-                    let block = new Sprite(new Vector(((j * this.blockWidth) + ((this.blockWidth * 0.5))) | 0, ((i * this.blockHeight) + ((this.blockHeight * 0.5)) | 0)), this.blockWidth, this.blockHeight, 'rgba(0,120,255,0.02)', 1, 'rgba(0,120,255,0.2)')
-                    this.debugBlocks.push(block)
+                this.debugBlocks.initialized = true
+
+                for (let i = 0; i < this.rows; i++) {
+                    for (let j = 0; j < this.columns; j++) {
+                        let block = new Sprite(new Vector(((j * this.blockWidth) + ((this.blockWidth * 0.5))) | 0, ((i * this.blockHeight) + ((this.blockHeight * 0.5)) | 0)), this.blockWidth, this.blockHeight, 'rgba(0,120,255,0.02)', 1, 'rgba(0,120,255,0.2)')
+                        this.debugBlocks.push(block)
+                    }
                 }
+
+            } else {
+
+                // reset initial block line color
+                this.debugBlocks.map((debugBlock) => {
+                    debugBlock.lineColor = 'rgba(0,120,255,0.2)'
+                })
+
+                // highlight colliding areas
+                this.collidingDebugAreas.map((collidingDebugBlock) => {
+                    let area = this.getDebugBlock(collidingDebugBlock.x, collidingDebugBlock.y)
+                    area.lineColor = 'red'
+                })
+
+                // draw all area blocks
+                this.debugBlocks.map((debugBlock) => {
+                    debugBlock.draw(graphics)
+                })
+
+                // clear colliding areas
+                this.collidingDebugAreas.length = 0
+
             }
-
-        } else {
-
-            // reset initial block line color
-            this.debugBlocks.map((debugBlock) => {
-                debugBlock.lineColor = 'rgba(0,120,255,0.2)'
-            })
-
-            // highlight colliding areas
-            this.collidingDebugAreas.map((collidingDebugBlock) => {
-                let area = this.getDebugBlock(collidingDebugBlock.x, collidingDebugBlock.y)
-                area.lineColor = 'red'
-            })
-
-            // draw all area blocks
-            this.debugBlocks.map((debugBlock) => {
-                debugBlock.draw(graphics)
-            })
-
-            // clear colliding areas
-            this.collidingDebugAreas.length = 0
-
         }
     }
 
