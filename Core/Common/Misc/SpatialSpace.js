@@ -15,9 +15,7 @@ class SpatialSpace {
      * @param {number}  width   - Max width of the spatial area 
      * @param {number}  height  - Max height of the spatial area
      */
-    constructor(rows = 3, columns = 3, width = DEVICE_WIDTH, height = DEVICE_HEIGHT) {
-
-        // TODO - add a update method passing an object and update it's index only
+    constructor(rows = 18, columns = 18, width = DEVICE_WIDTH, height = DEVICE_HEIGHT) {
 
         /**
          * @type {integer}
@@ -100,6 +98,13 @@ class SpatialSpace {
         this.tmpObjectStructure = {}
 
         /**
+         * Temporary object to be used to filter repeated objects
+         * 
+         * @type {object}
+         */
+        this.tmpNearestObjects = {}
+
+        /**
          * Flag indicating to create debug block tiles
          * 
          * @type {bool}
@@ -174,92 +179,147 @@ class SpatialSpace {
             // id to filter repeated object inside the same area
             object.spatialID = i
 
-            let objectStructure
-
-            if (object.constructor.name == 'Shape') {
-                objectStructure = object.getBoundingBox()
-            } else {
-                objectStructure = this.tmpObjectStructure
-                objectStructure.width = object.width
-                objectStructure.height = object.height
-                objectStructure.centerX = object.position.x
-                objectStructure.centerY = object.position.y
-            }
-
-            // half width and height
-            let objectHalfWidth = objectStructure.width * 0.5
-            let objectHalfHeight = objectStructure.height * 0.5
-            // center
-            let objectCenterX = objectStructure.centerX
-            let objectCenterY = objectStructure.centerY
-            // upper left
-            let objectUpperLeftX = objectCenterX - objectHalfWidth
-            let objectUpperLeftY = objectCenterY - objectHalfHeight
-            // upper right
-            let objectUpperRightX = objectCenterX + objectHalfWidth
-            let objectUpperRightY = objectCenterY - objectHalfHeight
-            // bottom left
-            let objectBottomLeftX = objectCenterX - objectHalfWidth
-            let objectBottomLeftY = objectCenterY + objectHalfHeight
-            // bottom right
-            let objectBottomRightX = objectCenterX + objectHalfWidth
-            let objectBottomRightY = objectCenterY + objectHalfHeight
-
-            // add object based on it's center position
-            let centerIndexX = (objectCenterX * this.iBlockWidth) | 0
-            let centerIndexY = (objectCenterY * this.iBlockHeight) | 0
-
-            if (this.areas[centerIndexY]) {
-                if (this.areas[centerIndexX]) {
-                    this.areas[centerIndexX][centerIndexY].push(object)
-                }
-            }
-
-            // add object based on it's upper left position
-            let upperLeftIndexX = (objectUpperLeftX * this.iBlockWidth) | 0
-            let upperLeftIndexY = (objectUpperLeftY * this.iBlockHeight) | 0
-
-            if (this.areas[upperLeftIndexY]) {
-                if (this.areas[upperLeftIndexX]) {
-                    this.areas[upperLeftIndexX][upperLeftIndexY].push(object)
-                }
-            }
-
-            // add object based on it's upper right position
-            let upperRightIndexX = (objectUpperRightX * this.iBlockWidth) | 0
-            let upperRightIndexY = (objectUpperRightY * this.iBlockHeight) | 0
-
-            if (this.areas[upperRightIndexY]) {
-                if (this.areas[upperRightIndexX]) {
-                    this.areas[upperRightIndexX][upperRightIndexY].push(object)
-                }
-            }
-
-            // add object based on it's bottom left position
-            let bottomLeftIndexX = (objectBottomLeftX * this.iBlockWidth) | 0
-            let bottomLeftIndexY = (objectBottomLeftY * this.iBlockHeight) | 0
-
-            if (this.areas[bottomLeftIndexY]) {
-                if (this.areas[bottomLeftIndexX]) {
-                    this.areas[bottomLeftIndexX][bottomLeftIndexY].push(object)
-                }
-            }
-
-            // add object based on it's bottom right position
-            let bottomRightIndexX = (objectBottomRightX * this.iBlockWidth) | 0
-            let bottomRightIndexY = (objectBottomRightY * this.iBlockHeight) | 0
-
-            if (this.areas[bottomRightIndexY]) {
-                if (this.areas[bottomRightIndexX]) {
-                    this.areas[bottomRightIndexX][bottomRightIndexY].push(object)
-                }
-            }
+            this.addObjectToGrid(object)
 
         })
 
         // after added objects to areas, check if there are possible collisions
         //this.collisionAreas = this.getCollisionAreas()
 
+    }
+
+    /**
+     * Adds object to grid 
+     * 
+     * @param {EmagJS.Core.Render.Sprite | EmagJS.Core.Render.Shape} object
+     * 
+     * @return {void}
+     */
+    addObjectToGrid(object) {
+
+        let objectStructure
+
+        if (object.constructor.name == 'Shape') {
+            objectStructure = object.getBoundingBox()
+        } else {
+            objectStructure = this.tmpObjectStructure
+            objectStructure.width = object.width
+            objectStructure.height = object.height
+            objectStructure.centerX = object.position.x
+            objectStructure.centerY = object.position.y
+        }
+
+        // half width and height
+        let objectHalfWidth = objectStructure.width * 0.5
+        let objectHalfHeight = objectStructure.height * 0.5
+        // center
+        let objectCenterX = objectStructure.centerX
+        let objectCenterY = objectStructure.centerY
+        // upper left
+        let objectUpperLeftX = objectCenterX - objectHalfWidth
+        let objectUpperLeftY = objectCenterY - objectHalfHeight
+        // upper right
+        let objectUpperRightX = objectCenterX + objectHalfWidth
+        let objectUpperRightY = objectCenterY - objectHalfHeight
+        // bottom left
+        let objectBottomLeftX = objectCenterX - objectHalfWidth
+        let objectBottomLeftY = objectCenterY + objectHalfHeight
+        // bottom right
+        let objectBottomRightX = objectCenterX + objectHalfWidth
+        let objectBottomRightY = objectCenterY + objectHalfHeight
+
+        // add object based on it's center position
+        let centerIndexX = (objectCenterX * this.iBlockWidth) | 0
+        let centerIndexY = (objectCenterY * this.iBlockHeight) | 0
+
+        if (this.areas[centerIndexY]) {
+            if (this.areas[centerIndexX]) {
+                this.areas[centerIndexX][centerIndexY][object.spatialID] = object
+            }
+        }
+
+        // add object based on it's upper left position
+        let upperLeftIndexX = (objectUpperLeftX * this.iBlockWidth) | 0
+        let upperLeftIndexY = (objectUpperLeftY * this.iBlockHeight) | 0
+
+        if (this.areas[upperLeftIndexY]) {
+            if (this.areas[upperLeftIndexX]) {
+                this.areas[upperLeftIndexX][upperLeftIndexY][object.spatialID] = object
+            }
+        }
+
+        // add object based on it's upper right position
+        let upperRightIndexX = (objectUpperRightX * this.iBlockWidth) | 0
+        let upperRightIndexY = (objectUpperRightY * this.iBlockHeight) | 0
+
+        if (this.areas[upperRightIndexY]) {
+            if (this.areas[upperRightIndexX]) {
+                this.areas[upperRightIndexX][upperRightIndexY][object.spatialID] = object
+            }
+        }
+
+        // add object based on it's bottom left position
+        let bottomLeftIndexX = (objectBottomLeftX * this.iBlockWidth) | 0
+        let bottomLeftIndexY = (objectBottomLeftY * this.iBlockHeight) | 0
+
+        if (this.areas[bottomLeftIndexY]) {
+            if (this.areas[bottomLeftIndexX]) {
+                this.areas[bottomLeftIndexX][bottomLeftIndexY][object.spatialID] = object
+            }
+        }
+
+        // add object based on it's bottom right position
+        let bottomRightIndexX = (objectBottomRightX * this.iBlockWidth) | 0
+        let bottomRightIndexY = (objectBottomRightY * this.iBlockHeight) | 0
+
+        if (this.areas[bottomRightIndexY]) {
+            if (this.areas[bottomRightIndexX]) {
+                this.areas[bottomRightIndexX][bottomRightIndexY][object.spatialID] = object
+            }
+        }
+    }
+
+    /**
+     * Removes object from grid
+     * 
+     * @param {EmagJS.Core.Render.Sprite | EmagJS.Core.Render.Shape} object
+     * 
+     * @return {void}
+     */
+    removeObjectFromGrid(object) {
+
+        let mainArea = this.getArea(object.position.x, object.position.y)
+        let topArea = this.getArea(object.position.x, object.position.y - this.blockHeight)
+        let bottomArea = this.getArea(object.position.x, object.position.y + this.blockHeight)
+        let rightArea = this.getArea(object.position.x + this.blockWidth, object.position.y)
+        let topRightArea = this.getArea(object.position.x + this.blockWidth, object.position.y - this.blockHeight)
+        let bottomRightArea = this.getArea(object.position.x + this.blockWidth, object.position.y + this.blockHeight)
+        let leftArea = this.getArea(object.position.x - this.blockWidth, object.position.y)
+        let topLeftArea = this.getArea(object.position.x - this.blockWidth, object.position.y - this.blockHeight)
+        let bottomLeftArea = this.getArea(object.position.x - this.blockWidth, object.position.y + this.blockHeight)
+
+        mainArea[object.spatialID] = null
+        topArea[object.spatialID] = null
+        bottomArea[object.spatialID] = null
+        rightArea[object.spatialID] = null
+        topRightArea[object.spatialID] = null
+        bottomRightArea[object.spatialID] = null
+        leftArea[object.spatialID] = null
+        topLeftArea[object.spatialID] = null
+        bottomLeftArea[object.spatialID] = null
+
+    }
+
+    /**
+     * Updates object grid index
+     * 
+     * @param {EmagJS.Core.Render.Sprite | EmagJS.Core.Render.Shape} object
+     * 
+     * @return {void} 
+     */
+    updateObject(object) {
+        this.removeObjectFromGrid(object)
+        this.addObjectToGrid(object)
     }
 
     /**
@@ -271,7 +331,9 @@ class SpatialSpace {
      * @return {array}
      */
     getArea(x, y) {
-        return this.areas[x * this.iBlockWidth | 0][y * this.iBlockHeight | 0]
+        let xIndex = x * this.iBlockWidth | 0
+        let yIndex = y * this.iBlockHeight | 0
+        return this.areas[xIndex] && this.areas[xIndex][yIndex] ? this.areas[xIndex][yIndex] : []
     }
 
     /**
@@ -288,25 +350,23 @@ class SpatialSpace {
 
                 let area = this.areas[x][y]
 
-                // array to keep not repeated objects
-                let filteredObjects = [area[0]]
+                let areaObjects = []
 
-                // filter repeated objects inside area
-                area.map((object) => {
-                    if (filteredObjects[filteredObjects.length - 1].spatialID != object.spatialID) {
-                        filteredObjects.push(object)
-                    }
-                })
+                let objects = Object.values(area)
 
-                // if two or more objects inside area, push area to possible colliding area
-                if (filteredObjects.length > 1) {
+                if (objects.length > 1) {
+                    objects.map((areaObject) => {
+                        if (areaObject)
+                            areaObjects.push(areaObject)
+                    })
+                }
 
-                    this.tmpCollisionAreas.push(filteredObjects)
-
-                    // debug only - debug area sprite to highlight
+                if (areaObjects.length > 1) {
+                    this.tmpCollisionAreas.push(areaObjects)
                     if (this.debug)
                         this.collidingDebugAreas.push({ x: x, y: y })
                 }
+
             }
         }
 
@@ -342,19 +402,54 @@ class SpatialSpace {
     /**
      * Gets all objects near passed object from spatial space grids
      * 
-     * TODO - Get nearest grids from object center
-     * 
      * @param {EmagJS.Core.Render.Sprite | EmagJS.Core.Render.Shape} object
      * 
      * @return {array} 
      */
     getObjectsNear(object) {
 
-        // terminar de fazer esse metodo...
-        // pegar todos os objetos dentro de uma grid especifica
+        // clear old near objects
+        for (let i in this.tmpNearestObjects) {
+            delete this.tmpNearestObjects[i]
+        }
 
-        let area = this.getArea(object.position.x, object.position.y)
-        
+        let mainArea = this.getArea(object.position.x, object.position.y)
+        let topArea = this.getArea(object.position.x, object.position.y - this.blockHeight)
+        let bottomArea = this.getArea(object.position.x, object.position.y + this.blockHeight)
+        let rightArea = this.getArea(object.position.x + this.blockWidth, object.position.y)
+        let topRightArea = this.getArea(object.position.x + this.blockWidth, object.position.y - this.blockHeight)
+        let bottomRightArea = this.getArea(object.position.x + this.blockWidth, object.position.y + this.blockHeight)
+        let leftArea = this.getArea(object.position.x - this.blockWidth, object.position.y)
+        let topLeftArea = this.getArea(object.position.x - this.blockWidth, object.position.y - this.blockHeight)
+        let bottomLeftArea = this.getArea(object.position.x - this.blockWidth, object.position.y + this.blockHeight)
+
+        let areas = [...mainArea, ...leftArea, ...topLeftArea, ...bottomLeftArea, ...rightArea, ...topRightArea, ...bottomRightArea, ...topArea, ...bottomArea]
+
+        areas.map((areaObject) => {
+            if (areaObject) {
+                if (areaObject.spatialID != object.spatialID) {
+
+                    this.tmpNearestObjects[areaObject.spatialID] = areaObject
+
+                    // debug only - debug area sprite to highlight
+                    if (this.debug) {
+                        this.collidingDebugAreas.push({ x: object.position.x * this.iBlockWidth | 0, y: object.position.y * this.iBlockHeight | 0 })
+                        this.collidingDebugAreas.push({ x: ((object.position.x + this.blockWidth) * this.iBlockWidth) | 0, y: object.position.y * this.iBlockHeight | 0 })
+                        this.collidingDebugAreas.push({ x: ((object.position.x - this.blockWidth) * this.iBlockWidth) | 0, y: object.position.y * this.iBlockHeight | 0 })
+                        this.collidingDebugAreas.push({ x: object.position.x * this.iBlockWidth | 0, y: ((object.position.y + this.blockHeight) * this.iBlockHeight) | 0 })
+                        this.collidingDebugAreas.push({ x: object.position.x * this.iBlockWidth | 0, y: ((object.position.y - this.blockHeight) * this.iBlockHeight) | 0 })
+                        this.collidingDebugAreas.push({ x: ((object.position.x - this.blockWidth) * this.iBlockWidth) | 0, y: ((object.position.y - this.blockHeight) * this.iBlockHeight) | 0 })
+                        this.collidingDebugAreas.push({ x: ((object.position.x + this.blockWidth) * this.iBlockWidth) | 0, y: ((object.position.y - this.blockHeight) * this.iBlockHeight) | 0 })
+                        this.collidingDebugAreas.push({ x: ((object.position.x - this.blockWidth) * this.iBlockWidth) | 0, y: ((object.position.y + this.blockHeight) * this.iBlockHeight) | 0 })
+                        this.collidingDebugAreas.push({ x: ((object.position.x + this.blockWidth) * this.iBlockWidth) | 0, y: ((object.position.y + this.blockHeight) * this.iBlockHeight) | 0 })
+                    }
+
+                }
+            }
+        })
+
+        return Object.values(this.tmpNearestObjects)
+
     }
 
     /**
@@ -416,7 +511,7 @@ class SpatialSpace {
 
                 for (let i = 0; i < this.rows; i++) {
                     for (let j = 0; j < this.columns; j++) {
-                        let block = new Sprite(new Vector(((j * this.blockWidth) + ((this.blockWidth * 0.5))) | 0, ((i * this.blockHeight) + ((this.blockHeight * 0.5)) | 0)), this.blockWidth, this.blockHeight, 'rgba(0,120,255,0.02)', 1, 'rgba(0,120,255,0.2)')
+                        let block = new Sprite(new Vector(((j * this.blockWidth) + ((this.blockWidth * 0.5))) | 0, ((i * this.blockHeight) + ((this.blockHeight * 0.5)) | 0)), this.blockWidth, this.blockHeight, 'transparent', 1, 'royalblue')
                         this.debugBlocks.push(block)
                     }
                 }
@@ -431,7 +526,8 @@ class SpatialSpace {
                 // highlight colliding areas
                 this.collidingDebugAreas.map((collidingDebugBlock) => {
                     let area = this.getDebugBlock(collidingDebugBlock.x, collidingDebugBlock.y)
-                    area.lineColor = 'red'
+                    if (area)
+                        area.lineColor = 'red'
                 })
 
                 // draw all area blocks
