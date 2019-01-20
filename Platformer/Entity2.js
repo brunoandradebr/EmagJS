@@ -24,11 +24,15 @@ class Entity2 extends Sprite {
         // collision masks
         this.collisionMask = []
         // foot mask
-        this.collisionMask['foot'] = new Shape(new Square, this.position.clone(), 10, 10, 'transparent', 2)
+        this.collisionMask['foot'] = new Circle(this.position.clone(), 10, 'transparent', 1, 'red')
+
+        // raycast
+        this.collisionMask['ray'] = new Line(this.position.clone(), new Vector)
+        this.collisionMask['ray'].lineWidth = 1
 
         // physic body
         this.body = new Body(this.collisionMask['foot'])
-        this.body.gravity = new Vector(0, .4)
+        this.body.gravity = new Vector(0, .2)
         this.body.friction = new Vector(0, 1)
 
         // mechanics properties
@@ -183,70 +187,58 @@ class Entity2 extends Sprite {
      */
     checkPlatformCollision(collisionHandler, platforms) {
 
-        // check collisions with platforms
-        for (let i = 0; i < platforms.length; i++) {
+        // update ray
+        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 6)
+        this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 20)
 
-            let platform = platforms[i]
+        let currentPlatform
 
-            // first checks if colliding with mask polygon and platform
-            if (collisionHandler.check(this.collisionMask['foot'], platform)) {
+        // get platform to check collision
+        platforms.map((platform) => {
 
-                // only if is falling
-                if (this.body.velocity.y > 0)
+            platform.lineColor = 'black'
+
+            if (collisionHandler.check(this.collisionMask['ray'], platform)) {
+                currentPlatform = platform
+            }
+
+        })
+
+        this.onGround = false
+
+        // check collision
+        if (currentPlatform) {
+
+            if (collisionHandler.check(this.collisionMask['foot'], currentPlatform)) {
+
+                // only collides if falling
+                if (this.body.velocity.y > 0) {
+
+                    // remove y velocity
+                    this.body.velocity.y = 0
+                    // circle mask radius
+                    let maskRadius = this.collisionMask['foot'].radius
+                    // x difference from start platform
+                    let xDiff = this.body.position.x - currentPlatform.position.x
+                    // correct height based on platform slope
+                    let y = xDiff * currentPlatform.slope
+                    // correct position
+                    this.body.position.y = (currentPlatform.position.y - y) - maskRadius - currentPlatform.height * 0.5
+
+                    this.body.acceleration.y += Math.abs(this.body.velocity.x) + .9
+
                     this.onGround = true
 
-                // if platform is a wall
-                if (platform.angle == 90) {
-                    this.body.velocity.add(collisionHandler.mtv)
-                    this.body.position.add(collisionHandler.mtv)
-                    this.onGround = false
-                    continue
                 }
-
             }
-
-            // now check collision with platform bounding box if entity is on ground
-            // checking with floor that can be a slope
-            if (collisionHandler.check(this.collisionMask['foot'].getBoundingBox(), platform.boundingBox) && this.onGround) {
-
-                // if colliding with a floor, send it to the last position
-                // in platforms array - correct collision order
-                if (platform.angle == 0) {
-                    platforms.splice(i, 1)
-                    platforms.push(platform)
-                }
-
-                // calculate distance on x axis (x2 - x1)
-                let distance = this.body.position.x - platform.position.x
-
-                // if jumping do not collide
-                if (this.body.velocity.y < 0) continue
-
-                // avoid jitter on slope edge
-                if (platform.angle < 0) {
-                    if (distance < 3) {
-                        continue
-                    }
-                }
-
-                // calculate y position
-                let y = (distance * platform.tangent + platform.offset)
-                // correct y position
-                this.body.position.y = platform.position.y - this.collisionMask['foot'].height * 0.5 - y
-
-                // remove velocity
-                this.body.velocity.y = 0
-
-            }
-
         }
 
         // update foot mask based on body position
-        this.collisionMask['foot'].position.update(this.body.position)
+        this.collisionMask['foot'].position.update(this.body.position.x, this.body.position.y)
 
         // update representation position based on foot mask
         this.position.x = this.collisionMask['foot'].position.x
-        this.position.y = this.collisionMask['foot'].position.y - ((this.height * 0.5 - this.collisionMask['foot'].height) + 1)
+        this.position.y = this.collisionMask['foot'].position.y + 3
 
         // round sprite coordinates
         this.position.x = this.position.x | 0
