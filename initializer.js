@@ -105,6 +105,7 @@ preloadFileClassScript.onload = (e) => {
         // PLATFORMER
         { platformerWaterPool: root + 'Platformer/WaterPool.js' },
         { platformerEntity: root + 'Platformer/Entity.js' },
+        { platformerEntity2: root + 'Platformer/Entity2.js' },
         { platformerPlatform: root + 'Platformer/Platform.js' },
     ]);
 
