@@ -25,21 +25,22 @@ class Entity2 extends Sprite {
         this.collisionMask = []
         // foot mask
         this.collisionMask['foot'] = new Circle(this.position.clone(), 10, 'transparent', 1, 'red')
+        // body mask
         this.collisionMask['body'] = new Shape(new Square, this.position.clone(), 5, 20, 'transparent', 1, 'cyan')
-
         // raycast
         this.collisionMask['ray'] = new Line(this.position.clone(), new Vector)
         this.collisionMask['ray'].lineColor = 'black'
         this.collisionMask['ray'].lineWidth = 1
 
         // physic body
-        this.body = new Body(this.collisionMask['foot'])
+        this.body = new Body(this)
         this.body.gravity = new Vector(0, .2)
-        this.body.friction = new Vector(0, 1)
+        this.body.friction = new Vector(.68, 1)
 
         // mechanics properties
         this.direction = new Vector(1, 0)
-        this.body.speed = new Vector(2, 0)
+        this.body.accSpeed = new Vector(.3, 0)
+        this.body.maxSpeed = new Vector(1.2, 4)
         this.body.jump = new Vector(0, -1)
         this.body.jumpTime = 0
         this.body.maxJump = 5.5
@@ -281,7 +282,16 @@ class Entity2 extends Sprite {
         this.body.applyForce(this.body.gravity)
 
         // apply friction
-        this.body.velocity.multiply(this.body.friction)
+        if (!this.input.holding('LEFT') && !this.input.holding('RIGHT'))
+            this.body.velocity.multiply(this.body.friction)
+
+        // limit x velocity
+        if (this.body.velocity.x > this.body.maxSpeed.x) this.body.velocity.x = this.body.maxSpeed.x
+        if (this.body.velocity.x < -this.body.maxSpeed.x) this.body.velocity.x = -this.body.maxSpeed.x
+
+        // limit y velocity
+        if (this.body.velocity.y > this.body.maxSpeed.y)
+            this.body.velocity.y = this.body.maxSpeed.y
 
         // state handler
         switch (this.state) {
