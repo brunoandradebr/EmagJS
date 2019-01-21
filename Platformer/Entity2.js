@@ -25,6 +25,7 @@ class Entity2 extends Sprite {
         this.collisionMask = []
         // foot mask
         this.collisionMask['foot'] = new Circle(this.position.clone(), 10, 'transparent', 1, 'red')
+        this.collisionMask['body'] = new Shape(new Square, this.position, 5, 10, 'transparent', 1, 'red')
 
         // raycast
         this.collisionMask['ray'] = new Line(this.position.clone(), new Vector)
@@ -198,9 +199,24 @@ class Entity2 extends Sprite {
 
             platform.lineColor = 'black'
 
-            if (collisionHandler.check(this.collisionMask['ray'], platform)) {
-                currentPlatform = platform
+            if (platform.angle == 90) {
+                if (collisionHandler.check(this.collisionMask['body'], platform)) {
+                    if (this.body.acceleration.x > 0) {
+                        this.body.position.x = ((platform.position.x) - this.collisionMask['body'].width * 0.5)
+                    }
+                }
+            } else if (platform.angle == -90) {
+                if (collisionHandler.check(this.collisionMask['body'], platform)) {
+                    if (this.body.acceleration.x < 0) {
+                        this.body.position.x = ((platform.position.x) + this.collisionMask['body'].width * 0.5)
+                    }
+                }
+            } else {
+                if (collisionHandler.check(this.collisionMask['ray'], platform)) {
+                    currentPlatform = platform
+                }
             }
+
 
         })
 
@@ -235,6 +251,7 @@ class Entity2 extends Sprite {
 
         // update foot mask based on body position
         this.collisionMask['foot'].position.update(this.body.position.x, this.body.position.y)
+        this.collisionMask['body'].position.update(this.body.position.x, this.body.position.y)
 
         // update representation position based on foot mask
         this.position.x = this.collisionMask['foot'].position.x
