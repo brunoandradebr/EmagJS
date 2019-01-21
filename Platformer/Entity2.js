@@ -25,10 +25,11 @@ class Entity2 extends Sprite {
         this.collisionMask = []
         // foot mask
         this.collisionMask['foot'] = new Circle(this.position.clone(), 10, 'transparent', 1, 'red')
-        this.collisionMask['body'] = new Shape(new Square, this.position, 5, 10, 'transparent', 1, 'red')
+        this.collisionMask['body'] = new Shape(new Square, this.position.clone(), 5, 20, 'transparent', 1, 'cyan')
 
         // raycast
         this.collisionMask['ray'] = new Line(this.position.clone(), new Vector)
+        this.collisionMask['ray'].lineColor = 'black'
         this.collisionMask['ray'].lineWidth = 1
 
         // physic body
@@ -188,9 +189,11 @@ class Entity2 extends Sprite {
      */
     checkPlatformCollision(collisionHandler, platforms) {
 
-        // update ray
+        // update collision masks
+        this.collisionMask['foot'].position.update(this.body.position.x, this.body.position.y)
+        this.collisionMask['body'].position.update(this.body.position.x, this.body.position.y)
         this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 6)
-        this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 20)
+        this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 15)
 
         let currentPlatform
 
@@ -199,17 +202,9 @@ class Entity2 extends Sprite {
 
             platform.lineColor = 'black'
 
-            if (platform.angle == 90) {
+            if (platform.angle == 90 || platform.angle == -90) {
                 if (collisionHandler.check(this.collisionMask['body'], platform)) {
-                    if (this.body.acceleration.x > 0) {
-                        this.body.position.x = ((platform.position.x) - this.collisionMask['body'].width * 0.5)
-                    }
-                }
-            } else if (platform.angle == -90) {
-                if (collisionHandler.check(this.collisionMask['body'], platform)) {
-                    if (this.body.acceleration.x < 0) {
-                        this.body.position.x = ((platform.position.x) + this.collisionMask['body'].width * 0.5)
-                    }
+                    this.body.position.x += collisionHandler.mtv.x
                 }
             } else {
                 if (collisionHandler.check(this.collisionMask['ray'], platform)) {
@@ -253,9 +248,13 @@ class Entity2 extends Sprite {
         this.collisionMask['foot'].position.update(this.body.position.x, this.body.position.y)
         this.collisionMask['body'].position.update(this.body.position.x, this.body.position.y)
 
+        // update ray
+        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 6)
+        this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 15)
+
         // update representation position based on foot mask
         this.position.x = this.collisionMask['foot'].position.x
-        this.position.y = this.collisionMask['foot'].position.y + 3
+        this.position.y = this.collisionMask['foot'].position.y - 5
 
         // round sprite coordinates
         this.position.x = this.position.x | 0
