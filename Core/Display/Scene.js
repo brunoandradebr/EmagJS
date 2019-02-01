@@ -225,11 +225,21 @@ class Scene {
 
         }
 
-        // render
+        // clear scene's canvas
+
+        // if scene has camera, clear only camera's rect
+        if (this.camera) {
+            this.graphics.clearRect(this.camera.x, this.camera.y, this.camera.width, this.camera.height);
+        } else {
+            // if there's no camera, clear all canvas
+            this.graphics.clearRect(0, 0, this.width, this.height);
+        }
+
+        // scene's draw operation
         if (this.onDraw)
             this.onDraw(this)
 
-        // if scene has a camera, draw to viewport only what camera is watching
+        // if scene has camera, draw to viewport only what camera is watching
         if (this.camera) {
 
             let xDraw = this.camera.x < 0 ? 0 : this.camera.x
@@ -245,21 +255,12 @@ class Scene {
 
         }
 
-        // clear scene's canvas
-        if (this.camera) {
-            this.graphics.clearRect(this.camera.x, this.camera.y, this.camera.width, this.camera.height);
-        } else {
-            this.graphics.clearRect(0, 0, this.width, this.height);
-        }
-
         // save scene state
         this.graphics.save()
 
         // scale scene
         if (this.camera)
             this.graphics.scale(this.camera.zoomScale, this.camera.zoomScale)
-
-        // draw
 
         // restore scene state
         this.graphics.restore()
