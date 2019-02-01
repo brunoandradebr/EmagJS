@@ -89,6 +89,17 @@ class Touch {
         this.buttons.length--
     }
 
+    update(dt) {
+        for (let i in this.buttons) {
+
+            let button = this.buttons[i]
+
+            if (button.alpha)
+                button.update(dt)
+
+        }
+    }
+
     /**
      * Draws all touch buttons
      * 

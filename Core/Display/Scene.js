@@ -121,7 +121,7 @@ class Scene {
          * 
          * @type {number}
          */
-        this.dt = 1 / this.FPS
+        this.dt = 1000 / this.FPS
 
         /**
          * Accumulates time between frames
@@ -200,11 +200,12 @@ class Scene {
     loop(time) {
 
         // calculates delta time between last frame and current frame
-        let frameTime = (time - this.lastTime) / 1000
+        let frameTime = (time - this.lastTime)
+        this.lastTime = time
 
         // prevent spiral of death!
-        if (frameTime > 0.25)
-            frameTime = 0.25
+        if (frameTime > 1000)
+            frameTime = 1000
 
         // accumulates total time between frames
         this.accumulatedTime += frameTime
@@ -214,63 +215,67 @@ class Scene {
 
             // run the animation at the same time on all hardware speed
             // executes all accumulated time by this.dt portions
-            while (this.accumulatedTime > this.dt) {
-
-                // starts render and update logic
-
-                // if scene has a camera, draw to viewport only what camera is watching
-                if (this.camera) {
-
-                    let xDraw = this.camera.x < 0 ? 0 : this.camera.x
-                    let yDraw = this.camera.y < 0 ? 0 : this.camera.y
-
-                    this.viewport.graphics.clearRect(0, 0, this.viewport.width, this.viewport.height);
-                    this.viewport.graphics.drawImage(this.canvas, xDraw, yDraw, this.camera.width, this.camera.height, 0, 0, this.camera.width, this.camera.height)
-
-                } else {
-
-                    // if scene has no camera, draw everything inside original scene canvas
-                    this.graphics.drawImage(this.canvas, 0, 0)
-
-                }
-
-                // clear scene's canvas
-                if (this.camera) {
-                    this.graphics.clearRect(this.camera.x, this.camera.y, this.camera.width, this.camera.height);
-                } else {
-                    this.graphics.clearRect(0, 0, this.width, this.height);
-                }
-
-                // save scene state
-                this.graphics.save()
-
-                // scale scene
-                if (this.camera)
-                    this.graphics.scale(this.camera.zoomScale, this.camera.zoomScale)
+            while (this.accumulatedTime >= this.dt) {
 
                 // scene loop callback - I'm multiplying by 50 to work with low numbers like gravity = 0.4
-                this.onLoop(this, this.dt * 50);
-
-                // restore scene state
-                this.graphics.restore()
-
-                // show camera
-                if (this.debug) {
-                    if (this.camera) {
-                        this.cameraDebug.position.x = (this.camera.x + this.camera.width * 0.5) + (this.cameraDebug.lineWidth * 0.5)
-                        this.cameraDebug.position.y = (this.camera.y + this.camera.height * 0.5) + (this.cameraDebug.lineWidth * 0.5)
-                        this.cameraDebug.width = this.camera.width
-                        this.cameraDebug.height = this.camera.height
-                        this.cameraDebug.draw(this.graphics)
-                    }
-                }
+                this.onLoop(this, this.dt * 0.05);
 
                 this.accumulatedTime -= this.dt
             }
+
         }
 
-        // update last time to current time
-        this.lastTime = time
+        // render
+        if (this.onDraw)
+            this.onDraw(this)
+
+        // if scene has a camera, draw to viewport only what camera is watching
+        if (this.camera) {
+
+            let xDraw = this.camera.x < 0 ? 0 : this.camera.x
+            let yDraw = this.camera.y < 0 ? 0 : this.camera.y
+
+            this.viewport.graphics.clearRect(0, 0, this.viewport.width, this.viewport.height);
+            this.viewport.graphics.drawImage(this.canvas, xDraw, yDraw, this.camera.width, this.camera.height, 0, 0, this.camera.width, this.camera.height)
+
+        } else {
+
+            // if scene has no camera, draw everything inside original scene canvas
+            this.graphics.drawImage(this.canvas, 0, 0)
+
+        }
+
+        // clear scene's canvas
+        if (this.camera) {
+            this.graphics.clearRect(this.camera.x, this.camera.y, this.camera.width, this.camera.height);
+        } else {
+            this.graphics.clearRect(0, 0, this.width, this.height);
+        }
+
+        // save scene state
+        this.graphics.save()
+
+        // scale scene
+        if (this.camera)
+            this.graphics.scale(this.camera.zoomScale, this.camera.zoomScale)
+
+        // draw
+
+        // restore scene state
+        this.graphics.restore()
+
+        // show camera
+        if (this.debug) {
+            if (this.camera) {
+                this.cameraDebug.position.x = (this.camera.x + this.camera.width * 0.5) + (this.cameraDebug.lineWidth * 0.5)
+                this.cameraDebug.position.y = (this.camera.y + this.camera.height * 0.5) + (this.cameraDebug.lineWidth * 0.5)
+                this.cameraDebug.width = this.camera.width
+                this.cameraDebug.height = this.camera.height
+                this.cameraDebug.draw(this.graphics)
+            }
+        }
+
+        // /render
 
         // request a new repaint
         if (!this.paused)

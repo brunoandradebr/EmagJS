@@ -148,16 +148,7 @@ class Button extends Sprite {
 
     }
 
-    /**
-     * Draw button
-     * 
-     * @param {CanvasRenderingContext2D} graphics
-     * 
-     * @return {void}
-     */
-    draw(graphics) {
-
-        super.draw(graphics)
+    update(dt) {
 
         // holding button
         this.holding = this.touchdown
@@ -181,6 +172,20 @@ class Button extends Sprite {
 
         if (!this.holding)
             this.triggered = false
+
+
+    }
+
+    /**
+     * Draw button
+     * 
+     * @param {CanvasRenderingContext2D} graphics
+     * 
+     * @return {void}
+     */
+    draw(graphics) {
+
+        super.draw(graphics)
 
         // feedback
         if (this.touchdown) {
