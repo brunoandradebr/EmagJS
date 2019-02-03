@@ -125,12 +125,7 @@ class Sprite {
         /**
          * @type {integer}
          */
-        this.animationFrameDuration = 100
-
-        /**
-         * @type {integer}
-         */
-        this.animationFPS = 24
+        this.animationFPS = 0
 
         /**
          * @type {bool}
@@ -146,11 +141,10 @@ class Sprite {
      * @param {array}    keyFrames [0, 1, 2, 3, ...] | ['0..3']
      * @param {interger} repeate 
      * @param {integer}  fps
-     * @param {integer}  frameDuration
      * 
      * @return {void}
      */
-    addAnimation(label, keyFrames, repeate = 1, fps = 24, frameDuration = 100) {
+    addAnimation(label, keyFrames, repeate = 1, fps = 10) {
 
         let frames = []
 
@@ -173,7 +167,6 @@ class Sprite {
         })
 
         frames.fps = fps
-        frames.frameDuration = frameDuration
         frames.repeate = repeate
 
         this.animations[label] = frames
@@ -206,10 +199,8 @@ class Sprite {
         // reset animation tick
         this.animationStartTime = window.performance.now()
         this.animationElapsedTime = 0
-
-        // set animation fps and frame duration
-        this.animationFrameDuration = this.currentAnimation.frameDuration
-        this.animationFPS = this.currentAnimation.fps
+        // animation fps 1 (second) / desired fps
+        this.animationFPS = 1 / this.currentAnimation.fps
     }
 
     /**
@@ -229,13 +220,16 @@ class Sprite {
         }
 
         let dt = window.performance.now() - this.animationStartTime
-        this.animationElapsedTime += dt
+        // get delta in seconds dt / 1000
+        this.animationElapsedTime += dt * 0.001
+        this.animationStartTime = window.performance.now()
 
         // animation tick
-        if (this.animationElapsedTime >= this.animationFrameDuration / this.animationFPS * 60) {
+        if (this.animationElapsedTime >= this.animationFPS) {
 
             // playing
             if (this.currentFrame < this.currentAnimation.length - 1) {
+                this.animationElapsedTime = 0
                 this.currentFrame++
             } else {
                 // completed animation
@@ -252,8 +246,7 @@ class Sprite {
                 this.currentAnimation.lastFrame = false
             }
 
-            this.animationStartTime = window.performance.now()
-            this.animationElapsedTime = 0
+
         }
 
     }
