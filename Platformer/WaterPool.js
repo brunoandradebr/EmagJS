@@ -1,6 +1,6 @@
 class WaterPool {
 
-    constructor(position = new Vector(0, 0), width = 200, height = 80) {
+    constructor(position = new Vector(0, 0), width = 200, height = 80, radius = 6, space = 20) {
 
         /**
          * position
@@ -18,6 +18,13 @@ class WaterPool {
          * @type {number}
          */
         this.height = height
+
+        this.boundingBox = {
+            centerX: this.position.x,
+            centerY: this.position.y,
+            width: this.width,
+            height: this.height
+        }
 
         /**
          * WaterPool's anchor orientation, to help positionate
@@ -72,12 +79,12 @@ class WaterPool {
         /**
          * @type {number}
          */
-        this.nodeRadius = 6
+        this.nodeRadius = radius
 
         /**
          * @type {number}
          */
-        this.nodeSpace = 20
+        this.nodeSpace = space
 
         /**
          * Object Pool to manager nodes creation
@@ -199,7 +206,8 @@ class WaterPool {
     createWave(nodeIndex, force = 5, influence = 1) {
 
         for (let i = nodeIndex - influence; i <= nodeIndex + influence; i++) {
-            this.nodes[i].body.applyForce(new Vector(0, force))
+            if (!this.nodes[i].static)
+                this.nodes[i].body.applyForce(new Vector(0, force))
         }
 
     }
@@ -245,6 +253,11 @@ class WaterPool {
             // apply friction to stop node from infinity oscillation
             node.body.velocity.y *= this.recover
 
+            if (node.static) {
+                node.body.acceleration.y = 0
+                node.body.velocity.y = 0
+            }
+
         })
 
         // propagate waves
@@ -284,13 +297,13 @@ class WaterPool {
      */
     draw(graphics) {
 
-        
+
         // create line gradient
         let linearGradient = graphics.createLinearGradient(this.light.x, 0, this.light.x + this.light.width, 0);
         linearGradient.addColorStop(0, this.fillColor);
         linearGradient.addColorStop(0.5, this.light.color);
         linearGradient.addColorStop(1, this.fillColor);
-        
+
         // draw outlines
         graphics.save()
         graphics.globalCompositeOperation = this.globalCompositeOperation

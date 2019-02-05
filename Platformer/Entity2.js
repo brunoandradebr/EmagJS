@@ -237,7 +237,10 @@ class Entity2 extends Sprite {
                     // correct position
                     this.body.position.y = (currentPlatform.position.y - y) - maskRadius - currentPlatform.height * 0.5
 
-                    this.body.acceleration.y += Math.abs(this.body.velocity.x) + .9
+                    // if not jumping, apply vertical force baased on x velocity
+                    // to snap to slope
+                    if (this.state != 'JUMP')
+                        this.body.acceleration.y += Math.abs(this.body.velocity.x) + .9
 
                     this.onGround = true
 
