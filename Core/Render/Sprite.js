@@ -236,6 +236,7 @@ class Sprite {
                 if (this.currentAnimation.repeate > 1)
                     this.currentFrame = 0
 
+                this.animationElapsedTime = 0
                 this.currentAnimationLoopCount++
 
             }

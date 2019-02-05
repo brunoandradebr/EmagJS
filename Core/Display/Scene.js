@@ -235,9 +235,19 @@ class Scene {
             this.graphics.clearRect(0, 0, this.width, this.height);
         }
 
+        // save scene state
+        this.graphics.save()
+
+        // scale scene
+        if (this.camera)
+            this.graphics.scale(this.camera.zoomScale, this.camera.zoomScale)
+
         // scene's draw operation
         if (this.onDraw)
             this.onDraw(this)
+
+        // restore scene state
+        this.graphics.restore()
 
         // if scene has camera, draw to viewport only what camera is watching
         if (this.camera) {
@@ -254,16 +264,6 @@ class Scene {
             this.graphics.drawImage(this.canvas, 0, 0)
 
         }
-
-        // save scene state
-        this.graphics.save()
-
-        // scale scene
-        if (this.camera)
-            this.graphics.scale(this.camera.zoomScale, this.camera.zoomScale)
-
-        // restore scene state
-        this.graphics.restore()
 
         // show camera
         if (this.debug) {
