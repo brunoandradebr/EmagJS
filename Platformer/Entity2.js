@@ -198,6 +198,8 @@ class Entity2 extends Sprite {
 
         let currentPlatform
 
+        this.collidingWithWall = false
+
         // get platform to check collision
         platforms.map((platform) => {
 
@@ -206,6 +208,7 @@ class Entity2 extends Sprite {
             if (platform.angle == 90 || platform.angle == -90) {
                 if (collisionHandler.check(this.collisionMask['body'], platform)) {
                     this.body.position.x += collisionHandler.mtv.x
+                    this.collidingWithWall = true
                 }
             } else {
                 if (collisionHandler.check(this.collisionMask['ray'], platform)) {
@@ -241,6 +244,30 @@ class Entity2 extends Sprite {
                     // to snap to slope
                     if (this.state != 'JUMP')
                         this.body.acceleration.y += Math.abs(this.body.velocity.x) + .9
+
+                    // fixable platform
+                    if (currentPlatform.fixable) {
+
+                        // if not fixed to platform yet
+                        if (!this.fixedToPlatform) {
+
+                            this.fixedToPlatform = true
+
+                            // get distance from collision point to platform start point
+                            let collisionPointToPlatformStart = collisionHandler.points[0].x - currentPlatform.position.x
+                            // get point to fix entity
+                            this.fixPointFactor = collisionPointToPlatformStart / currentPlatform.width
+
+                        }
+
+                        // if standing and not colliding with wall, fix entity to platform
+                        if (this.state == 'STAND' && !this.collidingWithWall) {
+                            this.body.position.x = currentPlatform.position.x + (currentPlatform.width * this.fixPointFactor)
+                        } else {
+                            this.fixedToPlatform = false
+                        }
+
+                    }
 
                     this.onGround = true
 
