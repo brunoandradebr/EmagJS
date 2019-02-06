@@ -193,7 +193,7 @@ class Entity2 extends Sprite {
         // update collision masks
         this.collisionMask['foot'].position.update(this.body.position.x, this.body.position.y)
         this.collisionMask['body'].position.update(this.body.position.x, this.body.position.y)
-        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 6)
+        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 2)
         this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 15)
 
         let currentPlatform
@@ -280,7 +280,7 @@ class Entity2 extends Sprite {
         this.collisionMask['body'].position.update(this.body.position.x, this.body.position.y)
 
         // update ray
-        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 6)
+        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 2)
         this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 15)
 
         // update representation position based on foot mask
