@@ -1,3 +1,8 @@
+/**
+ * @author Bruno Andrade <bruno.faria.andrade@gmail.com>
+ */
+
+
 class VisibilityPolygon {
 
     constructor(position = new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y), fillColor = 'rgba(255, 255, 255, 0.7)', width = DEVICE_WIDTH, height = DEVICE_HEIGHT, collisionHandler = new CollisionHandler()) {

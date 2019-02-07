@@ -1,5 +1,10 @@
 /**
- * Input interface that encapsules keyboard, touch
+ * @author Bruno Andrade <bruno.faria.andrade@gmail.com>
+ */
+
+
+/**
+ * Input interface that encapsulates keyboard, gamepad and touch
  * - fix touch pressed and doublePressed - fire twice...
  *   when created in an scene and rendered on another
  */

@@ -1,24 +1,35 @@
+/**
+ * @author Bruno Andrade <bruno.faria.andrade@gmail.com>
+ */
+
+
 class WaterPool {
 
+    /**
+     * Creates a water pool
+     * 
+     * o--o--o--o--o--o--o--o--o
+     * |                       |
+     * |_______________________|
+     * 
+     * @param {EmagJS.Core.Math.Vector} position 
+     * @param {number} width 
+     * @param {number} height 
+     * @param {number} radius 
+     * @param {number} space 
+     */
     constructor(position = new Vector(0, 0), width = 200, height = 80, radius = 6, space = 20) {
 
-        /**
-         * position
-         * 
-         * @type {EmagJS.Core.Math.Vector}
-         */
         this.position = position
 
-        /**
-         * @type {number}
-         */
         this.width = width
-
-        /**
-         * @type {number}
-         */
         this.height = height
 
+        /**
+         * bounding box information
+         * 
+         * @type {object}
+         */
         this.boundingBox = {
             centerX: this.position.x,
             centerY: this.position.y,

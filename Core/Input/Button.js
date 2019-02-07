@@ -94,6 +94,8 @@ class Button extends Sprite {
     /**
      * get touchdown - if touching the button area
      * 
+     * TODO - mouse
+     * 
      * @return {bool}
      */
     get touchdown() {
@@ -148,7 +150,13 @@ class Button extends Sprite {
 
     }
 
-    update(dt) {
+    /**
+     * Process button touch interactions
+     * Defines if it's pressed, holding or doublePressed
+     * 
+     * @return {void}
+     */
+    update() {
 
         // holding button
         this.holding = this.touchdown
@@ -172,7 +180,6 @@ class Button extends Sprite {
 
         if (!this.holding)
             this.triggered = false
-
 
     }
 

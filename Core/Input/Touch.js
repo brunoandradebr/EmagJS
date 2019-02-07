@@ -4,7 +4,7 @@
 
 
 /**
- * Touch - handles touch interaction
+ * Touch - creates a touch pad interface
  */
 class Touch {
 
@@ -58,34 +58,45 @@ class Touch {
      * @param {number} y 
      * @param {number} width 
      * @param {number} height
+     * @param {object} offset
      * 
      * @return {void} 
      */
     addButton(scene, name, x, y, width = 32, height = 32, offset = {}) {
 
+        // create a new button
         let button = new Button(scene)
 
+        // set button name
         button.name = name
+        // set button width
         button.width = width
+        // set button height
         button.height = height
+        // set button color
         button.fillColor = 'transparent'
+        // set button position x
         button.position.x = x
+        // set button position y
         button.position.y = y
+        // set button line width
         button.lineWidth = 1
 
+        // merge button offset with offset param
         let defaultOffset = Object.assign({
             left: 0,
             top: 0,
             right: 0,
             bottom: 0
         }, offset)
-
+        // set offset
         button.offsetLeft = defaultOffset.left
         button.offsetTop = defaultOffset.top
         button.offsetRight = defaultOffset.right
         button.offsetBottom = defaultOffset.bottom
-
+        // add button to touch buttons array
         this.buttons[name] = button
+        // increment buttons array length
         this.buttons.length++
     }
 
@@ -101,41 +112,67 @@ class Touch {
         this.buttons.length--
     }
 
-    update(dt) {
+    /**
+     * Updates all touch buttons
+     * 
+     * @return {void}
+     */
+    update() {
         for (let i in this.buttons) {
 
             let button = this.buttons[i]
 
             if (button.alpha)
-                button.update(dt)
+                button.update()
 
         }
     }
 
-    updatePositions(scale) {
+    /**
+     * Updates all touch buttons positions
+     * 
+     * if not passed scale factor, use it's scene's movie scale factor
+     * 
+     * @param {number} scaleFactor 
+     * @param {number} width
+     * @param {number} height
+     * 
+     * @return {void}
+     */
+    updatePositions(scaleFactor, width = 20, height = 20) {
 
-        let buttonWidth = 20 * (scale ? scale : this.scene.parent.scale)
-        let buttonHeight = 20 * (scale ? scale : this.scene.parent.scale)
+        let scale = scaleFactor ? scaleFactor : this.scene.parent.scale
 
-        this.buttons['LEFT'].width = buttonWidth
-        this.buttons['LEFT'].height = buttonHeight
-        this.buttons['LEFT'].position.x = buttonWidth
-        this.buttons['LEFT'].position.y = this.scene.height - buttonHeight
+        let buttonWidth = width * scale
+        let buttonHeight = height * scale
 
-        this.buttons['RIGHT'].width = buttonWidth
-        this.buttons['RIGHT'].height = buttonHeight
-        this.buttons['RIGHT'].position.x = (buttonWidth * 2) + 10
-        this.buttons['RIGHT'].position.y = this.scene.height - buttonHeight
+        if (this.buttons['LEFT']) {
+            this.buttons['LEFT'].width = buttonWidth
+            this.buttons['LEFT'].height = buttonHeight
+            this.buttons['LEFT'].position.x = buttonWidth
+            this.buttons['LEFT'].position.y = this.scene.height - buttonHeight
+        }
 
-        this.buttons['A'].width = buttonWidth
-        this.buttons['A'].height = buttonHeight
-        this.buttons['A'].position.x = this.scene.width - (buttonWidth * 2) - 10
-        this.buttons['A'].position.y = this.scene.height - buttonHeight
+        if (this.buttons['RIGHT']) {
+            this.buttons['RIGHT'].width = buttonWidth
+            this.buttons['RIGHT'].height = buttonHeight
+            this.buttons['RIGHT'].position.x = (buttonWidth * 2) + 10
+            this.buttons['RIGHT'].position.y = this.scene.height - buttonHeight
+        }
 
-        this.buttons['B'].width = buttonWidth
-        this.buttons['B'].height = buttonHeight
-        this.buttons['B'].position.x = this.scene.width - buttonWidth
-        this.buttons['B'].position.y = this.scene.height - buttonHeight
+        if (this.buttons['A']) {
+            this.buttons['A'].width = buttonWidth
+            this.buttons['A'].height = buttonHeight
+            this.buttons['A'].position.x = this.scene.width - (buttonWidth * 2) - 10
+            this.buttons['A'].position.y = this.scene.height - buttonHeight
+        }
+
+        if (this.buttons['B']) {
+            this.buttons['B'].width = buttonWidth
+            this.buttons['B'].height = buttonHeight
+            this.buttons['B'].position.x = this.scene.width - buttonWidth
+            this.buttons['B'].position.y = this.scene.height - buttonHeight
+        }
 
         if (this.buttons['C']) {
             this.buttons['C'].width = buttonWidth
