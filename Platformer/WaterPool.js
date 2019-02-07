@@ -322,8 +322,10 @@ class WaterPool {
 
         }
         graphics.closePath()
-        graphics.globalAlpha = this.alpha + 0.5
-        graphics.stroke()
+        if (this.lineWidth) {
+            graphics.globalAlpha = this.alpha + 0.5
+            graphics.stroke()
+        }
         graphics.globalAlpha = this.alpha
         graphics.fill()
         graphics.restore()
