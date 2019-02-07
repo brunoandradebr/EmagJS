@@ -27,6 +27,10 @@ class Entity2 extends Sprite {
         this.collisionMask['foot'] = new Circle(this.position.clone(), 10, 'transparent', 1, 'red')
         this.collisionMask['foot'].offsetX = 0
         this.collisionMask['foot'].offsetY = 0
+        // head mask
+        this.collisionMask['head'] = new Shape(new Square, this.position.clone(), 10, 5, 'transparent', 1, 'blue')
+        this.collisionMask['head'].offsetX = 0
+        this.collisionMask['head'].offsetY = 0
         // body mask
         this.collisionMask['body'] = new Shape(new Square, this.position.clone(), 5, 20, 'transparent', 1, 'cyan')
         this.collisionMask['body'].offsetX = 0
@@ -197,8 +201,9 @@ class Entity2 extends Sprite {
     checkPlatformCollision(collisionHandler, platforms) {
 
         // update collision masks
-        this.collisionMask['foot'].position.update(this.body.position.x + this.collisionMask['foot'].offsetX, this.body.position.y + this.collisionMask['foot'].offsetY)
         this.collisionMask['body'].position.update(this.body.position.x + this.collisionMask['body'].offsetX, this.body.position.y + this.collisionMask['body'].offsetY)
+        this.collisionMask['head'].position.update(this.body.position.x + this.collisionMask['head'].offsetX, this.body.position.y + this.collisionMask['head'].offsetY - this.collisionMask['body'].height * 0.5 - this.collisionMask['head'].height * 0.5)
+        this.collisionMask['foot'].position.update(this.body.position.x + this.collisionMask['foot'].offsetX, this.body.position.y + this.collisionMask['foot'].offsetY)
         this.collisionMask['ray'].start.update(this.body.position.x + this.collisionMask['ray'].offsetX, this.body.position.y + this.collisionMask['ray'].offsetY)
         this.collisionMask['ray'].end.update(this.body.position.x + this.collisionMask['ray'].offsetX, this.body.position.y + this.collisionMask['ray'].offsetY + 15)
 
@@ -220,12 +225,13 @@ class Entity2 extends Sprite {
             }
             // colliding with roof
             else if (!platform.across) {
-                if (collisionHandler.check(this.collisionMask['body'], platform)) {
-                    // if not colliding walls and is jumping
-                    if (!this.collidingWithWall && this.state == 'JUMP')
+                if (collisionHandler.check(this.collisionMask['head'], platform)) {
+                    // if jumping
+                    if (this.state == 'JUMP') {
+                        // push down
                         this.body.velocity.y = 0
-                    // push down
-                    this.body.position.y += collisionHandler.mtv.y
+                        this.body.position.y += collisionHandler.mtv.y
+                    }
                 }
             }
             // colliding with floor/slope platform
@@ -294,9 +300,12 @@ class Entity2 extends Sprite {
             }
         }
 
+        // update body mask based on body position
+        this.collisionMask['body'].position.update(this.body.position.x + this.collisionMask['body'].offsetX, this.body.position.y + this.collisionMask['body'].offsetY)
+        // update head mask based on body position
+        this.collisionMask['head'].position.update(this.body.position.x + this.collisionMask['head'].offsetX, this.body.position.y + this.collisionMask['head'].offsetY - this.collisionMask['body'].height * 0.5 - this.collisionMask['head'].height * 0.5)
         // update foot mask based on body position
         this.collisionMask['foot'].position.update(this.body.position.x + this.collisionMask['foot'].offsetX, this.body.position.y + this.collisionMask['foot'].offsetY)
-        this.collisionMask['body'].position.update(this.body.position.x + this.collisionMask['body'].offsetX, this.body.position.y + this.collisionMask['body'].offsetY)
 
         // update ray
         this.collisionMask['ray'].start.update(this.body.position.x + this.collisionMask['ray'].offsetX, this.body.position.y + this.collisionMask['ray'].offsetY)
@@ -524,8 +533,9 @@ class Entity2 extends Sprite {
         super.draw(graphics)
 
         // this.collisionMask['ray'].draw(graphics)
-        // this.collisionMask['foot'].draw(graphics)
+        // this.collisionMask['head'].draw(graphics)
         // this.collisionMask['body'].draw(graphics)
+        // this.collisionMask['foot'].draw(graphics)
 
     }
 
