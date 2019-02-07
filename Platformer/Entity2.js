@@ -25,10 +25,16 @@ class Entity2 extends Sprite {
         this.collisionMask = []
         // foot mask
         this.collisionMask['foot'] = new Circle(this.position.clone(), 10, 'transparent', 1, 'red')
+        this.collisionMask['foot'].offsetX = 0
+        this.collisionMask['foot'].offsetY = 0
         // body mask
         this.collisionMask['body'] = new Shape(new Square, this.position.clone(), 5, 20, 'transparent', 1, 'cyan')
+        this.collisionMask['body'].offsetX = 0
+        this.collisionMask['body'].offsetY = 0
         // raycast
         this.collisionMask['ray'] = new Line(this.position.clone(), new Vector)
+        this.collisionMask['ray'].offsetX = 0
+        this.collisionMask['ray'].offsetY = 2
         this.collisionMask['ray'].lineColor = 'black'
         this.collisionMask['ray'].lineWidth = 1
 
@@ -191,10 +197,10 @@ class Entity2 extends Sprite {
     checkPlatformCollision(collisionHandler, platforms) {
 
         // update collision masks
-        this.collisionMask['foot'].position.update(this.body.position.x, this.body.position.y)
-        this.collisionMask['body'].position.update(this.body.position.x, this.body.position.y)
-        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 2)
-        this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 15)
+        this.collisionMask['foot'].position.update(this.body.position.x + this.collisionMask['foot'].offsetX, this.body.position.y + this.collisionMask['foot'].offsetY)
+        this.collisionMask['body'].position.update(this.body.position.x + this.collisionMask['body'].offsetX, this.body.position.y + this.collisionMask['body'].offsetY)
+        this.collisionMask['ray'].start.update(this.body.position.x + this.collisionMask['ray'].offsetX, this.body.position.y + this.collisionMask['ray'].offsetY)
+        this.collisionMask['ray'].end.update(this.body.position.x + this.collisionMask['ray'].offsetX, this.body.position.y + this.collisionMask['ray'].offsetY + 15)
 
         let currentPlatform
 
@@ -205,12 +211,25 @@ class Entity2 extends Sprite {
 
             platform.lineColor = 'black'
 
+            // colliding with walls
             if (platform.angle == 90 || platform.angle == -90) {
                 if (collisionHandler.check(this.collisionMask['body'], platform)) {
                     this.body.position.x += collisionHandler.mtv.x
                     this.collidingWithWall = true
                 }
-            } else {
+            }
+            // colliding with roof
+            else if (!platform.across) {
+                if (collisionHandler.check(this.collisionMask['body'], platform)) {
+                    // if not colliding walls and is jumping
+                    if (!this.collidingWithWall && this.state == 'JUMP')
+                        this.body.velocity.y = 0
+                    // push down
+                    this.body.position.y += collisionHandler.mtv.y
+                }
+            }
+            // colliding with floor/slope platform
+            else {
                 if (collisionHandler.check(this.collisionMask['ray'], platform)) {
                     currentPlatform = platform
                 }
@@ -245,26 +264,26 @@ class Entity2 extends Sprite {
                     if (this.state != 'JUMP')
                         this.body.acceleration.y += Math.abs(this.body.velocity.x) + .9
 
-                    // fixable platform
-                    if (currentPlatform.fixable) {
+                    // sticky platform
+                    if (currentPlatform.sticky) {
 
-                        // if not fixed to platform yet
-                        if (!this.fixedToPlatform) {
+                        // if not sticked to platform yet
+                        if (!this.stickedToPlatform) {
 
-                            this.fixedToPlatform = true
+                            this.stickedToPlatform = true
 
                             // get distance from collision point to platform start point
                             let collisionPointToPlatformStart = collisionHandler.points[0].x - currentPlatform.position.x
                             // get point to fix entity
-                            this.fixPointFactor = collisionPointToPlatformStart / currentPlatform.width
+                            this.stickyPointFactor = collisionPointToPlatformStart / currentPlatform.width
 
                         }
 
                         // if standing and not colliding with wall, fix entity to platform
                         if (this.state == 'STAND' && !this.collidingWithWall) {
-                            this.body.position.x = currentPlatform.position.x + (currentPlatform.width * this.fixPointFactor)
+                            this.body.position.x = currentPlatform.position.x + (currentPlatform.width * this.stickyPointFactor)
                         } else {
-                            this.fixedToPlatform = false
+                            this.stickedToPlatform = false
                         }
 
                     }
@@ -276,12 +295,12 @@ class Entity2 extends Sprite {
         }
 
         // update foot mask based on body position
-        this.collisionMask['foot'].position.update(this.body.position.x, this.body.position.y)
-        this.collisionMask['body'].position.update(this.body.position.x, this.body.position.y)
+        this.collisionMask['foot'].position.update(this.body.position.x + this.collisionMask['foot'].offsetX, this.body.position.y + this.collisionMask['foot'].offsetY)
+        this.collisionMask['body'].position.update(this.body.position.x + this.collisionMask['body'].offsetX, this.body.position.y + this.collisionMask['body'].offsetY)
 
         // update ray
-        this.collisionMask['ray'].start.update(this.body.position.x, this.body.position.y + 2)
-        this.collisionMask['ray'].end.update(this.body.position.x, this.body.position.y + 15)
+        this.collisionMask['ray'].start.update(this.body.position.x + this.collisionMask['ray'].offsetX, this.body.position.y + this.collisionMask['ray'].offsetY)
+        this.collisionMask['ray'].end.update(this.body.position.x + this.collisionMask['ray'].offsetX, this.body.position.y + this.collisionMask['ray'].offsetY + 15)
 
         // update representation position based on foot mask
         this.position.x = this.collisionMask['foot'].position.x
@@ -503,6 +522,10 @@ class Entity2 extends Sprite {
     draw(graphics) {
 
         super.draw(graphics)
+
+        // this.collisionMask['ray'].draw(graphics)
+        // this.collisionMask['foot'].draw(graphics)
+        // this.collisionMask['body'].draw(graphics)
 
     }
 

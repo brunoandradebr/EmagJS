@@ -45,10 +45,11 @@ class Platform extends Shape {
      * @param {number} angle 
      * @param {number} size 
      * @param {number} start
+     * @param {object} type
      * 
      * @return {void} 
      */
-    static add(platforms, angle, size, start) {
+    static add(platforms, angle, size, start, type = {}) {
 
         let lastPlatform = platforms[platforms.length - 1]
 
@@ -66,6 +67,10 @@ class Platform extends Shape {
         }
 
         let platform = new Platform(position.x, position.y, size, 1, angle)
+
+        let platformTypes = Object.assign({ across: true, sticky: false }, type)
+        platform.across = platformTypes.across
+        platform.sticky = platformTypes.sticky
 
         platforms.push(platform)
 
