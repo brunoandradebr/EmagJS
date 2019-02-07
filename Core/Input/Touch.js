@@ -137,15 +137,19 @@ class Touch {
         this.buttons['B'].position.x = this.scene.width - buttonWidth
         this.buttons['B'].position.y = this.scene.height - buttonHeight
 
-        this.buttons['C'].width = buttonWidth
-        this.buttons['C'].height = buttonHeight
-        this.buttons['C'].position.x = this.scene.width - buttonWidth
-        this.buttons['C'].position.y = this.scene.height - (buttonHeight * 2) - 10
+        if (this.buttons['C']) {
+            this.buttons['C'].width = buttonWidth
+            this.buttons['C'].height = buttonHeight
+            this.buttons['C'].position.x = this.scene.width - buttonWidth
+            this.buttons['C'].position.y = this.scene.height - (buttonHeight * 2) - 10
+        }
 
-        this.buttons['D'].width = buttonWidth
-        this.buttons['D'].height = buttonHeight
-        this.buttons['D'].position.x = this.scene.width - buttonWidth
-        this.buttons['D'].position.y = buttonHeight
+        if (this.buttons['D']) {
+            this.buttons['D'].width = buttonWidth
+            this.buttons['D'].height = buttonHeight
+            this.buttons['D'].position.x = this.scene.width - buttonWidth
+            this.buttons['D'].position.y = buttonHeight
+        }
 
     }
 
