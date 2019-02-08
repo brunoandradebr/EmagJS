@@ -3,7 +3,7 @@ A game engine made from scratch (no engine, no lib) for the purpose of studying 
 
 ### examples
 <a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
-<a target="_blank" href="http://www.acobaia.com.br/framework/example">Preload example</a>
+<a target="_blank" href="http://www.acobaia.com.br/framework/example2">Preload example</a>
 
 ## Usage
 
