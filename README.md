@@ -1,6 +1,9 @@
 # EmagJS 
-A game engine made from scratch for the purpose of studying game development. example <a target="_blank" href="http://www.acobaia.com.br/framework/example">here</a>
+A game engine made from scratch (no engine, no lib) for the purpose of studying game development.
 
+### examples
+<a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
+<a target="_blank" href="http://www.acobaia.com.br/framework/example">Preload example</a>
 
 ## Usage
 
@@ -140,3 +143,134 @@ stage.addMovie(example)
 
 // start playing example movie
 stage.play('example')
+```
+
+<br><br><br>
+
+<hr>
+
+
+## Project with preload
+
+**Create your project structure** : <br>
+* **App/**
+  * **Assets/**
+     * knight.png
+  * Index.html
+  * Preload.js
+  * Game.js
+* **EmagJS/**
+  
+<br>
+
+**App/index.html** :
+
+```html
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <!-- viewport -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- EmagJS initializer script -->
+    <script src="../EmagJS/initializer.js" initScript="Preload.js"></script>
+
+</head>
+
+<body></body>
+
+</html>
+```
+**initScript** indicates Preload.js as the first script to be executed. <br> <br>
+
+## Preload
+
+**App/Preload.js**
+```js
+// preload all assets here
+// PreloadFile can preload png|jpg|mp3|wave|js|ttf|txt|json|xml
+// preloaded files will be stored in global scope variable assets (or any other variable name)
+// example : let knightImage = assets.images.knight
+let assets = new PreloadFile([
+    { knight: 'Assets/knight.png' }
+])
+
+// after all assets are loaded
+assets.oncomplete = () => {
+    // preload Game.js - our main script
+    new PreloadFile([{ game: 'Game.js' }])
+}
+```
+
+## Game
+
+**App/Game.js**
+```js
+// example2 movie
+let example2 = new Movie('example2')
+
+// main scene
+example2.addScene('main', {
+
+    width: 400,
+    height: 400,
+
+    onCreate: (scene) => {
+
+        // vector with scene center
+        let center = new Vector(scene.width * 0.5, scene.height * 0.5)
+
+        // create a sprite
+        scene.knight = new Sprite(new Vector(center.x, center.y + 50), 32, 32, 'transparent', 0)
+
+        // set sprite image
+        scene.knight.image = new SpriteSheet(assets.images.knight, 16, 16)
+        // create some animations
+        scene.knight.addAnimation('idle', [0, 1, 2, 3, 4, 5, 6, 7], Infinity /* repeat count */, 12 /* FPS */)
+        scene.knight.addAnimation('run', [8, 9, 10, 11, 12, 13, 14, 15], 3, 18)
+        // set current animation
+        scene.knight.setAnimation('idle')
+
+        // sprite sheet from assets/knight.png
+        scene.spriteSheetView = new Sprite(new Vector(center.x, center.y - 20), 128, 96, 'transparent', 2)
+        scene.spriteSheetView.image = new ImageProcessor(assets.images.knight)
+
+    },
+
+    // scene loop
+    onLoop: (scene, dt) => {
+        // update your objects here
+
+        // some logic to change animation
+        if (mousedown || touches.length) {
+            scene.knight.setAnimation('run')
+        } else {
+            scene.knight.setAnimation('idle')
+        }
+
+    },
+
+    // scene draw
+    onDraw: (scene) => {
+        // draw your objects here
+
+        // draw knight
+        scene.knight.draw(scene.graphics)
+
+        // draw sprite sheet view
+        scene.spriteSheetView.draw(scene.graphics)
+
+    }
+
+})
+
+// add movie to stage
+stage.addMovie(example2)
+
+// start playing example2 movie
+stage.play('example2')
