@@ -226,7 +226,7 @@ example2.addScene('main', {
         let center = new Vector(scene.width * 0.5, scene.height * 0.5)
 
         // create a sprite
-        scene.knight = new Sprite(new Vector(center.x, center.y + 50), 32, 32, 'transparent', 0)
+        scene.knight = new Sprite(new Vector(center.x, center.y + 50), 16, 16, 'transparent', 0)
 
         // set sprite image
         scene.knight.image = new SpriteSheet(assets.images.knight, 16, 16)
