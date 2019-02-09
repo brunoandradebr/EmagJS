@@ -166,6 +166,7 @@ class Scene {
         this.paused = false
         this.onCreate(this)
         this.onEnter(this)
+        this.lastTime = window.performance.now()
         this.loop(window.performance.now())
     }
 
