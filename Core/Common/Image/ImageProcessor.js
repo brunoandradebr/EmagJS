@@ -156,6 +156,68 @@ class ImageProcessor {
     }
 
     /**
+     * Fades out image based on colors array
+     * 
+     * Iterates over each pixel and replace it color by it's next darken color
+     * 
+     * @param {array<number>} colors 
+     * 
+     * @return {array<EmagJS.Core.Common.Image.ImageProcessor}
+     */
+    fadeOutColors(colors = []) {
+
+        // array to hold modified images
+        let images = []
+
+        let originalImage = this.clone()
+
+        for (let k = 0; k < colors.length; k++) {
+
+            // iterate each original image pixel
+            for (let i = 0; i < originalImage.imageArray.length; i += 4) {
+
+                // each pixel component (rgba)
+                let imageR = originalImage.imageArray[i + 0];
+                let imageG = originalImage.imageArray[i + 1];
+                let imageB = originalImage.imageArray[i + 2];
+                let imageA = originalImage.imageArray[i + 3];
+
+                // transparent pixel
+                if (imageA == 0) continue
+
+                // each color
+                for (let c = 0; c < colors.length; c++) {
+
+                    // color to be replaced
+                    let targetColor = colors[c]
+                    // color to be set
+                    let changeColor = colors[c + 1]
+
+                    // if target color is found, change it
+                    if (imageR == targetColor[0] && imageG == targetColor[1] && imageB == targetColor[2]) {
+                        if (changeColor) {
+                            originalImage.imageArray[i + 0] = changeColor[0]
+                            originalImage.imageArray[i + 1] = changeColor[1]
+                            originalImage.imageArray[i + 2] = changeColor[2]
+                        }
+                    }
+
+                }
+            }
+
+            // modify image pixels
+            originalImage.modifyPixels()
+
+            // push modified image to array
+            images.push(originalImage.clone())
+
+        }
+
+        return images
+
+    }
+
+    /**
      * Removes a target color
      * factor will take neighbor colors in account
      * no factor will only take exact target color
