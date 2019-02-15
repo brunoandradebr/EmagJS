@@ -171,6 +171,9 @@ class ImageProcessor {
 
         let originalImage = this.clone()
 
+        // add original image to images array
+        images.push(originalImage.clone())
+
         for (let k = 0; k < colors.length; k++) {
 
             // iterate each original image pixel
