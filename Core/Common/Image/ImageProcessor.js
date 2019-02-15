@@ -156,7 +156,7 @@ class ImageProcessor {
     }
 
     /**
-     * Fades out image based on colors array
+     * Fades image based on colors array
      * 
      * Iterates over each pixel and replace it color by it's next darken color
      * 
@@ -164,7 +164,7 @@ class ImageProcessor {
      * 
      * @return {array<EmagJS.Core.Common.Image.ImageProcessor}
      */
-    fadeOutColors(colors = []) {
+    fadeColors(colors = []) {
 
         // array to hold modified images
         let images = []
