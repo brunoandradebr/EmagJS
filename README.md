@@ -4,7 +4,8 @@ It's using canvas API with 2d context (Software rendering).
 
 ### examples
 <a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
-<a target="_blank" href="http://www.acobaia.com.br/framework/example2">Preload example</a>
+<a target="_blank" href="http://www.acobaia.com.br/framework/example2">Preload example</a> <br>
+<a target="_blank" href="http://www.acobaia.com.br/framework/example3">Mask example</a> 
 
 ## Usage
 
@@ -275,3 +276,118 @@ stage.addMovie(example2)
 
 // start playing example2 movie
 stage.play('example2')
+
+```
+
+<hr>
+
+
+## Mask effect example
+
+```js
+let movie1 = new Movie('movie1')
+
+movie1.addScene('main', {
+
+    width: 768,
+    height: 144,
+
+    backgroundColor: 'white',
+
+    onCreate: (scene) => {
+
+        // creates an image processor object loading image from assets
+        let imageProcessor = new ImageProcessor(assets.images.bg)
+
+        // creates an image shade (array of images) with original image colors (4 colors - shades of green)
+        scene.shadeImages = imageProcessor.fadeColors('l2d' /* light to dark */)
+
+        // you can get image colors as well
+        // imageProcessor.getColors('d2l')
+        // output : [
+        //              [40, 66, 41]    <- darken
+        //              [83, 121, 60]
+        //              [168, 186, 74]   
+        //              [210, 226, 155] <- lighter
+        //          ]
+
+        // creates a background sprite - to be revealed
+        scene.background1 = new Sprite(new Vector(0, 0), 768, 144, 'transparent', 0)
+        scene.background1.anchor.x = scene.background1.anchor.y = 0
+        scene.background1.image = scene.shadeImages[0]
+
+        // creates a second background using a different shade - surface
+        scene.background2 = new Sprite(new Vector(0, 0), 768, 144, 'transparent', 0)
+        scene.background2.anchor.x = scene.background2.anchor.y = 0
+        scene.background2.image = scene.shadeImages[2]
+        scene.background2.compositeOperation = 'destination-atop'
+
+        // creates a mask
+        scene.mask = new Circle(new Vector(140, 70), 30, 'black', 0)
+        // composite operation to show what comes before it
+        scene.mask.compositeOperation = 'destination-in'
+
+        // other random object
+        scene.otherObject = new Sprite(new Vector(scene.width * 0.5, 70), 50, 50, 'royalblue', 0)
+
+        // shaded images preview
+        scene.shades = []
+        // shade 1
+        let shade1 = new Sprite(new Vector(80, 10), 60, 60, 'transparent', 2)
+        shade1.anchor.x = shade1.anchor.y = 0
+        shade1.image = scene.shadeImages[0].clone().crop(100, 50, 60, 60)
+        // shade 2
+        let shade2 = new Sprite(new Vector(145, 10), 60, 60, 'transparent', 2)
+        shade2.anchor.x = shade2.anchor.y = 0
+        shade2.image = scene.shadeImages[1].clone().crop(100, 50, 60, 60)
+        // shade 3
+        let shade3 = new Sprite(new Vector(210, 10), 60, 60, 'transparent', 2)
+        shade3.anchor.x = shade3.anchor.y = 0
+        shade3.image = scene.shadeImages[2].clone().crop(100, 50, 60, 60)
+        // shade 4
+        let shade4 = new Sprite(new Vector(275, 10), 60, 60, 'transparent', 2)
+        shade4.anchor.x = shade4.anchor.y = 0
+        shade4.image = scene.shadeImages[3].clone().crop(100, 50, 60, 60)
+
+        scene.shades.push(shade1, shade2, shade3, shade4)
+
+        // pulse
+        scene.pulse = 0
+
+    },
+
+    onLoop: (scene, dt) => {
+
+        // convert global coordinate to local coordinate (to view port)
+        let mouseViewPort = localToGlobal(mouse, scene)
+        // circle follows mouse
+        scene.mask.position.update(mouseViewPort.x, mouseViewPort.y)
+
+        // pulse effect
+        scene.pulse++
+        scene.mask.radius = 30 + ((Math.cos(scene.pulse * 0.08) * 2) * dt)
+
+    },
+
+    onDraw: (scene) => {
+
+        // render background 1
+        scene.background1.draw(scene.graphics)
+        // render other object
+        scene.otherObject.draw(scene.graphics)
+        // render mask
+        scene.mask.draw(scene.graphics)
+        // render background 2
+        scene.background2.draw(scene.graphics)
+
+        // draw shades preview
+        scene.shades.map((shade) => shade.draw(scene.graphics))
+
+    }
+
+})
+
+stage.addMovie(movie1)
+
+stage.play('movie1')
+```
