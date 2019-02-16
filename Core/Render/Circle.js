@@ -43,6 +43,11 @@ class Circle {
          */
         this.lineColor = lineColor
 
+        /**
+         * @type {number}
+         */
+        this.alpha = 1
+
     }
 
     /**
@@ -78,6 +83,8 @@ class Circle {
     draw(graphics) {
 
         graphics.save()
+
+        graphics.globalAlpha = this.alpha
 
         graphics.globalCompositeOperation = this.compositeOperation || 'none'
 
