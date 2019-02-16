@@ -161,10 +161,14 @@ class ImageProcessor {
      * Iterates over each pixel and replace it color by it's next darken color
      * 
      * @param {array<number>} colors 
+     * @param {array<number>} orderType - order colors by l2d (light to dark) | d2l (dark to light)
      * 
      * @return {array<EmagJS.Core.Common.Image.ImageProcessor}
      */
-    fadeColors(colors = []) {
+    fadeColors(orderType = 'l2d', colors = null) {
+
+        // if not set colors, use image colors
+        if (!colors) colors = this.getColors(orderType)
 
         // array to hold modified images
         let images = []
@@ -223,9 +227,11 @@ class ImageProcessor {
     /**
      * get image colors
      * 
+     * @param {array<number>} orderType - order colors by l2d (light to dark) | d2l (dark to light)
+     * 
      * @return {array<number>}
      */
-    getColors() {
+    getColors(orderType = 'l2d') {
 
         // array with all colors found
         let colors = []
@@ -264,6 +270,13 @@ class ImageProcessor {
 
         // clear repeated colors
         colors = Object.values(colors)
+
+        // order colors
+        if (orderType == 'l2d') {
+            colors.sort((a, b) => ((b[0] + b[1] + b[2]) / 3) - ((a[0] + a[1] + a[2]) / 3))
+        } else if (orderType == 'd2l') {
+            colors.sort((a, b) => ((a[0] + a[1] + a[2]) / 3) - ((b[0] + b[1] + b[2]) / 3))
+        }
 
         return colors
 
