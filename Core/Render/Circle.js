@@ -78,11 +78,14 @@ class Circle {
     draw(graphics) {
 
         graphics.save()
-        graphics.beginPath()
+
+        graphics.globalCompositeOperation = this.compositeOperation || 'none'
+
         graphics.fillStyle = this.fillColor
         graphics.strokeStyle = this.lineColor
         graphics.lineWidth = this.lineWidth
 
+        graphics.beginPath()
         graphics.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
 
         graphics.fill()
