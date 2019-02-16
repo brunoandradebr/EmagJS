@@ -220,11 +220,18 @@ class ImageProcessor {
 
     }
 
+    /**
+     * get image colors
+     * 
+     * @return {array<number>}
+     */
     getColors() {
 
-        let currentColor = [-1, -1, -1]
-
+        // array with all colors found
         let colors = []
+
+        // current color - null
+        let currentColor = [-1, -1, -1]
 
         // iterate each image pixel
         for (let i = 0; i < this.imageArray.length; i += 4) {
@@ -242,16 +249,20 @@ class ImageProcessor {
             if (imageR == currentColor[0] && imageG == currentColor[1] && imageB == currentColor[2])
                 continue
 
+            // if current image pixel is different from current color
             if (imageR != currentColor[0] && imageG != currentColor[1] && imageB != currentColor[2]) {
 
+                // save color on it's index colors[rgb] = [r, g, b]
                 colors[imageR + '' + imageG + '' + imageB] = [imageR, imageG, imageB]
 
+                // update current color to current image pixel to next check
                 currentColor = [imageR, imageG, imageB]
 
             }
 
         }
 
+        // clear repeated colors
         colors = Object.values(colors)
 
         return colors
