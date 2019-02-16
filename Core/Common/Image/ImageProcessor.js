@@ -220,6 +220,44 @@ class ImageProcessor {
 
     }
 
+    getColors() {
+
+        let currentColor = [-1, -1, -1]
+
+        let colors = []
+
+        // iterate each image pixel
+        for (let i = 0; i < this.imageArray.length; i += 4) {
+
+            // each pixel component (rgba)
+            let imageR = this.imageArray[i + 0];
+            let imageG = this.imageArray[i + 1];
+            let imageB = this.imageArray[i + 2];
+            let imageA = this.imageArray[i + 3];
+
+            // transparent pixel
+            if (imageA == 0) continue
+
+            // if current color is the same, skip
+            if (imageR == currentColor[0] && imageG == currentColor[1] && imageB == currentColor[2])
+                continue
+
+            if (imageR != currentColor[0] && imageG != currentColor[1] && imageB != currentColor[2]) {
+
+                colors[imageR + '' + imageG + '' + imageB] = [imageR, imageG, imageB]
+
+                currentColor = [imageR, imageG, imageB]
+
+            }
+
+        }
+
+        colors = Object.values(colors)
+
+        return colors
+
+    }
+
     /**
      * Removes a target color
      * factor will take neighbor colors in account
