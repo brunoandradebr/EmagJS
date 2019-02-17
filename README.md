@@ -300,7 +300,7 @@ movie1.addScene('main', {
         let imageProcessor = new ImageProcessor(assets.images.bg)
 
         // creates an image shade (array of images) with original image colors (4 colors - shades of green)
-        scene.shadeImages = imageProcessor.fadeColors('l2d' /* light to dark */)
+        scene.shadeImages = imageProcessor.createShades('l2d' /* light to dark */)
 
         // you can get image colors as well
         // imageProcessor.getColors('d2l')
@@ -358,8 +358,8 @@ movie1.addScene('main', {
 
     onLoop: (scene, dt) => {
 
-        // convert global coordinate to local coordinate (to view port)
-        let mouseViewPort = localToGlobal(mouse, scene)
+        // convert global coordinate to viewport coordinate
+        let mouseViewPort = globalToViewport(mouse, scene)
         // circle follows mouse
         scene.mask.position.update(mouseViewPort.x, mouseViewPort.y)
 
