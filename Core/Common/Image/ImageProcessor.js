@@ -156,7 +156,7 @@ class ImageProcessor {
     }
 
     /**
-     * Fades image based on colors array
+     * Creates shades image based on colors array
      * 
      * Iterates over each pixel and replace it color by it's next darken color
      * 
@@ -165,7 +165,7 @@ class ImageProcessor {
      * 
      * @return {array<EmagJS.Core.Common.Image.ImageProcessor}
      */
-    fadeColors(orderType = 'l2d', colors = null) {
+    createShades(orderType = 'l2d', colors = null) {
 
         // if not set colors, use image colors
         if (!colors) colors = this.getColors(orderType)
