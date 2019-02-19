@@ -204,6 +204,19 @@ class Sprite {
     }
 
     /**
+     * Reset current animation
+     * 
+     * @return {void}
+     */
+    resetCurrentAnimation() {
+        this.currentFrame = 0
+        this.currentAnimationLoopCount = 0
+        this.currentAnimation.lastFrame = false
+        this.animationStartTime = window.performance.now()
+        this.animationElapsedTime = 0
+    }
+
+    /**
      * Plays it's current animation
      * 
      * @return {void}
