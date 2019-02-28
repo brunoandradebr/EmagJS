@@ -13,8 +13,66 @@
  * 
  * @return {void}
  */
-function trace(content) {
-    console.log(content);
+const trace = function () {
+
+    let typeStyle = (background = '', color = 'rgba(255,255,255, .8)') => `
+                    background-color:${background};
+                    color: ${color};
+                    border-radius:10px;
+                    margin:3px 0px 3px -10px;
+                    text-shadow:1px 1px 2px rgba(0, 0, 0, 0.5);
+                    padding: 4px;`
+
+    Object.values(arguments).map((content) => {
+
+        switch (content.constructor.name) {
+            case 'Array':
+                console.log('%c ' + content.constructor.name + ' ' + content.length + ' ', typeStyle('#4834d4'), content)
+                break;
+            case 'Object':
+                console.log('%c ' + content.constructor.name + ' ', typeStyle('#ff9f43'), content)
+                break;
+            case 'Function':
+                let returnType = content() ? content().constructor.name : content() !== false ? 'Void' : content().constructor.name
+                console.log('%c ' + content.constructor.name + ' <' + returnType + '> ', typeStyle('#1B9CFC'), content)
+                break;
+            case 'String':
+                console.log('%c ' + content.constructor.name + ' ' + content.length + ' %c' + content, typeStyle('#f46'), 'color:#666; background-color:white; border:1px solid #999; padding:5px; border-radius:5px; margin:5px 5px;')
+                break;
+            case 'Boolean':
+                console.log('%c ' + content.constructor.name + ' ', typeStyle('#1dd1a1'), content)
+                break;
+            case 'Number':
+                let binary = content % 1 === 0 ? (content >>> 0).toString(2) : 'float'
+                console.log('%c ' + content.constructor.name + ' ' + binary + ' ', typeStyle('#999'), content)
+                break;
+            default:
+
+                // recursive - get object parent
+                const getProto = (obj) => {
+
+                    arguments.callee.protos = arguments.callee.protos || []
+
+                    if (obj.__proto__) {
+                        getProto(obj.__proto__)
+                    }
+
+                    arguments.callee.protos[obj.constructor.name] = obj.constructor
+
+                    return Object.keys(arguments.callee.protos)
+
+                }
+
+                console.log('%c ' + getProto(content).join(' > ') + ' ', typeStyle('#9b59b6'), content);
+
+                // clear protos from arguments
+                arguments.callee.protos = []
+
+                break;
+        }
+
+    })
+
 }
 
 
