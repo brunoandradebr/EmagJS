@@ -75,6 +75,39 @@ const trace = function () {
 
 }
 
+/**
+ * Performance tests
+ * 
+ * Ex : 
+ * 
+ *      performance(
+ *          ()=>{
+ *              for(let i = 0; i < 1000; i++){
+ *                  new Array(1000)
+ *              } 
+ *          },
+ *          ()=>{
+ *              for(let i = 0; i < 100000; i++){
+ *                  new Array(1000)
+ *              } 
+ *          }
+ *      )
+ * 
+ * Result : 
+ *      test 1: 0.071044921875ms
+ *      test 2: 2.34814453125ms
+ * 
+ * @return {void}
+ */
+const performance = function () {
+
+    Object.values(arguments).map((test, i) => {
+        console.time('test ' + (i + 1))
+        test()
+        console.timeEnd('test ' + (i + 1))
+    })
+
+}
 
 
 
