@@ -27,7 +27,15 @@ const trace = function () {
 
         switch (content.constructor.name) {
             case 'Array':
-                console.log('%c ' + content.constructor.name + ' ' + content.length + ' ', typeStyle('#4834d4'), content)
+
+                // check if it's a 2d array
+                let is2dArray = true
+                content.map((item) => {
+                    if (item.constructor.name != 'Array')
+                        is2dArray = false
+                })
+
+                console.log('%c ' + (is2dArray ? '2D ' : '') + content.constructor.name + ' ' + content.length + 'x' + content[0].length + ' ', typeStyle('#4834d4'), content)
                 break;
             case 'Object':
                 console.log('%c ' + content.constructor.name + ' ', typeStyle('#ff9f43'), content)
@@ -109,9 +117,29 @@ const performance = function () {
 
 }
 
-
-
-
+/**
+ * Creates a 2D array
+ * 
+ * ex : array2D(5, 5)
+ *      [0, 0, 0, 0, 0]
+ *      [0, 0, 0, 0, 0]
+ *      [0, 0, 0, 0, 0]
+ *      [0, 0, 0, 0, 0]
+ *      [0, 0, 0, 0, 0]
+ * 
+ * @param {number} columns 
+ * @param {number} rows 
+ * @param {number} initialValue 
+ * 
+ * @return {array<array>}
+ */
+const array2D = (columns = 0, rows = 0, initialValue = 0) => {
+    let arr = []
+    for (let i = 0; i < columns; i++) {
+        arr.push(new Array(rows).fill(initialValue))
+    }
+    return arr
+}
 
 
 
