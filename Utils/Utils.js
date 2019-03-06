@@ -35,7 +35,14 @@ const trace = function () {
                         is2dArray = false
                 })
 
-                console.log('%c ' + (is2dArray ? '2D ' : '') + content.constructor.name + ' ' + content.length + 'x' + content[0].length + ' ', typeStyle('#4834d4'), content)
+                if (!content[0]) is2dArray = false
+
+                if (is2dArray) {
+                    console.log('%c ' + (is2dArray ? '2D ' : '') + content.constructor.name + ' ' + content.length + 'x' + content[0].length + ' ', typeStyle('#4834d4'), content)
+                } else {
+                    console.log('%c ' + (is2dArray ? '2D ' : '') + content.constructor.name + ' ' + content.length + ' ', typeStyle('#4834d4'), content)
+                }
+
                 break;
             case 'Object':
                 console.log('%c ' + content.constructor.name + ' ', typeStyle('#ff9f43'), content)

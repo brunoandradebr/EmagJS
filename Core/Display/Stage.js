@@ -206,6 +206,21 @@ class Stage {
     }
 
     /**
+     * Remove a movie from stage
+     * 
+     * @param {string} movieID
+     * 
+     * @return {void}
+     */
+    removeMovie(movieID) {
+
+        this.movies[movieID].destroy()
+
+        delete this.movies[movieID]
+        this.movies.length--
+    }
+
+    /**
      * Plays movie's scenes
      * 
      * @param {string} movieID

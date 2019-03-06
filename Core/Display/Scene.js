@@ -181,6 +181,17 @@ class Scene {
     }
 
     /**
+     * Destroys it's loop
+     * 
+     * @return {void}
+     */
+    destroy() {
+        this.paused = true
+        window.cancelAnimationFrame(this.RAF)
+        this.RAF = null
+    }
+
+    /**
      * Resumes it's loop
      * 
      * @return {void}

@@ -191,6 +191,28 @@ class Movie {
     }
 
     /**
+     * Destroys all scenes
+     * 
+     * @return {void}
+     */
+    destroy() {
+
+        // destroys all scenes
+        for (let i in this.scenes) {
+
+            this.scenes[i].destroy()
+
+            delete this.scenes[i]
+            this.scenes.length--
+
+        }
+
+        // remove movie container
+        this.container.remove()
+
+    }
+
+    /**
      * Set movie in full screen dimensions
      * 
      * @return {void}
