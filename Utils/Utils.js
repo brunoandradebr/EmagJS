@@ -25,6 +25,11 @@ const trace = function () {
 
     Object.values(arguments).map((content) => {
 
+        if (!content) {
+            console.log('%c ' + 'undefined' + ' ', typeStyle('#a9a9a9'), '')
+            return
+        }
+
         switch (content.constructor.name) {
             case 'Array':
 
