@@ -25,7 +25,7 @@ const trace = function () {
 
     Object.values(arguments).map((content) => {
 
-        if (!content) {
+        if (content == undefined) {
             console.log('%c ' + 'undefined' + ' ', typeStyle('#a9a9a9'), '')
             return
         }
