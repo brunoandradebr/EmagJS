@@ -73,6 +73,11 @@ class Text {
          */
         this.shadowOffsetY = 5
 
+        /**
+         * @type {number}
+         */
+        this.alpha = 1
+
     }
 
     /**
@@ -86,6 +91,8 @@ class Text {
         this.lines = this.text.split('\n')
 
         graphics.save()
+
+        graphics.globalAlpha = this.alpha
 
         // shadow
         if (this.shadowBlur) {
