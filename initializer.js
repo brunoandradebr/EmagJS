@@ -87,6 +87,7 @@ preloadFileClassScript.onload = (e) => {
         { background: root + 'Resource/Image/Background.png' },
         // RESOURCE/IMAGE FONT
         { alagard_font: root + 'Resource/Image/Font/alagard.png' },
+        { joy_font: root + 'Resource/Image/Font/joy.png' },
         // RESOURCE/DIALOG IMAGES
         { dialog_top_left: root + 'Resource/Image/Dialog/dialog_top_left.png' },
         { dialog_top: root + 'Resource/Image/Dialog/dialog_top.png' },

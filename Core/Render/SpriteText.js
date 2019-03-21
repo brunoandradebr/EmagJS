@@ -13,10 +13,40 @@ class SpriteText {
      */
     constructor(spriteFont) {
 
+        // default sprite font
+        if (!spriteFont) {
+            spriteFont = new SpriteFont(core.files.joy_font, 4, 6, `abcdefghijklmnopqrstuvwxyz1234567890.:-+/%!?><'"`)
+        } else if (spriteFont && typeof spriteFont == 'string') {
+            switch (spriteFont) {
+                case 'JOY': case 'joy': spriteFont = new SpriteFont(core.files.joy_font, 4, 6, `abcdefghijklmnopqrstuvwxyz1234567890.:-+/%!?><'"`); break;
+                case 'ALAGARD': case 'alagard': spriteFont = new SpriteFont(core.files.alagard_font, 10, 10); break;
+            }
+        }
+
         /**
          * sprite font that holds a sprite sheet with letters
          */
         this.spriteFont = spriteFont
+
+        /**
+         * where to render
+         */
+        this.position = new Vector(10, 10)
+
+        /**
+         * sprite size - based on sprite font size
+         */
+        this.size = spriteFont.width
+
+        /**
+         * max width to render letters
+         */
+        this.width = 0
+
+        /**
+         * vertical space between lines
+         */
+        this.lineHeight = 2
 
         /**
          * all created sprite letters to render
@@ -47,6 +77,14 @@ class SpriteText {
         this.write(this.spriteFont.chars)
         this.clear()
 
+    }
+
+    /**
+     * Set text content - clear before create new letters (from pool)
+     */
+    set text(content = '') {
+        this.clear()
+        this.write(content, this.position.x | 0, this.position.y | 0, this.spriteFont.width, this.spriteFont.height, this.width, this.lineHeight)
     }
 
     /**
