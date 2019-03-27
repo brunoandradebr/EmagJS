@@ -7,6 +7,8 @@ class DialogSystem extends SpriteText {
         this.width = width
         this.height = height
         this.position = position
+        this.initialPosition = this.position.clone()
+        this.anchor = new Vector(0, 0)
         this.alpha = 0
 
         /**
@@ -256,8 +258,10 @@ class DialogSystem extends SpriteText {
                 this.reopen()
 
             // update position before open
-            if (dialog.position)
+            if (dialog.position) {
                 this.position.update(dialog.position)
+                this.initialPosition.update(this.position.clone())
+            }
 
             // creates all letters
             this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPoisitionX)
@@ -336,6 +340,10 @@ class DialogSystem extends SpriteText {
 
         if (!this.dialogs[this.currentDialogIndex]) return
 
+        // adjust animation anchor
+        this.position.x = (this.initialPosition.x | 0) - (this.width * this.anchor.x | 0)
+        this.position.y = (this.initialPosition.y | 0) - (this.height * this.anchor.y | 0)
+
         // update ui position
         this.top_corner.position.update(this.position.x + this.top_left_corner.width, this.position.y)
         this.top_right_corner.position.update(this.position.x + this.width + this.top_left_corner.width, this.position.y)
@@ -372,6 +380,7 @@ class DialogSystem extends SpriteText {
         // draw left corner
         this.left_corner.alpha = this.alpha
         this.left_corner.draw(graphics)
+
         // draw text box
         this.text_box.alpha = this.alpha
         this.text_box.draw(graphics)
