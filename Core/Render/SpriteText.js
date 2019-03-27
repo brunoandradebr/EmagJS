@@ -19,7 +19,7 @@ class SpriteText {
         } else if (spriteFont && typeof spriteFont == 'string') {
             switch (spriteFont) {
                 case 'JOY': case 'joy': spriteFont = new SpriteFont(core.files.joy_font, 4, 6, `abcdefghijklmnopqrstuvwxyz1234567890.:-+/%!?><'"`); break;
-                case 'ALAGARD': case 'alagard': spriteFont = new SpriteFont(core.files.alagard_font, 10, 10); break;
+                case 'ALAGARD': case 'alagard': spriteFont = new SpriteFont(core.files.alagard_font, 10, 10, null, ['g', 'j', 'p', 'q', 'y', ',']); break;
             }
         }
 
@@ -59,6 +59,7 @@ class SpriteText {
         this.letterPool = new ObjectPool(() => {
             let letter = new Sprite(new Vector(0, 0), this.spriteFont.width, this.spriteFont.height, 'transparent', 0)
             letter.image = this.spriteFont.image.clone()
+            letter.initialPosition = letter.position.clone()
             letter.interpolation = 0
             letter.alreadyRendered = false
             letter.animation = new Tween(letter)
@@ -84,7 +85,7 @@ class SpriteText {
      */
     set text(content = '') {
         this.clear()
-        this.write(content, this.position.x | 0, this.position.y | 0, this.spriteFont.width, this.spriteFont.height, this.width, this.lineHeight)
+        this.write(content, 0, 0, this.spriteFont.width, this.spriteFont.height, this.width, this.lineHeight)
     }
 
     /**
@@ -103,7 +104,7 @@ class SpriteText {
         let currentY, startY, currentX, startX
 
         currentX = startX = x + width + 3
-        currentY = startY = y + height + 3 + lineHeight
+        currentY = startY = y + height * 0.5 + 3 + lineHeight
 
         // next letter recoil
         let nextRecoil = 0
@@ -126,8 +127,8 @@ class SpriteText {
                     // create or get from pool
                     let letter = this.letterPool.create()
                     // position letter
-                    letter.position.x = letter.initialPositionX = currentX - nextRecoil
-                    letter.position.y = letter.initialPositionY = currentY + spriteFont.descend
+                    letter.position.x = letter.initialPosition.x = currentX - nextRecoil
+                    letter.position.y = letter.initialPosition.y = currentY + spriteFont.descend
                     // letter size
                     letter.width = letter.initialWidth = width
                     letter.height = letter.initialHeight = height
@@ -181,6 +182,8 @@ class SpriteText {
     draw(graphics) {
 
         this.letters.map((letter) => {
+            letter.position.x = this.position.x + letter.initialPosition.x
+            letter.position.y = this.position.y + letter.initialPosition.y
             letter.animation.play()
             letter.draw(graphics)
         })

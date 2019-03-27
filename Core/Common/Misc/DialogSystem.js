@@ -1,6 +1,6 @@
 class DialogSystem extends SpriteText {
 
-    constructor(spriteFont, position = new Vector(0, 0), width = 200, height = 200, lineHeight = 2) {
+    constructor(spriteFont, position = new Vector(0, 0), width = 200, height = 200, lineHeight = 2, autoHeight = true) {
         super(spriteFont)
 
         // dialog properties
@@ -45,6 +45,11 @@ class DialogSystem extends SpriteText {
          * Dialog line height
          */
         this.lineHeight = lineHeight
+
+        /**
+         * Auto adjust dialog height
+         */
+        this.autoHeight = autoHeight
 
         // corner properties
         this.cornerWidth = 4
@@ -132,7 +137,15 @@ class DialogSystem extends SpriteText {
      * 
      * @return {void}
      */
-    addDialog(text, position, letterWidth, letterHeight, arrowPoisitionX, reopen = false, callback = null) {
+    addDialog(params) {
+
+        let text = params.text
+        let position = params.position || this.position
+        let letterWidth = params.letterWidth || this.spriteFont.width
+        let letterHeight = params.letterHeight || this.spriteFont.height
+        let arrowPoisitionX = params.arrowPoisitionX || 0.5
+        let reopen = params.reopen || false
+        let callback = params.callback || null
 
         // calculate total letter
         let length = ((this.width * this.height) / ((letterWidth * letterHeight) + (5 * 5) + (this.lineHeight * this.lineHeight))) | 0
@@ -190,7 +203,7 @@ class DialogSystem extends SpriteText {
         this.arrowPosition.x = arrowPoisitionX
 
         // create letters needed to be drawn
-        super.write(string, this.position.x, this.position.y - fontHeight * 0.5, fontWidth, fontHeight, this.width, this.lineHeight)
+        super.write(string, 0, 0, fontWidth, fontHeight, this.width, this.lineHeight)
 
     }
 
@@ -211,7 +224,7 @@ class DialogSystem extends SpriteText {
             return false
         }
 
-        // clar all letters
+        // clear all letters
         this.clear()
 
         this.renderedLettersCount = 0
@@ -231,13 +244,20 @@ class DialogSystem extends SpriteText {
 
             this.closed = false
 
-            // update position before open
-            if (dialog.position)
-                this.updatePosition(dialog.position.x, dialog.position.y)
+            // auto height
+            if (this.autoHeight) {
+                this.updateSize(this.width, dialog.text.length + dialog.letterHeight + this.lineHeight)
+                this.openAnimation.updateAnimation(2, this.height, 0)
+                this.openAnimation.updateAnimation(4, 0, this.height)
+            }
 
             // if reopen
             if (dialog.reopen)
                 this.reopen()
+
+            // update position before open
+            if (dialog.position)
+                this.position.update(dialog.position)
 
             // creates all letters
             this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPoisitionX)
@@ -281,26 +301,6 @@ class DialogSystem extends SpriteText {
     }
 
     /**
-     * Update dialog position
-     * 
-     * @param {number} x 
-     * @param {number} y
-     * 
-     * @return {void}
-     */
-    updatePosition(x, y) {
-
-        this.position.x = x
-        this.position.y = y
-
-        // update ui positions
-        this._updateUIPosition(x, y)
-
-        // rewrite actual dialog
-        this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPoisitionX)
-    }
-
-    /**
      * Update dialog size
      * 
      * @param {number} width 
@@ -319,33 +319,10 @@ class DialogSystem extends SpriteText {
         this.top_corner.width = this.bottom_corner.width = width
         this.left_corner.height = this.right_corner.height = height
 
-        // update ui position
-        this._updateUIPosition(this.position.x, this.position.y)
-
         // rewrite actual dialog
         if (this.openAnimation.completed)
             this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPoisitionX)
 
-    }
-
-    /**
-     * Update UI position
-     * 
-     * @param {number} x 
-     * @param {number} y
-     * 
-     * @return {void}
-     */
-    _updateUIPosition(x, y) {
-        this.top_corner.position.update(x + this.top_left_corner.width, y)
-        this.top_right_corner.position.update(x + this.width + this.top_left_corner.width, y)
-        this.right_corner.position.update(x + this.width + this.top_left_corner.width, y + this.top_left_corner.height)
-        this.bottom_right_corner.position.update(x + this.width + this.top_left_corner.width, y + this.height + this.top_left_corner.height)
-        this.bottom_corner.position.update(x + this.top_left_corner.width, y + this.height + this.top_left_corner.height)
-        this.bottom_left_corner.position.update(x, y + this.height + this.top_left_corner.height)
-        this.left_corner.position.update(x, y + this.top_left_corner.height)
-        this.text_box.position.update(x + this.top_left_corner.width, y + this.top_left_corner.height)
-        this.arrow.position.update(x + this.top_left_corner.width + this.width * this.arrowPosition.x, (this.top_left_corner.position.y + this.top_corner.height + this.bottom_corner.height + this.arrowHeight * 0.5) + this.height - 3 * this.arrowPosition.y)
     }
 
     /**
@@ -358,6 +335,18 @@ class DialogSystem extends SpriteText {
     draw(graphics) {
 
         if (!this.dialogs[this.currentDialogIndex]) return
+
+        // update ui position
+        this.top_corner.position.update(this.position.x + this.top_left_corner.width, this.position.y)
+        this.top_right_corner.position.update(this.position.x + this.width + this.top_left_corner.width, this.position.y)
+        this.right_corner.position.update(this.position.x + this.width + this.top_left_corner.width, this.position.y + this.top_left_corner.height)
+        this.bottom_right_corner.position.update(this.position.x + this.width + this.top_left_corner.width, this.position.y + this.height + this.top_left_corner.height)
+        this.bottom_corner.position.update(this.position.x + this.top_left_corner.width, this.position.y + this.height + this.top_left_corner.height)
+        this.bottom_left_corner.position.update(this.position.x, this.position.y + this.height + this.top_left_corner.height)
+        this.left_corner.position.update(this.position.x, this.position.y + this.top_left_corner.height)
+        this.text_box.position.update(this.position.x + this.top_left_corner.width, this.position.y + this.top_left_corner.height)
+        this.arrow.position.update(this.position.x + this.top_left_corner.width + this.width * this.arrowPosition.x, (this.top_left_corner.position.y + this.top_corner.height + this.bottom_corner.height + this.arrowHeight * 0.5) + this.height - 3 * this.arrowPosition.y)
+        // /update ui position
 
         // draw top left corner
         this.top_left_corner.alpha = this.alpha
