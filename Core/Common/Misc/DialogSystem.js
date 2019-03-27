@@ -134,7 +134,7 @@ class DialogSystem extends SpriteText {
      * @param {EmagJS.Core.Math.Vector} position  
      * @param {number} letterWidth 
      * @param {number} letterHeight 
-     * @param {number} arrowPoisitionX 
+     * @param {number} arrowPositionX 
      * @param {bool}   reopen 
      * 
      * @return {void}
@@ -145,7 +145,7 @@ class DialogSystem extends SpriteText {
         let position = params.position || this.position
         let letterWidth = params.letterWidth || this.spriteFont.width
         let letterHeight = params.letterHeight || this.spriteFont.height
-        let arrowPoisitionX = params.arrowPoisitionX || 0.5
+        let arrowPositionX = params.arrowPositionX || 0.5
         let reopen = params.reopen || false
         let callback = params.callback || null
 
@@ -177,7 +177,7 @@ class DialogSystem extends SpriteText {
                 position: position,
                 letterWidth: letterWidth,
                 letterHeight: letterHeight,
-                arrowPoisitionX: arrowPoisitionX,
+                arrowPositionX: arrowPositionX,
                 reopen: reopen,
                 callback: callback
             })
@@ -193,7 +193,7 @@ class DialogSystem extends SpriteText {
      * 
      * @return {void}
      */
-    _write(string, width, height, arrowPoisitionX = 0.5) {
+    _write(string, width, height, arrowPositionX = 0.5) {
 
         // clear letters
         this.clear()
@@ -202,7 +202,7 @@ class DialogSystem extends SpriteText {
         let fontWidth = width
         let fontHeight = height
 
-        this.arrowPosition.x = arrowPoisitionX
+        this.arrowPosition.x = arrowPositionX
 
         // create letters needed to be drawn
         super.write(string, 0, 0, fontWidth, fontHeight, this.width, this.lineHeight)
@@ -264,7 +264,7 @@ class DialogSystem extends SpriteText {
             }
 
             // creates all letters
-            this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPoisitionX)
+            this._write(dialog.text, dialog.letterWidth, dialog.letterHeight, dialog.arrowPositionX)
 
             // dialog callback 
             this.callback = dialog.callback
@@ -325,7 +325,7 @@ class DialogSystem extends SpriteText {
 
         // rewrite actual dialog
         if (this.openAnimation.completed)
-            this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPoisitionX)
+            this._write(this.dialogs[this.currentDialogIndex].text, this.dialogs[this.currentDialogIndex].letterWidth, this.dialogs[this.currentDialogIndex].letterHeight, this.dialogs[this.currentDialogIndex].arrowPositionX)
 
     }
 
