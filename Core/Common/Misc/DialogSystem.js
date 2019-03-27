@@ -119,7 +119,7 @@ class DialogSystem extends SpriteText {
 
         // open animation
         this.openAnimation = new Tween(this)
-        this.openAnimation.animate({ alpha: 1 }, 200, 0, 'cubicInOut')
+        this.openAnimation.animate({ alpha: 1 }, 200, 100, 'cubicInOut')
         this.openAnimation.animate({ width: -width + this.arrowWidth }, 0, 0)
         this.openAnimation.animate({ height: -height + this.arrowHeight }, 0, 0)
         this.openAnimation.animate({ width: width - this.arrowWidth }, 800, 100, 'elasticInOut')
