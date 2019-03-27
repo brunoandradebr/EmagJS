@@ -8,7 +8,7 @@ class DialogSystem extends SpriteText {
         this.height = height
         this.position = position
         this.initialPosition = this.position.clone()
-        this.anchor = new Vector(0, 0)
+        this.anchor = new Vector(0.5, 0.5)
         this.alpha = 0
 
         /**
@@ -142,7 +142,7 @@ class DialogSystem extends SpriteText {
     addDialog(params) {
 
         let text = params.text
-        let position = params.position || this.position
+        let position = params.position || this.initialPosition
         let letterWidth = params.letterWidth || this.spriteFont.width
         let letterHeight = params.letterHeight || this.spriteFont.height
         let arrowPositionX = params.arrowPositionX || 0.5

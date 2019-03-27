@@ -88,8 +88,10 @@ class Camera {
         let centerX = this.x + this.width * 0.5
         let centerY = this.y + this.height * 0.5
 
-        let targetCenterX = (this.target.position.x * this.zoomScale) + (this.target.width * 0.5)
-        let targetCenterY = (this.target.position.y * this.zoomScale) + (this.target.height * 0.5)
+        let position = this.target.initialPosition || this.target.position
+
+        let targetCenterX = (position.x * this.zoomScale) + (this.target.width * 0.5)
+        let targetCenterY = (position.y * this.zoomScale) + (this.target.height * 0.5)
 
         let targetDirectionX = this.target.direction ? this.target.direction.x : 1
         let targetDirectionY = this.target.direction ? this.target.direction.y : 1
