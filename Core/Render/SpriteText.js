@@ -19,6 +19,8 @@ class SpriteText {
         } else if (spriteFont && typeof spriteFont == 'string') {
             switch (spriteFont) {
                 case 'JOY': case 'joy': spriteFont = new SpriteFont(core.files.joy_font, 4, 6, `abcdefghijklmnopqrstuvwxyz1234567890.:-+/%!?><'"`); break;
+                case 'JOY_BORDER': case 'joy_border': spriteFont = new SpriteFont(core.files.joy_font_border, 6, 8, `abcdefghijklmnopqrstuvwxyz1234567890.:-+/%!?><'"`); break;
+                case 'JOY_BORDER2': case 'joy_border2': spriteFont = new SpriteFont(core.files.joy_font_border2, 6, 8, `abcdefghijklmnopqrstuvwxyz1234567890.:-+/%!?><'"`); break;
                 case 'ALAGARD': case 'alagard': spriteFont = new SpriteFont(core.files.alagard_font, 10, 10, null, ['g', 'j', 'p', 'q', 'y', ',']); break;
             }
         }
