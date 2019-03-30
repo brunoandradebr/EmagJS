@@ -63,6 +63,13 @@ class ImageProcessor {
          */
         this.imageArray = this.imageData.data
 
+        /**
+         * Temporary array to keep pixels index
+         * 
+         * @type {array<integer>}
+         */
+        this.tmpPixels = []
+
     }
 
     /**
@@ -150,6 +157,122 @@ class ImageProcessor {
             }
 
         }
+
+        return this.modifyPixels()
+
+    }
+
+    /**
+     * Outlines the image
+     * 
+     * @param {number} r 
+     * @param {number} g 
+     * @param {number} b 
+     * @param {boolean} edge
+     * 
+     * @return {void} 
+     */
+    stroke(r = 0, g = 0, b = 0, edge = false) {
+
+        // clear temporary index pixel array
+        this.tmpPixels.length = 0
+
+        for (let i = 0; i < this.imageArray.length; i += 4) {
+
+            // current pixel alpha channel
+            let currentPixelA = this.imageArray[i + 3];
+
+            // get nearest pixels
+
+            // top pixel
+            let topPixel = i - 4 * this.width
+            let topPixelA = this.imageArray[topPixel + 3]
+            // left pixel
+            let leftPixel = i - 4
+            let leftPixelA = this.imageArray[leftPixel + 3]
+            // right pixel
+            let rightPixel = i + 4
+            let rightPixelA = this.imageArray[rightPixel + 3]
+            // bottom pixel
+            let bottomPixel = i + (4 * this.width)
+            let bottomPixelA = this.imageArray[bottomPixel + 3]
+
+            // edge pixels 
+
+            // top left pixel
+            let topLeftPixel = (i - 4 * this.width) - 4
+            let topLeftPixelA = this.imageArray[topLeftPixel + 3]
+            // top right pixel
+            let topRightPixel = (i - 4 * this.width) + 4
+            let topRightPixelA = this.imageArray[topRightPixel + 3]
+            // bottom left pixel
+            let bottomLeftPixel = (i + 4 * this.width) - 4
+            let bottomLeftPixelA = this.imageArray[bottomLeftPixel + 3]
+            // bottom right pixel
+            let bottomRightPixel = (i + 4 * this.width) + 4
+            let bottomRightPixelA = this.imageArray[bottomRightPixel + 3]
+
+            // if pixel is filled
+            if (currentPixelA) {
+
+                // get current pixel column index
+                let currentPixelColumn = i / 4 % this.width
+
+                // get top pixel index
+                if (!topPixelA) {
+                    this.tmpPixels[topPixel] = topPixel
+                }
+
+                // get left pixel index
+                if (!leftPixelA && currentPixelColumn != 0) {
+                    this.tmpPixels[leftPixel] = leftPixel
+                }
+
+                // get right pixel index
+                if (!rightPixelA && currentPixelColumn < this.width - 1) {
+                    this.tmpPixels[rightPixel] = rightPixel
+                }
+
+                // get bottom pixel index
+                if (!bottomPixelA) {
+                    this.tmpPixels[bottomPixel] = bottomPixel
+                }
+
+                if (edge) {
+
+                    // get top right pixel index
+                    if (!topRightPixelA && currentPixelColumn < this.width - 1) {
+                        this.tmpPixels[topRightPixel] = topRightPixel
+                    }
+
+                    // get top left pixel index
+                    if (!topLeftPixelA && currentPixelColumn != 0) {
+                        this.tmpPixels[topLeftPixel] = topLeftPixel
+                    }
+
+                    // get bottom right pixel index
+                    if (!bottomRightPixelA && currentPixelColumn < this.width - 1) {
+                        this.tmpPixels[bottomRightPixel] = bottomRightPixel
+                    }
+
+                    // get bottom left pixel index
+                    if (!bottomLeftPixelA && currentPixelColumn != 0) {
+                        this.tmpPixels[bottomLeftPixel] = bottomLeftPixel
+                    }
+
+                }
+
+            }
+
+        }
+
+        // fill all pixels found
+        this.tmpPixels.map((pixel, i) => {
+            this.imageArray[i + 0] = r
+            this.imageArray[i + 1] = g
+            this.imageArray[i + 2] = b
+            this.imageArray[i + 3] = 255
+        })
 
         return this.modifyPixels()
 
