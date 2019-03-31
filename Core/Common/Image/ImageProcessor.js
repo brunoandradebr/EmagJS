@@ -406,6 +406,40 @@ class ImageProcessor {
     }
 
     /**
+     * Get image main color
+     * 
+     * @return {array<integer>}
+     */
+    getMainColor() {
+
+        let r = 0
+        let g = 0
+        let b = 0
+
+        // iterate each image pixel
+        for (let i = 0; i < this.imageArray.length; i += 4) {
+
+            // each pixel component (rgba)
+            let imageR = this.imageArray[i + 0];
+            let imageG = this.imageArray[i + 1];
+            let imageB = this.imageArray[i + 2];
+
+            r += imageR
+            g += imageG
+            b += imageB
+
+        }
+
+        let m = r + g + b / 3
+        r = (r / m) * 255
+        g = (g / m) * 255
+        b = (b / m) * 255
+
+        return [r | 0, g | 0, b | 0]
+
+    }
+
+    /**
      * Removes a target color
      * factor will take neighbor colors in account
      * no factor will only take exact target color
