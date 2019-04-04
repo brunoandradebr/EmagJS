@@ -146,6 +146,22 @@ class CollisionHandler {
 
     }
 
+    static distanceToLine(object, line) {
+
+        let lineNormal = line.normal.normalize
+        let objectToLineEnd = object.position.clone().subtract(line.end).reverse
+        let objectToLineNormal = objectToLineEnd.normalize
+
+        // distance to circle
+        if (object.constructor.name == 'Circle') {
+
+            let pointInCircle = object.position.clone().add(objectToLineNormal.multiplyScalar(object.radius))
+            return pointInCircle
+
+        }
+
+    }
+
     /**
      * SAT - Separating Axis Theorem
      * 
