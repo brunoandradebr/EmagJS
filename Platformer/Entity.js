@@ -38,7 +38,7 @@ class Entity extends Sprite {
         // raycast
         this.collisionMask['ray'] = new Line(this.position.clone(), new Vector)
         this.collisionMask['ray'].offsetX = 0
-        this.collisionMask['ray'].offsetY = 2
+        this.collisionMask['ray'].offsetY = 3
         this.collisionMask['ray'].lineColor = 'black'
         this.collisionMask['ray'].lineWidth = 1
 
