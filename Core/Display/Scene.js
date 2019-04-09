@@ -26,6 +26,7 @@ class Scene {
             scale: 1,                         // scene's scale factor - how much camera resolution(width-height) will be scaled to fit movie's width and height
             fullscreen: false,                // full screen mode - if true ignores camera, and fit movie's dimensions - device size
             blend: 'none',
+            autoclear: true,                  // clear canvas before new draw
             onCreate: function () { },
             onEnter: function () { },
             index: 0,                         // depth order
@@ -240,11 +241,13 @@ class Scene {
         // clear scene's canvas
 
         // if scene has camera, clear only camera's rect
-        if (this.camera) {
-            this.graphics.clearRect(this.camera.x, this.camera.y, this.camera.width, this.camera.height);
-        } else {
-            // if there's no camera, clear all canvas
-            this.graphics.clearRect(0, 0, this.width, this.height);
+        if (this.autoclear) {
+            if (this.camera) {
+                this.graphics.clearRect(this.camera.x, this.camera.y, this.camera.width, this.camera.height);
+            } else {
+                // if there's no camera, clear all canvas
+                this.graphics.clearRect(0, 0, this.width, this.height);
+            }
         }
 
         // save scene state
