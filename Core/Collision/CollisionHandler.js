@@ -148,15 +148,51 @@ class CollisionHandler {
 
     static distanceToLine(object, line) {
 
-        let lineNormal = line.normal.normalize
-        let objectToLineEnd = object.position.clone().subtract(line.end).reverse
-        let objectToLineNormal = objectToLineEnd.normalize
-
         // distance to circle
         if (object.constructor.name == 'Circle') {
 
-            let pointInCircle = object.position.clone().add(objectToLineNormal.multiplyScalar(object.radius))
-            return pointInCircle
+            let pointInCircle,
+                pointInLine,
+                projection
+
+            let linePlane = line.plane
+            let lineNormal = line.normal.normalize
+            let objectToLineStart = line.start.clone().subtract(object.position)
+            let objectToLineEnd = line.end.clone().subtract(object.position)
+
+            // if line is not facing object
+            if (linePlane.dot(objectToLineStart) > 0) {
+                projection = objectToLineStart.normalize.multiplyScalar(object.radius)
+                pointInCircle = object.position.clone().add(projection)
+                pointInLine = line.start
+            } else {
+
+                // check if line end is right from object center imaginary line (perpendicular to line)
+                if (objectToLineEnd.cross(lineNormal) < 0) {
+                    projection = lineNormal.multiplyScalar(object.radius)
+
+                    // if line end is above object, reverse projection
+                    if (objectToLineEnd.cross(objectToLineStart) > 0)
+                        projection.reverse
+
+                    pointInCircle = object.position.clone().add(projection)
+
+                    let pointInCircleToLineStart = line.start.clone().add(pointInCircle.clone().subtract(line.start).project(linePlane))
+                    pointInLine = pointInCircleToLineStart
+
+                } else {
+                    projection = objectToLineEnd.normalize.multiplyScalar(object.radius)
+                    pointInLine = line.end
+                    pointInCircle = object.position.clone().add(projection)
+                }
+
+            }
+
+            return {
+                pointInCircle: pointInCircle,
+                pointInLine: pointInLine,
+                distance: pointInLine.clone().subtract(pointInCircle).length,
+            }
 
         }
 
