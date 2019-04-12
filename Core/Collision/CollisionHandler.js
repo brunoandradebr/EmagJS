@@ -189,7 +189,7 @@ class CollisionHandler {
             }
 
             return {
-                pointInCircle: pointInCircle,
+                pointInObject: pointInCircle,
                 pointInLine: pointInLine,
                 distance: pointInLine.clone().subtract(pointInCircle).length,
             }
