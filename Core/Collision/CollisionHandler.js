@@ -214,7 +214,7 @@ class CollisionHandler {
             let pointInObject = objectPoints[0]
             let closestDistance = Infinity
 
-            let lineFacingObject = false
+            let lineNotFacingObject = false
 
             // for each object point
             objectPoints.map((point) => {
@@ -237,19 +237,18 @@ class CollisionHandler {
                     // get point in line
                     pointInLine = line.start.clone().add(pointInObjectProjection)
                     // update flag
-                    lineFacingObject = pointInObjectProjection.cross(line.normal) < 0
+                    lineNotFacingObject = pointInObjectProjection.cross(line.normal) > 0
                 }
 
             })
 
             // if line is not facing object
-            if (!lineFacingObject) {
+            if (lineNotFacingObject) {
 
                 // update point in line to line start
                 pointInLine = line.start
 
-                // update point in object to the closest to point in line
-                let closestPointToLineStart = objectPoints[0]
+                // update point in object to the closest to point to line start
                 let closestDistanceToLineStart = Infinity
                 objectPoints.map((point) => {
                     let distanceX = point.x - line.start.x
@@ -260,6 +259,33 @@ class CollisionHandler {
                         closestDistanceToLineStart = distanceSquared
                     }
                 })
+
+            } else {
+
+                // TODO - GET POINT IN OBJECT SEGMENT, NOT CLOSEST POINT TO POINT IN LINE
+
+                // vector from line start to point in line
+                let pointInLineToLineStart = pointInLine.clone().subtract(line.start).lengthSquared
+
+                // if point in line is outside line segment
+                if (pointInLineToLineStart > line.lengthSquared) {
+
+                    // update point in line to line end
+                    pointInLine = line.end
+
+                    // update point in object to the closest to point to line end
+                    let closestDistanceToLineEnd = Infinity
+                    objectPoints.map((point) => {
+                        let distanceX = point.x - line.end.x
+                        let distanceY = point.y - line.end.y
+                        let distanceSquared = distanceX * distanceX + distanceY * distanceY
+                        if (distanceSquared < closestDistanceToLineEnd) {
+                            pointInObject = point
+                            closestDistanceToLineEnd = distanceSquared
+                        }
+                    })
+
+                }
 
             }
 
