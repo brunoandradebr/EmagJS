@@ -116,7 +116,7 @@ class CollisionHandler {
     /**
      * Bounces a representation's body away
      * 
-     * @param {Shape | Sprite} A - Shape or Sprite representation with a body object
+     * @param {EmagJS.Core.Render.Shape | EmagJS.Core.Render.Sprite} A - Shape or Sprite representation with a body object
      * @param {EmagJS.Core.Display.Scene} scene
      * 
      * @return {void}
@@ -146,6 +146,18 @@ class CollisionHandler {
 
     }
 
+    /**
+     * Calculates distance from object to line
+     * info : 
+     *         point in object closest to line
+     *         point in line closest to object
+     *         distance from points
+     * 
+     * @param {EmagJS.Core.Render.Shape | EmagJS.Core.Render.Circle} object 
+     * @param {EmagJS.Core.Render.Line} line 
+     * 
+     * @return {Object}
+     */
     static distanceToLine(object, line) {
 
         // distance to circle
@@ -192,6 +204,69 @@ class CollisionHandler {
                 pointInObject: pointInCircle,
                 pointInLine: pointInLine,
                 distance: pointInLine.clone().subtract(pointInCircle).length,
+            }
+
+        } else {
+
+            let lineToObject = line.start.clone().subtract(object.position)
+            let objectPoints = object.getVertices()
+            let pointInLine = line.start
+            let pointInObject = objectPoints[0]
+            let closestDistance = Infinity
+
+            let lineFacingObject = false
+
+            // for each object point
+            objectPoints.map((point) => {
+
+                // vector from line start to point
+                let pointToLine = point.clone().subtract(line.start)
+                // projects pointToLine vector on line
+                let pointToLineProjection = pointToLine.project(line.plane)
+                // the same as vector.length but without square root
+                let pointDistanceToLine = Math.abs(pointToLineProjection.subtract(pointToLine).dot(line.normal))
+
+                // update closest point to line
+                if (pointDistanceToLine < closestDistance) {
+                    // update closest distance
+                    closestDistance = pointDistanceToLine
+                    // update point in object nearest to line
+                    pointInObject = point
+                    // projects vector from line start to point in object in line
+                    let pointInObjectProjection = pointInObject.clone().subtract(line.start).project(line.plane)
+                    // get point in line
+                    pointInLine = line.start.clone().add(pointInObjectProjection)
+                    // update flag
+                    lineFacingObject = pointInObjectProjection.cross(line.normal) < 0
+                }
+
+            })
+
+            // if line is not facing object
+            if (!lineFacingObject) {
+
+                // update point in line to line start
+                pointInLine = line.start
+
+                // update point in object to the closest to point in line
+                let closestPointToLineStart = objectPoints[0]
+                let closestDistanceToLineStart = Infinity
+                objectPoints.map((point) => {
+                    let distanceX = point.x - line.start.x
+                    let distanceY = point.y - line.start.y
+                    let distanceSquared = distanceX * distanceX + distanceY * distanceY
+                    if (distanceSquared < closestDistanceToLineStart) {
+                        pointInObject = point
+                        closestDistanceToLineStart = distanceSquared
+                    }
+                })
+
+            }
+
+            return {
+                pointInObject: pointInObject,
+                pointInLine: pointInLine,
+                distance: closestDistance
             }
 
         }
