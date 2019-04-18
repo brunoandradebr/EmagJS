@@ -208,7 +208,8 @@ class CollisionHandler {
 
         } else {
 
-            let lineToObject = line.start.clone().subtract(object.position)
+            // test with shape
+
             let objectPoints = object.getVertices()
             let pointInLine = line.start
             let pointInObject = objectPoints[0]
@@ -224,7 +225,7 @@ class CollisionHandler {
                 // projects pointToLine vector on line
                 let pointToLineProjection = pointToLine.project(line.plane)
                 // the same as vector.length but without square root
-                let pointDistanceToLine = Math.abs(pointToLineProjection.subtract(pointToLine).dot(line.normal))
+                let pointDistanceToLine = Math.abs(pointToLineProjection.subtract(pointToLine).dot(line.normal.normalize))
 
                 // update closest point to line
                 if (pointDistanceToLine < closestDistance) {
@@ -260,6 +261,8 @@ class CollisionHandler {
                     }
                 })
 
+                closestDistance = Math.sqrt(closestDistanceToLineStart)
+
             } else {
 
                 // TODO - GET POINT IN OBJECT SEGMENT, NOT CLOSEST POINT TO POINT IN LINE
@@ -285,6 +288,8 @@ class CollisionHandler {
                         }
                     })
 
+                    closestDistance = Math.sqrt(closestDistanceToLineEnd)
+
                 }
 
             }
@@ -292,7 +297,7 @@ class CollisionHandler {
             return {
                 pointInObject: pointInObject,
                 pointInLine: pointInLine,
-                distance: closestDistance
+                distance: closestDistance,
             }
 
         }
