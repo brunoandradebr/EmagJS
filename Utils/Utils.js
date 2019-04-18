@@ -192,8 +192,12 @@ let toDegree = 180 / PI;
 /**
  * Generates a random number in the range - signed as default
  * 
- * @type {number}
  * @global
+ * 
+ * @param {number} range
+ * @param {bool} signed
+ * 
+ * @return {number}
  */
 const random = (range, signed = true) => {
 
@@ -203,6 +207,24 @@ const random = (range, signed = true) => {
 
 }
 
+/**
+ * Converts hex color to rgb
+ * 
+ * @global
+ * 
+ * @param {string} hex
+ * 
+ * @return {array<number>}
+ */
+const hex2rgb = (hex = '#ffffff') => {
+
+    if (hex.length == 4)
+        hex = '#' + hex[1] + '' + hex[1] + '' + hex[2] + '' + hex[2] + '' + hex[3] + '' + hex[3] + ''
+
+    hex = hex.replace('#', '0x')
+
+    return [hex >> 16, hex >> 8 & 0xff, hex >> 0 & 0xff]
+}
 
 /**
  * Converts global coordinates to viewport canvas coordinates

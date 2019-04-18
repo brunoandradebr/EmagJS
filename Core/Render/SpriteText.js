@@ -43,7 +43,7 @@ class SpriteText {
         /**
          * max width to render letters
          */
-        this.width = 0
+        this.width = 80
 
         /**
          * vertical space between lines
@@ -51,9 +51,19 @@ class SpriteText {
         this.lineHeight = 2
 
         /**
+         * sprite image color - sprite default color
+         */
+        this.color
+
+        /**
          * all created sprite letters to render
          */
         this.letters = []
+
+        /**
+         * tmp string to hold previous text
+         */
+        this._text = ''
 
         /**
          * sprite characters pool
@@ -80,6 +90,9 @@ class SpriteText {
         this.write(this.spriteFont.chars)
         this.clear()
 
+        // default empty text
+        this.text = ''
+
     }
 
     /**
@@ -87,7 +100,52 @@ class SpriteText {
      */
     set text(content = '') {
         this.clear()
-        this.write(content, 0, 0, this.spriteFont.width, this.spriteFont.height, this.width, this.lineHeight)
+        this.write(content + '', 0, 0, this.spriteFont.width, this.spriteFont.height, this.width, this.lineHeight)
+    }
+
+    /**
+     * Tint all letters image
+     * 
+     * @return {void}
+     */
+    set color(color) {
+
+        // cache current text
+        let tmpText = this._text
+
+        // color as string
+        if (color.constructor.name == 'String') {
+            // hex format
+            if (color[0] == '#') {
+                color = hex2rgb(color)
+            } else {
+                // color name
+                switch (color.toLowerCase()) {
+                    case 'black': color = [-255, -255, -255]; break;
+                    case 'white': color = [255, 255, 255]; break;
+                    case 'red': color = [255, -255, -255]; break;
+                    case 'blue': color = [-255, -255, 255]; break;
+                    case 'green': color = [-255, 255, -255]; break;
+                }
+            }
+        }
+
+        // color as array
+        if (color.constructor.name == 'Array') {
+
+            let r = color[0],
+                g = color[1],
+                b = color[2]
+
+            // create all letters to tint all
+            this.text = `abcdefghijklmnopqrstuvwxyz1234567890.:-+/%!?><'"`
+            // tint all letters
+            this.letters.map((letter) => letter.image = this.spriteFont.image.clone().tint(r, g, b))
+            // back to previous text
+            this.text = tmpText
+
+        }
+
     }
 
     /**
@@ -102,6 +160,8 @@ class SpriteText {
      * @return {void} 
      */
     write(string, x, y, width, height, maxWidth = 0, lineHeight = 2) {
+
+        this._text = string
 
         let currentY, startY, currentX, startX
 
