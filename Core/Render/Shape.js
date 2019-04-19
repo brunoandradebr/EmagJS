@@ -128,6 +128,41 @@ class Shape {
          */
         this.tmp_normal = Line.fromAngle(this.angle, this.width, this.position)
 
+        /**
+         * Temporary vector that holds polygon centroid
+         * 
+         * @type {EmagJS.Core.Math.Vector}
+         */
+        this.tmp_centroid = new Vector
+
+        /**
+         * Inverse total points
+         * 
+         * @type {number}
+         */
+        this.iPoints = 1 / this.points.length
+
+    }
+
+    /**
+     * get polygon centroid
+     * 
+     * @return {EmagJS.Core.Math.Vector}
+     */
+    get centroid() {
+
+        this.tmp_centroid.x = this.tmp_centroid.y = 0
+
+        // add x and y from all points to centroid vector
+        this.getVertices().map((point) => {
+            this.tmp_centroid.x += point.x
+            this.tmp_centroid.y += point.y
+        })
+        // divide by polygon total points
+        this.tmp_centroid.x *= this.iPoints
+        this.tmp_centroid.y *= this.iPoints
+
+        return this.tmp_centroid
     }
 
     /**
