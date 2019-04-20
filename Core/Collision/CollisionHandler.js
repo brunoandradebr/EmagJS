@@ -305,6 +305,71 @@ class CollisionHandler {
     }
 
     /**
+     * Slice shape's polygon
+     * 
+     * @param {EmagJS.Core.Render.Line} line 
+     * @param {EmagJS.Core.Render.Shape} shape
+     * 
+     * @return {object<EmagJS.Core.Render.Shape>} 
+     */
+    sliceShape(line, shape) {
+
+        // save reference to this
+        let intersection = this
+
+        // check line with shape intersection
+        this.check(line, shape)
+
+        // if less than 2 points
+        if (intersection.points.length < 2)
+            return false
+
+        // intersection points
+        let intersectionPoint1 = intersection.points[0]
+        let intersectionPoint2 = intersection.points[1]
+
+        // left and right points
+        let leftPoints = []
+        let rightPoints = []
+        // shape points
+        let shapePoints = shape.getVertices()
+
+        // get left and right points
+        shapePoints.map((point) => {
+
+            // vector from line start to shape point
+            let lineStartToPoint = point.clone().subtract(line.start)
+
+            // point is left from line
+            if (lineStartToPoint.cross(line.plane) > 0) {
+                leftPoints.push(point.subtract(shape.position))
+            } else {
+                // point is right from line
+                rightPoints.push(point.subtract(shape.position))
+            }
+
+        })
+
+        // add intersection points
+        leftPoints.push(intersectionPoint1.clone().subtract(shape.position), intersectionPoint2.clone().subtract(shape.position))
+        rightPoints.push(intersectionPoint1.subtract(shape.position), intersectionPoint2.subtract(shape.position))
+
+        // sort points by angle
+        leftPoints.sort((a, b) => a.angle - b.angle)
+        rightPoints.sort((a, b) => a.angle - b.angle)
+
+        // create shapes
+        let shape1 = new Shape(new Polygon(leftPoints), shape.position.clone(), 1, 1, shape.fillColor, shape.lineWidth, shape.lineColor)
+        let shape2 = new Shape(new Polygon(rightPoints), shape.position.clone(), 1, 1, shape.fillColor, shape.lineWidth, shape.lineColor)
+
+        return {
+            leftShape: shape1,
+            rightShape: shape2
+        }
+
+    }
+
+    /**
      * SAT - Separating Axis Theorem
      * 
      * @param {EmagJS.Core.Render.Shape} A 
