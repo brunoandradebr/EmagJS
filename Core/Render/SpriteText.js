@@ -126,6 +126,7 @@ class SpriteText {
                     case 'red': color = [255, -255, -255]; break;
                     case 'blue': color = [-255, -255, 255]; break;
                     case 'green': color = [-255, 255, -255]; break;
+                    case 'yellow': color = [244, 207, 56]; break;
                 }
             }
         }
