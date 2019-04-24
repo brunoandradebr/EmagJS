@@ -102,6 +102,7 @@ class Text {
      */
     draw(graphics) {
 
+        this.text += ''
         this.lines = this.text.split('\n')
 
         graphics.save()
