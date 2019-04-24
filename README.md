@@ -5,7 +5,7 @@ It's using canvas API with 2d context (Software rendering).
 ### examples
 <a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
 <a target="_blank" href="http://www.acobaia.com.br/framework/example2">Preload example</a> <br>
-<a target="_blank" href="http://www.acobaia.com.br/framework/example3">Mask example</a> 
+<a target="_blank" href="http://www.acobaia.com.br/framework/example3">Mask example</a> <br>
 <a target="_blank" href="http://www.acobaia.com.br/prototipos/2/">Pong example</a> 
 
 ## Usage
