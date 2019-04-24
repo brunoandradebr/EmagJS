@@ -78,6 +78,20 @@ class Text {
          */
         this.alpha = 1
 
+        this.tmpGraphics = document.createElement('canvas').getContext('2d')
+
+    }
+
+    /**
+     * Measures text width
+     * 
+     * @return {number}
+     */
+    get width() {
+
+        this.tmpGraphics.font = this.size + 'px ' + this.font
+
+        return this.tmpGraphics.measureText(this.text).width
     }
 
     /**
