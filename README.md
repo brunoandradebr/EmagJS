@@ -446,13 +446,8 @@ cyberPong.addScene('overlay', {
     index: 1,
 
     blend: 'soft-light',
-
-    onEnter: (scene) => {
-        scene.colorAngle = 0
-    },
-
+    
     onLoop: (scene) => {
-        scene.colorAngle++
         scene.canvas.style.backgroundColor = 'hsl(' + (140 + random(140, 0)) + ', 100%, 50%)'
     }
 
