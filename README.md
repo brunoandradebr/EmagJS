@@ -398,6 +398,8 @@ stage.play('movie1')
 
 ## Pong example
 
+In real world it would be better to separate ball and paddles in classes. 
+
 ```js
 let warning = new Movie('warning')
 let cyberPong = new Movie('cyberPong')
