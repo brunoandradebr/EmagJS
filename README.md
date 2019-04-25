@@ -446,7 +446,7 @@ cyberPong.addScene('overlay', {
     index: 1,
 
     blend: 'soft-light',
-    
+
     onLoop: (scene) => {
         scene.canvas.style.backgroundColor = 'hsl(' + (140 + random(140, 0)) + ', 100%, 50%)'
     }
@@ -543,7 +543,7 @@ cyberPong.addScene('main', {
         // paddle trail spawn timer
         scene.paddleTrailTimer = new Timer(10)
         // create paddle trail pool
-        scene.paddlePool = new ObjectPool(() => {
+        scene.paddleTrailPool = new ObjectPool(() => {
             // create new paddle trail object
             let trail = new Sprite(new Vector, scene.leftPaddle.width, scene.leftPaddle.height, 'white', 0)
             return trail
@@ -752,10 +752,10 @@ cyberPong.addScene('main', {
         if (scene.paddleTrailTimer.tick) {
 
             // left paddle trail
-            let leftTrail = scene.paddlePool.create()
+            let leftTrail = scene.paddleTrailPool.create()
             leftTrail.position.update(scene.leftPaddle.position.clone())
             // right paddle trail
-            let rightTrail = scene.paddlePool.create()
+            let rightTrail = scene.paddleTrailPool.create()
             rightTrail.position.update(scene.rightPaddle.position.clone())
 
             scene.paddleTrail.push(leftTrail, rightTrail)
@@ -780,7 +780,7 @@ cyberPong.addScene('main', {
             trail.alpha -= .12 * dt
 
             if (trail.alpha < 0) {
-                scene.paddlePool.destroy(trail)
+                scene.paddleTrailPool.destroy(trail)
                 scene.paddleTrail.splice(i, 1)
             }
 
