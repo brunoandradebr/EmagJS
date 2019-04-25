@@ -26,6 +26,11 @@ class Line {
         this.end = end;
 
         /**
+         * @type {number}
+         */
+        this.alpha = 1
+
+        /**
          * @type {string}
          */
         this.lineColor = 'black'
@@ -34,6 +39,41 @@ class Line {
          * @type {number}
          */
         this.lineWidth = 1
+
+        /**
+         * @type {string}
+         */
+        this.lineCap = 'butt'
+
+        /**
+         * @type {array<number>}
+         */
+        this.dashPattern = []
+
+        /**
+         * @type {number}
+         */
+        this.dashOffset = 0
+
+        /**
+         * @type {number}
+         */
+        this.shadowBlur = undefined
+
+        /**
+         * @type {string}
+         */
+        this.shadowColor = 'black'
+
+        /**
+         * @type {number}
+         */
+        this.shadowOffsetX = 0
+
+        /**
+         * @type {number}
+         */
+        this.shadowOffsetY = 0
 
     }
 
@@ -141,11 +181,23 @@ class Line {
 
     /**
      * Clone
+     * 
+     * @return {EmagJS.Core.Render.Line}
      */
     clone() {
+
         let clone = new Line(this.start.clone(), this.end.clone())
+
         clone.lineWidth = this.lineWidth
         clone.lineColor = this.lineColor
+        clone.lineCap = this.lineCap
+        clone.dashPattern = this.dashPattern
+        clone.dashOffset = this.dashOffset
+        clone.shadowBlur = this.shadowBlur
+        clone.shadowColor = this.shadowColor
+        clone.shadowOffsetX = this.shadowOffsetX
+        clone.shadowOffsetY = this.shadowOffsetY
+
         return clone
     }
 
@@ -157,12 +209,45 @@ class Line {
      */
     draw(graphics) {
 
+        // save graphics context
+        graphics.save()
+
+        // alpha
+        graphics.globalAlpha = this.alpha
+
+        // composite operation
+        graphics.globalCompositeOperation = this.compositeOperation || 'none'
+
+        // draw shadow
+        if (this.shadowBlur != undefined) {
+            graphics.shadowBlur = this.shadowBlur
+            graphics.shadowColor = this.shadowColor
+            graphics.shadowOffsetX = this.shadowOffsetX
+            graphics.shadowOffsetY = this.shadowOffsetY
+        }
+
+        // line color
         graphics.strokeStyle = this.lineColor
+        // line width
         graphics.lineWidth = this.lineWidth
+        // line cap
+        graphics.lineCap = this.lineCap
+
+        // begin path
         graphics.beginPath();
+        // line dash pattern
+        graphics.setLineDash(this.dashPattern)
+        // line dash offset
+        graphics.lineDashOffset = -this.dashOffset
+
         graphics.moveTo(this.start.x, this.start.y);
         graphics.lineTo(this.end.x, this.end.y);
+
+        // stroke!
         graphics.stroke();
+
+        // restore graphics context
+        graphics.restore()
 
     }
 
