@@ -651,7 +651,6 @@ cyberPong.addScene('main', {
                 stage.shake(300)
 
                 // play bounce sound
-
                 scene.sound.play(assets.sounds.bounce, 3)
 
             }
@@ -689,7 +688,6 @@ cyberPong.addScene('main', {
                 }
 
                 // play bounce sound
-
                 scene.sound.play(assets.sounds.bounce)
 
             }
