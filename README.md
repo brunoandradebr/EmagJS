@@ -534,8 +534,8 @@ cyberPong.addScene('main', {
         ]
 
         // create paddles
-        scene.leftPaddle = new Shape(new Square, new Vector((scene.width * 0.02) | 0 + 50, scene.height * 0.5), (scene.width * 0.02) | 0, (scene.height * 0.25) | 0, 'white', 0)
-        scene.rightPaddle = new Shape(new Square, new Vector(scene.width - 50 - ((scene.width * 0.02) | 0), scene.height * 0.5), (scene.width * 0.02) | 0, (scene.height * 0.25) | 0, 'white', 0)
+        scene.leftPaddle = new Shape(new Square, new Vector(scene.width * 0.5 - scene.width * 0.40, scene.height * 0.5), (scene.width * 0.02) | 0, (scene.height * 0.25) | 0, 'white', 0)
+        scene.rightPaddle = new Shape(new Square, new Vector(scene.width - ((scene.width * 0.1) | 0), scene.height * 0.5), (scene.width * 0.02) | 0, (scene.height * 0.25) | 0, 'white', 0)
         scene.paddles = [scene.leftPaddle, scene.rightPaddle]
 
         // paddle trail container
@@ -648,7 +648,7 @@ cyberPong.addScene('main', {
                 }
 
                 // shake scene
-                stage.shake(300)
+                stage.shake(300, 8)
 
                 // play bounce sound
                 scene.sound.play(assets.sounds.bounce, 3)
@@ -687,6 +687,9 @@ cyberPong.addScene('main', {
                     scene.particles.push(scene.particlePool.create())
                 }
 
+                // shake scene
+                stage.shake(300)
+
                 // play bounce sound
                 scene.sound.play(assets.sounds.bounce)
 
@@ -721,7 +724,7 @@ cyberPong.addScene('main', {
             }
 
             // shake scene
-            stage.shake()
+            stage.shake(300, 8)
 
             // play score sound
             scene.sound.play(assets.sounds.pling2)
