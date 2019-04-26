@@ -56,7 +56,7 @@ class Text {
         /**
          * @type {number}
          */
-        this.shadowBlur = 0
+        this.shadowBlur = undefined
 
         /**
          * @type {string}
@@ -110,7 +110,7 @@ class Text {
         graphics.globalAlpha = this.alpha
 
         // shadow
-        if (this.shadowBlur) {
+        if (this.shadowBlur != undefined) {
             graphics.shadowBlur = this.shadowBlur
             graphics.shadowColor = this.shadowColor
             graphics.shadowOffsetX = this.shadowOffsetX
