@@ -81,7 +81,7 @@ class CollisionHandler {
 
         // collision between Lines
         if (AConstructor == 'Line' && BConstructor == 'Line')
-            return this.lineToLineCollision(A, B)
+            return this.lineToLineCollision(A, B, offset)
 
         // collision between Line and Shape
         if (AConstructor == 'Line' && BConstructor == 'Shape')
@@ -587,10 +587,11 @@ class CollisionHandler {
      * 
      * @param {EmagJS.Core.Render.Line} A 
      * @param {EmagJS.Core.Render.Line} B 
+     * @param {number} offset - 0 even very small angles
      * 
      * @return {bool}
      */
-    lineToLineCollision(A = Line, B = Line) {
+    lineToLineCollision(A = Line, B = Line, offset = .01) {
 
         let aux = B.start.clone().subtract(A.start);
 
@@ -599,7 +600,7 @@ class CollisionHandler {
 
         let f = s1 / s2;
 
-        if (f > 0 && f <= 1) {
+        if (f > 0 && f <= 1 - offset) {
 
             let collisionPoint = A.start.clone().add(A.plane.clone().multiplyScalar(f));
 
