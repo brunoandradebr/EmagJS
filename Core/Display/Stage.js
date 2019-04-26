@@ -187,6 +187,15 @@ class Stage {
 
         })
 
+        /**
+         * Touch cancel event - deletes all pointers
+         * keeping touching but opened notification area or leave
+         * browser
+         */
+        this.container.addEventListener('touchcancel', (e) => {
+            touches.length = 0
+        })
+
     }
 
     /**
