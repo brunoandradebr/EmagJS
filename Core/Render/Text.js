@@ -109,14 +109,6 @@ class Text {
 
         graphics.globalAlpha = this.alpha
 
-        // shadow
-        if (this.shadowBlur != undefined) {
-            graphics.shadowBlur = this.shadowBlur
-            graphics.shadowColor = this.shadowColor
-            graphics.shadowOffsetX = this.shadowOffsetX
-            graphics.shadowOffsetY = this.shadowOffsetY
-        }
-
         // pixelated
         graphics.mozImageSmoothingEnabled = false
         graphics.webkitImageSmoothingEnabled = false
@@ -126,17 +118,27 @@ class Text {
         graphics.font = this.size + 'px ' + this.font
         graphics.lineWidth = this.lineWidth
 
+        // stroke
         if (this.lineWidth) {
             graphics.strokeStyle = this.lineColor
             this.lines.map((line, i) => {
-                graphics.strokeText(line, this.position.x, this.position.y + i * this.size)
+                graphics.strokeText(line, (this.position.x | 0), (this.position.y + i * this.size) | 0)
             })
         }
 
+        // shadow
+        if (this.shadowBlur != undefined) {
+            graphics.shadowBlur = this.shadowBlur
+            graphics.shadowColor = this.shadowColor
+            graphics.shadowOffsetX = this.shadowOffsetX
+            graphics.shadowOffsetY = this.shadowOffsetY
+        }
+
+        // fill
         if (this.color != 'transparent') {
             graphics.fillStyle = this.color
             this.lines.map((line, i) => {
-                graphics.fillText(line, this.position.x, this.position.y + i * this.size)
+                graphics.fillText(line, (this.position.x | 0), (this.position.y + i * this.size) | 0)
             })
         }
 
