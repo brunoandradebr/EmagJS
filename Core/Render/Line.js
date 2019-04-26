@@ -244,7 +244,7 @@ class Line {
         graphics.lineTo(this.end.x, this.end.y);
 
         // stroke!
-        graphics.stroke();
+        graphics.stroke()
 
         // restore graphics context
         graphics.restore()

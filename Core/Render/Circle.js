@@ -46,6 +46,26 @@ class Circle {
         /**
          * @type {number}
          */
+        this.shadowBlur = undefined
+
+        /**
+         * @type {string}
+         */
+        this.shadowColor = 'black'
+
+        /**
+         * @type {number}
+         */
+        this.shadowOffsetX = 5
+
+        /**
+         * @type {number}
+         */
+        this.shadowOffsetY = 5
+
+        /**
+         * @type {number}
+         */
         this.alpha = 1
 
     }
@@ -82,24 +102,47 @@ class Circle {
      */
     draw(graphics) {
 
+        // save graphics state
         graphics.save()
 
+        // alpha
         graphics.globalAlpha = this.alpha
 
+        // composite operation
         graphics.globalCompositeOperation = this.compositeOperation || 'none'
 
+        // fill style
         graphics.fillStyle = this.fillColor
-        graphics.strokeStyle = this.lineColor
+        // line width
         graphics.lineWidth = this.lineWidth
+        // line color
+        graphics.strokeStyle = this.lineColor
 
+        // shadow
+        if (this.shadowBlur != undefined) {
+            graphics.shadowBlur = this.shadowBlur
+            graphics.shadowColor = this.shadowColor
+            graphics.shadowOffsetX = this.shadowOffsetX
+            graphics.shadowOffsetY = this.shadowOffsetY
+        }
+
+        // draw circle
         graphics.beginPath()
         graphics.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+        graphics.closePath()
 
+        // fill circle
         graphics.fill()
 
-        if (this.lineWidth)
+        // draw line
+        if (this.lineWidth) {
+            // do not shadow line
+            graphics.shadowColor = 'transparent'
+            // stroke!
             graphics.stroke()
+        }
 
+        // restore graphics state
         graphics.restore()
 
     }
