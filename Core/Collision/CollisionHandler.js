@@ -97,7 +97,7 @@ class CollisionHandler {
 
         // collision between Circle and screen boundary
         if (AConstructor == 'Circle' && B == 'screen')
-            return this.circleToScreenCollision(A)
+            return this.circleToScreenCollision(A, offset)
 
         // collision between Circle and Shape
         if (AConstructor == 'Circle' && BConstructor == 'Shape')
@@ -879,26 +879,54 @@ class CollisionHandler {
      * Bounce circle at screen edge
      * 
      * @param {EmagJS.Core.Render.Circle} A
+     * @param {object} offset 
      * 
      * @return {void}
      */
-    circleToScreenCollision(A = Circle) {
+    circleToScreenCollision(A = Circle, offset = { x: 0, y: 0 }) {
 
-        if (A.position.x > DEVICE_WIDTH - A.radius) {
-            A.body.position.x = DEVICE_WIDTH - A.radius
-            A.body.velocity.x *= -1
+        if (A.position.x > (DEVICE_WIDTH - offset.x) - A.radius) {
+
+            if (A.body) {
+                A.body.position.x = (DEVICE_WIDTH - offset.x) - A.radius
+                A.body.velocity.x *= -1
+            }
+
+            A.position.x = (DEVICE_WIDTH - offset.x) - A.radius
+
         }
-        if (A.position.x < A.radius) {
-            A.body.position.x = A.radius
-            A.body.velocity.x *= -1
+
+        if (A.position.x < A.radius + offset.x) {
+
+            if (A.body) {
+                A.body.position.x = A.radius + offset.x
+                A.body.velocity.x *= -1
+            }
+
+            A.position.x = A.radius + offset.x
+
         }
-        if (A.position.y < A.radius) {
-            A.body.position.y = A.radius
-            A.body.velocity.y *= -1
+
+        if (A.position.y < A.radius + offset.y) {
+
+            if (A.body) {
+                A.body.position.y = A.radius + offset.y
+                A.body.velocity.y *= -1
+            }
+
+            A.position.y = A.radius + offset.y
+
         }
-        if (A.position.y > DEVICE_HEIGHT - A.radius) {
-            A.body.position.y = DEVICE_HEIGHT - A.radius
-            A.body.velocity.y *= -1
+
+        if (A.position.y > (DEVICE_HEIGHT - offset.y) - A.radius) {
+
+            if (A.body) {
+                A.body.position.y = (DEVICE_HEIGHT - offset.y) - A.radius
+                A.body.velocity.y *= -1
+            }
+
+            A.position.y = (DEVICE_HEIGHT - offset.y) - A.radius
+
         }
 
     }
