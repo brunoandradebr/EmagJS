@@ -208,6 +208,27 @@ const random = (range, signed = true) => {
 }
 
 /**
+ * Creates a random array inside an area
+ * 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} width 
+ * @param {number} height 
+ * 
+ * @return {EmagJS.Core.Math.Vector}
+ */
+const randomInArea = (x, y, width, height = width) => {
+
+    let pointInArea = new Vector
+
+    pointInArea.x = x + random(width, 0)
+    pointInArea.y = y + random(height, 0)
+
+    return pointInArea
+
+}
+
+/**
  * Converts hex color to rgb
  * 
  * @global
