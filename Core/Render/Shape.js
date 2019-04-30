@@ -49,6 +49,11 @@ class Shape {
         this.lineColor = lineColor;
 
         /**
+         * @type {number}
+         */
+        this.alpha = 1
+
+        /**
          * copy it's polygon base points
          * 
          * @type {array<EmagJS.Core.Math.Vector>}
@@ -424,6 +429,9 @@ class Shape {
         let borderPortion = this.lineWidth * 0.5 || 0;
 
         graphics.save();
+
+        // alpha
+        graphics.globalAlpha = this.alpha
 
         graphics.lineCap = 'round';
         graphics.lineJoin = 'round';
