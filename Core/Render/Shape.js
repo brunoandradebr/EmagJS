@@ -54,6 +54,26 @@ class Shape {
         this.alpha = 1
 
         /**
+         * @type {number}
+         */
+        this.shadowBlur = undefined
+
+        /**
+         * @type {string}
+         */
+        this.shadowColor = 'black'
+
+        /**
+         * @type {number}
+         */
+        this.shadowOffsetX = 5
+
+        /**
+         * @type {number}
+         */
+        this.shadowOffsetY = 5
+
+        /**
          * copy it's polygon base points
          * 
          * @type {array<EmagJS.Core.Math.Vector>}
@@ -441,8 +461,17 @@ class Shape {
         graphics.lineWidth = this.lineWidth;
         graphics.strokeStyle = this.lineColor;
 
+        // composite operation
         if (this.compositeOperation)
             graphics.globalCompositeOperation = this.compositeOperation
+
+        // shadow
+        if (this.shadowBlur != undefined) {
+            graphics.shadowBlur = this.shadowBlur
+            graphics.shadowColor = this.shadowColor
+            graphics.shadowOffsetX = this.shadowOffsetX
+            graphics.shadowOffsetY = this.shadowOffsetY
+        }
 
         // line shape
         graphics.beginPath();
