@@ -326,9 +326,6 @@ class Stage {
      */
     shake(interval = 300, force = 5, frequence = 5) {
 
-        let tmpTop = this.container.style.top
-        let tmpLeft = this.container.style.left
-
         let shake = setInterval(() => {
             this.container.style.top = random(force) + 'px'
             this.container.style.left = random(force) + 'px'
@@ -336,8 +333,7 @@ class Stage {
 
         setTimeout(() => {
             clearInterval(shake)
-            this.container.style.top = tmpTop
-            this.container.style.left = tmpLeft
+            this.container.style = ""
         }, interval)
 
     }
