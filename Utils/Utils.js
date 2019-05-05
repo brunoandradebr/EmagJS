@@ -36,7 +36,7 @@ const trace = function () {
                 // check if it's a 2d array
                 let is2dArray = true
                 content.map((item) => {
-                    if (item.constructor.name != 'Array')
+                    if (item && item.constructor.name != 'Array')
                         is2dArray = false
                 })
 

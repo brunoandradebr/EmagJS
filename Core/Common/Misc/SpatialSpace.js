@@ -91,6 +91,13 @@ class SpatialSpace {
         this.tmpCollisionAreas = []
 
         /**
+         * Temporary array to be used to get grid areas
+         * 
+         * @type {array}
+         */
+        this.tmpGetAreaArray = []
+
+        /**
          * Temporary object to be used to hold object bounding box
          * 
          * @type {object}
@@ -201,6 +208,12 @@ class SpatialSpace {
 
         if (object.constructor.name == 'Shape') {
             objectStructure = object.getBoundingBox()
+        } else if (object.constructor.name == 'Circle') {
+            objectStructure = this.tmpObjectStructure
+            objectStructure.width = object.radius
+            objectStructure.height = object.radius
+            objectStructure.centerX = object.position.x
+            objectStructure.centerY = object.position.y
         } else {
             objectStructure = this.tmpObjectStructure
             objectStructure.width = object.width
@@ -323,17 +336,77 @@ class SpatialSpace {
     }
 
     /**
-     * Get area based on x and y position
+     * Get area based on x and y position with neighbor depth
      * 
      * @param {integer} x 
      * @param {integer} y
+     * @param {integer} depth 
      * 
      * @return {array}
      */
-    getArea(x, y) {
+    getArea(x, y, depth = 0) {
+
         let xIndex = x * this.iBlockWidth | 0
         let yIndex = y * this.iBlockHeight | 0
-        return this.areas[xIndex] && this.areas[xIndex][yIndex] ? this.areas[xIndex][yIndex] : []
+
+        // reset temporary array with grid areas
+        this.tmpGetAreaArray.length = 0
+
+        // TODO -- depth only working with 0 or 1, greater than 1 can't get diagonals
+
+        // get main area
+        if (this.areas[xIndex] && this.areas[xIndex][yIndex]) {
+            this.areas[xIndex][yIndex].map((object) => this.tmpGetAreaArray.push(object))
+        }
+
+        // if depth, consider neighbor areas
+        for (let i = 1; i <= depth; i++) {
+
+            //top area
+            if (this.areas[xIndex] && this.areas[xIndex][yIndex - i]) {
+                this.areas[xIndex][yIndex - i].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+            //top left area
+            if (this.areas[xIndex - i] && this.areas[xIndex - i][yIndex - i]) {
+                this.areas[xIndex - i][yIndex - i].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+            //top right area
+            if (this.areas[xIndex + i] && this.areas[xIndex + i][yIndex - i]) {
+                this.areas[xIndex + i][yIndex - i].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+            //left area
+            if (this.areas[xIndex - i] && this.areas[xIndex - i][yIndex]) {
+                this.areas[xIndex - i][yIndex].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+            //right area
+            if (this.areas[xIndex + i] && this.areas[xIndex + i][yIndex]) {
+                this.areas[xIndex + i][yIndex].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+            //bottom area
+            if (this.areas[xIndex] && this.areas[xIndex][yIndex + i]) {
+                this.areas[xIndex][yIndex + i].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+            //bottom left area
+            if (this.areas[xIndex - i] && this.areas[xIndex - i][yIndex + i]) {
+                this.areas[xIndex - i][yIndex + i].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+            //bottom right area
+            if (this.areas[xIndex + i] && this.areas[xIndex + i][yIndex + i]) {
+                this.areas[xIndex + i][yIndex + i].map((object) => this.tmpGetAreaArray.push(object))
+            }
+
+        }
+
+        // return grid areas
+        return this.tmpGetAreaArray
+
     }
 
     /**
