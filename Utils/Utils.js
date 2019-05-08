@@ -208,6 +208,20 @@ const random = (range, signed = true) => {
 }
 
 /**
+ * Pick a random value from parameters values
+ * 
+ * @global
+ * 
+ * @param  {...any} possibleValues 
+ * 
+ * @return {any}
+ */
+const randomPick = (...possibleValues) => {
+    let pick = Math.random() * possibleValues.length | 0
+    return possibleValues[pick]
+}
+
+/**
  * Creates a random array inside an area
  * 
  * @param {number} x 
