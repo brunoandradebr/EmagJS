@@ -231,7 +231,7 @@ class Scene {
             while (this.accumulatedTime >= this.dt) {
 
                 // scene loop callback - I'm multiplying by 50 to work with low numbers like gravity = 0.4
-                this.onLoop(this, this.dt * 0.05);
+                this.onLoop(this, this.dt * 0.05, time | 0);
 
                 this.accumulatedTime -= this.dt
             }
