@@ -66,7 +66,7 @@ class PreloadFile {
                     let request = new XMLHttpRequest();
 
                     // if loading sound file
-                    if (type == 'mp3' || type == 'WAV') {
+                    if (type == 'mp3' || type == 'WAV' || type == 'wav' || type == 'ogg' || type == 'OGG') {
                         request.responseType = 'arraybuffer';
                     }
 
@@ -170,7 +170,7 @@ class PreloadFile {
                                     checkCompletation(files, loaded, total);
                                 }
                                 break;
-                            case 'mp3': case 'wav':
+                            case 'mp3': case 'wav': case 'ogg':
 
                                 let arrayBuffer = e.target.response;
 
