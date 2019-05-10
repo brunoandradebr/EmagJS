@@ -77,6 +77,7 @@ preloadFileClassScript.onload = (e) => {
         { gamepad: root + 'Core/Input/Gamepad.js' },
         { keyboard: root + 'Core/Input/Keyboard.js' },
         { touch: root + 'Core/Input/Touch.js' },
+        { stick: root + 'Core/Input/Stick.js' },
         { button: root + 'Core/Input/Button.js' },
         { input: root + 'Core/Input/Input.js' },
         // COLLISION

@@ -45,6 +45,11 @@ class Touch {
             this.addButton(scene, 'D', scene.width - 37, 30, 32, 32)
         }
 
+        /**
+         * @type {EmagJS.Core.Input.Stick}
+         */
+        this.leftStick = new Stick()
+
     }
 
     /**
@@ -120,6 +125,11 @@ class Touch {
      * @return {void}
      */
     update() {
+
+        // if left stick is active, update
+        if (this.leftStick.active)
+            this.leftStick.update()
+
         for (let i in this.buttons) {
 
             let button = this.buttons[i]
@@ -200,6 +210,10 @@ class Touch {
      * @return {void}
      */
     draw(graphics) {
+
+        // if left stick is active, draw
+        if (this.leftStick.active)
+            this.leftStick.draw(graphics)
 
         for (let i in this.buttons) {
 
