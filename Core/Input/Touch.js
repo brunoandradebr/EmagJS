@@ -48,7 +48,7 @@ class Touch {
         /**
          * @type {EmagJS.Core.Input.Stick}
          */
-        this.leftStick = new Stick()
+        this.leftStick = new Stick(scene)
 
     }
 
