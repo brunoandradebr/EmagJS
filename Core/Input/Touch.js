@@ -101,15 +101,17 @@ class Touch {
     }
 
     /**
-     * Removes a button from buttons pool
+     * Removes buttons from buttons pool
      * 
-     * @param {string} name
+     * @param {string} buttonName
      * 
      * @return {void}
      */
-    removeButton(name) {
-        delete this.buttons[name]
-        this.buttons.length--
+    removeButton(...buttonName) {
+        buttonName.map((button) => {
+            delete this.buttons[button]
+            this.buttons.length--
+        })
     }
 
     /**
