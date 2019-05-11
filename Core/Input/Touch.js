@@ -49,6 +49,17 @@ class Touch {
          * @type {EmagJS.Core.Input.Stick}
          */
         this.leftStick = new Stick(scene)
+        this.leftStick.active = false
+        this.leftStick.area.center.update(scene.width * 0.25, scene.height * 0.5)
+        this.leftStick.area.width = scene.width * 0.5
+
+        /**
+         * @type {EmagJS.Core.Input.Stick}
+         */
+        this.rightStick = new Stick(scene)
+        this.rightStick.active = false
+        this.rightStick.area.center.update(scene.width * 0.75, scene.height * 0.5)
+        this.rightStick.area.width = scene.width * 0.5
 
     }
 
@@ -129,6 +140,10 @@ class Touch {
         // if left stick is active, update
         if (this.leftStick.active)
             this.leftStick.update()
+
+        // if right stick is active, update
+        if (this.rightStick.active)
+            this.rightStick.update()
 
         for (let i in this.buttons) {
 
@@ -214,6 +229,10 @@ class Touch {
         // if left stick is active, draw
         if (this.leftStick.active)
             this.leftStick.draw(graphics)
+
+        // if right stick is active, draw
+        if (this.rightStick.active)
+            this.rightStick.draw(graphics)
 
         for (let i in this.buttons) {
 
