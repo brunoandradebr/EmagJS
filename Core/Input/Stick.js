@@ -120,6 +120,13 @@ class Stick {
         this.direction = new Vector(0, 0)
 
         /**
+         * Flag to know if interacting with stick
+         * 
+         * @type {bool}
+         */
+        this.isDown = false
+
+        /**
          * Sprite to show stick area (debug only)
          * 
          * @type {EmagJS.Core.Render.Sprite}
@@ -198,6 +205,8 @@ class Stick {
                         this._initialPosition.y = y / this.scene.scale
                         // save touch id
                         this._activeTouchId = i
+                        // update isDown flag
+                        this.isDown = true
                     }
 
                     // update touched flag
@@ -208,7 +217,10 @@ class Stick {
         }
 
         // if there is no touch pointer
-        if (!touches.length) this._activeTouchId = null
+        if (!touches.length) {
+            this._activeTouchId = null
+            this.isDown = false
+        }
 
         // cache active touch
         let activeTouch = touches[this._activeTouchId]
@@ -253,6 +265,8 @@ class Stick {
         } else { // if touch id is not down anymore
             // reset touch id
             this._activeTouchId = null
+            // update isDown flag
+            this.isDown = false
             // update touched flag
             this._touched = false
             // update stick direction
