@@ -296,6 +296,21 @@ class Stick {
 
             // if touching
             if (this._activeTouchId) {
+
+                // radius fill color
+                this.radiusSprite.fillColor = this.radiusColor
+                // radius line color
+                this.radiusSprite.lineColor = this.radiusLineColor
+                // radius line width
+                this.radiusSprite.lineWidth = this.radiusLineWidth
+
+                // thumb fill color
+                this.thumbSprite.fillColor = this.thumbColor
+                // thumb line color
+                this.thumbSprite.lineColor = this.thumbLineColor
+                // thumb line width
+                this.thumbSprite.lineWidth = this.thumbLineWidth
+
                 // draw radius sprite
                 this.radiusSprite.draw(graphics)
                 // draw thumb sprite
