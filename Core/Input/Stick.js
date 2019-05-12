@@ -172,6 +172,9 @@ class Stick {
             if (typeof (touch) == 'number')
                 continue
 
+            // only accept touch start to activate stick area (click event like)
+            if (window.performance.now() - touch.startTimeStamp > 50) continue
+
             // offset touch position
             let x = touch.clientX - this.scene.offsetX
             let y = touch.clientY - this.scene.offsetY
@@ -203,6 +206,9 @@ class Stick {
                 }
             }
         }
+
+        // if there is no touch pointer
+        if (!touches.length) this._activeTouchId = null
 
         // cache active touch
         let activeTouch = touches[this._activeTouchId]

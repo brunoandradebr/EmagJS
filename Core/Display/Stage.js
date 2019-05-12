@@ -142,6 +142,9 @@ class Stage {
 
                 let touch = e.changedTouches[i]
 
+                // add touch start time information
+                touch.startTimeStamp = e.timeStamp
+
                 touches[touch.identifier] = touch
                 touches.length++
 
@@ -164,6 +167,9 @@ class Stage {
             for (let i = 0; i < e.changedTouches.length; i++) {
 
                 let touch = e.changedTouches[i]
+
+                // keep touch start time information
+                touch.startTimeStamp = touches[touch.identifier].startTimeStamp
 
                 touches[touch.identifier] = touch
 
