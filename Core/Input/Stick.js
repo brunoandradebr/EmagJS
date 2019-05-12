@@ -157,6 +157,12 @@ class Stick {
 
         if (!this.active) return false
 
+        // set stick area to scene scale factor
+        let areaX = this.area.center.x * this.scene.scale
+        let areaY = this.area.center.y * this.scene.scale
+        let areaWidth = this.area.width * this.scene.scale
+        let areaHeight = this.area.height * this.scene.scale
+
         // for each touch pointer
         for (let i in touches) {
 
@@ -179,14 +185,14 @@ class Stick {
             }
 
             // touching area
-            if (x > ((this.area.center.x - this.area.width * 0.5)) && x < ((this.area.center.x + this.area.width * 0.5))) {
-                if (y > ((this.area.center.y - this.area.height * 0.5)) && y < ((this.area.center.y + this.area.height * 0.5))) {
+            if (x > ((areaX - areaWidth * 0.5)) && x < ((areaX + areaWidth * 0.5))) {
+                if (y > ((areaY - areaHeight * 0.5)) && y < ((areaY + areaHeight * 0.5))) {
 
                     // if not toucing yet
                     if (!this._touched) {
                         // update initial position
-                        this._initialPosition.x = x
-                        this._initialPosition.y = y
+                        this._initialPosition.x = x / this.scene.scale
+                        this._initialPosition.y = y / this.scene.scale
                         // save touch id
                         this._activeTouchId = i
                     }
@@ -217,14 +223,14 @@ class Stick {
             }
 
             // calculate distance
-            let dx = activeTouchX - this._initialPosition.x
-            let dy = activeTouchY - this._initialPosition.y
+            let dx = activeTouchX - this._initialPosition.x * this.scene.scale
+            let dy = activeTouchY - this._initialPosition.y * this.scene.scale
 
             // if touch inside stick radius, free move
-            if (dx * dx + dy * dy < this.radius * this.radius) {
+            if ((dx * dx + dy * dy) / this.scene.scale < (this.radius * this.radius) * this.scene.scale) {
                 // update thumb sprite position
-                this.thumbSprite.position.x = activeTouchX
-                this.thumbSprite.position.y = activeTouchY
+                this.thumbSprite.position.x = activeTouchX / this.scene.scale
+                this.thumbSprite.position.y = activeTouchY / this.scene.scale
                 // update stick direction
                 this.direction.x = dx * this._iRadius
                 this.direction.y = dy * this._iRadius
