@@ -120,6 +120,13 @@ class Stick {
         this.direction = new Vector(0, 0)
 
         /**
+         * When stick is not down, reset direction (0, 0)
+         * 
+         * @type {EmagJS.Core.Math.Vector}
+         */
+        this.autoResetDirection = true
+
+        /**
          * Flag to know if interacting with stick
          * 
          * @type {bool}
@@ -258,8 +265,8 @@ class Stick {
                 this.thumbSprite.position.x = (this._initialPosition.x + ((dx * distanceNormalized) * this.radius))
                 this.thumbSprite.position.y = (this._initialPosition.y + ((dy * distanceNormalized) * this.radius))
                 // update stick direction
-                this.direction.x = Math.round(dx * distanceNormalized)
-                this.direction.y = Math.round(dy * distanceNormalized)
+                this.direction.x = dx * distanceNormalized
+                this.direction.y = dy * distanceNormalized
             }
 
         } else { // if touch id is not down anymore
@@ -269,9 +276,11 @@ class Stick {
             this.isDown = false
             // update touched flag
             this._touched = false
-            // update stick direction
-            this.direction.x = 0
-            this.direction.y = 0
+            // reset stick direction
+            if (this.autoResetDirection) {
+                this.direction.x = 0
+                this.direction.y = 0
+            }
         }
 
         // update debug sprite
