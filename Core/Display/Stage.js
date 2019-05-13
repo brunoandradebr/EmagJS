@@ -143,7 +143,7 @@ class Stage {
                 let touch = e.changedTouches[i]
 
                 // add touch start time information
-                touch.startTimeStamp = e.timeStamp
+                touch.startTimeStamp = window.performance.now()
 
                 touches[touch.identifier] = touch
                 touches.length++
