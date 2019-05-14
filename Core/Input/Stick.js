@@ -31,35 +31,35 @@ class Stick {
          * 
          * @type {string}
          */
-        this.radiusColor = 'rgba(0, 0, 0, 0.03)'
+        this.radiusColor = 'rgba(0, 0, 0, 0.3)'
 
         /**
          * Stick radius line color
          * 
          * @type {string}
          */
-        this.radiusLineColor = ''
+        this.radiusLineColor = 'rgba(0, 0, 0, 0.5)'
 
         /**
          * Stick radius line width
          * 
          * @type {number}
          */
-        this.radiusLineWidth = 0
+        this.radiusLineWidth = 1
 
         /**
          * Stick thumb color
          * 
          * @type {string}
          */
-        this.thumbColor = 'rgba(0, 0, 0, 0.05)'
+        this.thumbColor = 'rgba(255, 255, 255, 0.2)'
 
         /**
          * Stick thumb line color
          * 
          * @type {string}
          */
-        this.thumbLineColor = 'rgba(0, 0, 0, 0.05)'
+        this.thumbLineColor = 'rgba(0, 0, 0, 0.5)'
 
         /**
          * Stick thumb line width
@@ -289,6 +289,20 @@ class Stick {
         this.area._debug.width = this.area.width
         this.area._debug.height = this.area.height
 
+        // radius fill color
+        this.radiusSprite.fillColor = this.radiusColor
+        // radius line color
+        this.radiusSprite.lineColor = this.radiusLineColor
+        // radius line width
+        this.radiusSprite.lineWidth = this.radiusLineWidth
+
+        // thumb fill color
+        this.thumbSprite.fillColor = this.thumbColor
+        // thumb line color
+        this.thumbSprite.lineColor = this.thumbLineColor
+        // thumb line width
+        this.thumbSprite.lineWidth = this.thumbLineWidth
+
     }
 
     /**
@@ -319,21 +333,6 @@ class Stick {
 
             // if touching
             if (this._activeTouchId) {
-
-                // radius fill color
-                this.radiusSprite.fillColor = this.radiusColor
-                // radius line color
-                this.radiusSprite.lineColor = this.radiusLineColor
-                // radius line width
-                this.radiusSprite.lineWidth = this.radiusLineWidth
-
-                // thumb fill color
-                this.thumbSprite.fillColor = this.thumbColor
-                // thumb line color
-                this.thumbSprite.lineColor = this.thumbLineColor
-                // thumb line width
-                this.thumbSprite.lineWidth = this.thumbLineWidth
-
                 // draw radius sprite
                 this.radiusSprite.draw(graphics)
                 // draw thumb sprite
