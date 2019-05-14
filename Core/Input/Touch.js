@@ -52,6 +52,7 @@ class Touch {
         this.leftStick.active = false
         this.leftStick.area.center.update(scene.width * 0.25, scene.height * 0.5)
         this.leftStick.area.width = scene.width * 0.5
+        this.leftStick.area.height = scene.height
 
         /**
          * @type {EmagJS.Core.Input.Stick}
@@ -60,6 +61,7 @@ class Touch {
         this.rightStick.active = false
         this.rightStick.area.center.update(scene.width * 0.75, scene.height * 0.5)
         this.rightStick.area.width = scene.width * 0.5
+        this.rightStick.area.height = scene.height
 
     }
 
