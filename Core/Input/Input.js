@@ -12,8 +12,8 @@ class Input {
 
     constructor(keyboard, touch, gamepad) {
 
-        this.touch = touch
         this.keyboard = keyboard
+        this.touch = touch
         this.gamepad = gamepad
 
     }
@@ -39,7 +39,7 @@ class Input {
             return this.gamepad.holding(key)
         } else if (MOBILE && this.touch) {
             key = touchKey ? touchKey : key
-            return this.touch.buttons[key].holding
+            return this.touch.buttons[key] ? this.touch.buttons[key].holding : false
         } else {
             if (this.keyboard)
                 return this.keyboard.holding(this.keyboard[key])
@@ -68,7 +68,7 @@ class Input {
             return this.gamepad.pressed(key)
         } else if (MOBILE && this.touch) {
             key = touchKey ? touchKey : key
-            return this.touch.buttons[key].pressed
+            return this.touch.buttons[key] ? this.touch.buttons[key].pressed : false
         } else {
             if (this.keyboard)
                 return this.keyboard.pressed(this.keyboard[key])
@@ -97,7 +97,7 @@ class Input {
             return this.gamepad.doublePressed(key)
         } else if (MOBILE && this.touch) {
             key = touchKey ? touchKey : key
-            return this.touch.buttons[key].doublePressed
+            return this.touch.buttons[key] ? this.touch.buttons[key].doublePressed : false
         } else {
             if (this.keyboard)
                 return this.keyboard.doublePressed(this.keyboard[key])
