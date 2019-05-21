@@ -305,6 +305,33 @@ class CollisionHandler {
     }
 
     /**
+     * Sorts a list of objects by line axis
+     * 
+     * @param {EmagJS.Core.Render.Line} line 
+     * @param {<EmagJS.Core.Render.Sprite|Shape|Circle>} objects 
+     * 
+     * @return {void}
+     */
+    static lineSorting(line, objects) {
+
+        objects.sort((a, b) => {
+            // cache line plane
+            let linePlane = line.plane
+            // object A - A.position.subtract(line.start).dot(line.plane)
+            let adx = a.position.x - line.start.x
+            let ady = a.position.y - line.start.y
+            let adot = adx * linePlane.x + ady * linePlane.y
+            // object B - B.position.subtract(line.start).dot(line.plane)
+            let bdx = b.position.x - line.start.x
+            let bdy = b.position.y - line.start.y
+            let bdot = bdx * linePlane.x + bdy * linePlane.y
+            // sort
+            return adot - bdot
+        })
+
+    }
+
+    /**
      * Slice shape's polygon
      * 
      * @param {EmagJS.Core.Render.Line} line 
