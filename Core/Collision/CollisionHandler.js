@@ -658,6 +658,7 @@ class CollisionHandler {
                     if (minDistanceDot < minDistance) {
                         minDistance = minDistanceDot;
                         this.closestPoint = collisionPoint;
+                        this.normal = line.normal
                     }
 
                 }
