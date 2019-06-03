@@ -84,6 +84,7 @@ preloadFileClassScript.onload = (e) => {
         { collisionHandler: root + 'Core/Collision/CollisionHandler.js' },
         // PHYSICS
         { body: root + 'Core/Physics/Body.js' },
+        { IK: root + 'Core/Physics/IK.js' },
         // RESOURCE/IMAGE
         { background: root + 'Resource/Image/Background.png' },
         // RESOURCE/IMAGE FONT
