@@ -281,12 +281,6 @@ class IK {
         // for each node
         this.connections.map((connection) => {
 
-            // draw node - debug mode only
-            if (this.debug) {
-                connection.a.draw(graphics)
-                connection.b.draw(graphics)
-            }
-
             // move and stroke
             graphics.beginPath()
             graphics.moveTo(connection.a.body.position.x, connection.a.body.position.y)
@@ -294,6 +288,20 @@ class IK {
             graphics.stroke()
 
         })
+
+        // draw node - debug mode only
+        if (this.debug) {
+            this.nodes.map((node) => {
+
+                if (node.fixed) {
+                    node.lineColor = 'red'
+                } else {
+                    node.lineColor = 'black'
+                }
+
+                node.draw(graphics)
+            })
+        }
 
     }
 
