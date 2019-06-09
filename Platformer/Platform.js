@@ -17,8 +17,9 @@ class Platform extends Shape {
      * @param {number} width 
      * @param {number} height 
      * @param {number} angle 
+     * @param {object} type
      */
-    constructor(x, y, width, height, angle = 0) {
+    constructor(x, y, width, height, angle = 0, type = {}) {
         super(new Square, new Vector(x, y), width, height, 'rgba(0, 0, 255, 0.4)', 0)
 
         // to collision handler see platform as a shape
@@ -31,6 +32,11 @@ class Platform extends Shape {
         // calculates it's slope factor
         angle = angle * toRad
         this.slope = Math.tan(angle)
+
+        // defines platform types
+        let platformTypes = Object.assign({ across: true, sticky: false }, type)
+        this.across = platformTypes.across
+        this.sticky = platformTypes.sticky
 
         // pre calculates it's bounding box
         this.boundingBox = this.getBoundingBox()
@@ -83,12 +89,7 @@ class Platform extends Shape {
         }
 
         // creates a platform - TODO - object pool
-        let platform = new Platform(position.x, position.y, size, 1, angle)
-
-        // defines platform types
-        let platformTypes = Object.assign({ across: true, sticky: false }, type)
-        platform.across = platformTypes.across
-        platform.sticky = platformTypes.sticky
+        let platform = new Platform(position.x, position.y, size, 1, angle, type)
 
         // add created platform to platform array
         platforms.push(platform)
