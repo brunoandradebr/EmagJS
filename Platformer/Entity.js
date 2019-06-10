@@ -266,7 +266,7 @@ class Entity extends Sprite {
                     // remove y velocity
                     this.body.velocity.y = 0
                     // circle mask radius
-                    let maskRadius = this.collisionMask['foot'].radius
+                    let maskRadius = this.collisionMask['foot'].radius + this.collisionMask['foot'].offsetY
                     // x difference from start platform
                     let xDiff = this.body.position.x - currentPlatform.position.x
                     // correct height based on platform slope
