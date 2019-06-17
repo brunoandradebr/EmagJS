@@ -126,7 +126,7 @@ class PreloadFile {
 
                                 break;
 
-                            case 'ttf':
+                            case 'ttf': case 'woff':
 
                                 try {
                                     let font = new FontFace(key, `url(${path})`);
