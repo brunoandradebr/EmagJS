@@ -339,7 +339,8 @@ class Stage {
 
         setTimeout(() => {
             clearInterval(shake)
-            this.container.style = ""
+            this.container.style.left = "initial"
+            this.container.style.top = "initial"
         }, interval)
 
     }
