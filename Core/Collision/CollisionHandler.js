@@ -305,26 +305,42 @@ class CollisionHandler {
     }
 
     /**
-     * Sorts a list of objects by line axis
+     * Sorts a list of vectors or objects that have a position vector by line axis
      * 
      * @param {EmagJS.Core.Render.Line} line 
-     * @param {<EmagJS.Core.Render.Sprite|Shape|Circle>} objects 
+     * @param {<EmagJS.Core.Math.Vector | EmagJS.Core.Render.Sprite|Shape|Circle>} objects 
      * 
      * @return {void}
      */
     static lineSorting(line, objects) {
 
         objects.sort((a, b) => {
+
             // cache line plane
             let linePlane = line.plane
-            // object A - A.position.subtract(line.start).dot(line.plane)
-            let adx = a.position.x - line.start.x
-            let ady = a.position.y - line.start.y
+
+            // vector A or object A - A.position.subtract(line.start).dot(line.plane)
+            let adx, ady
+            if (a.position) {
+                adx = a.position.x - line.start.x
+                ady = a.position.y - line.start.y
+            } else {
+                adx = a.x - line.start.x
+                ady = a.y - line.start.y
+            }
             let adot = adx * linePlane.x + ady * linePlane.y
-            // object B - B.position.subtract(line.start).dot(line.plane)
-            let bdx = b.position.x - line.start.x
-            let bdy = b.position.y - line.start.y
+
+            // vector B or object B - B.position.subtract(line.start).dot(line.plane)
+            let bdx, bdy
+            if (b.position) {
+                bdx = b.position.x - line.start.x
+                bdy = b.position.y - line.start.y
+            } else {
+                bdx = b.x - line.start.x
+                bdy = b.y - line.start.y
+            }
             let bdot = bdx * linePlane.x + bdy * linePlane.y
+
             // sort
             return adot - bdot
         })
