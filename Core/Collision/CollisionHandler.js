@@ -348,67 +348,157 @@ class CollisionHandler {
     }
 
     /**
-     * Slice shape's polygon
+     * Slices a list of shapes
      * 
      * @param {EmagJS.Core.Render.Line} line 
      * @param {EmagJS.Core.Render.Shape} shape
+     * @param {bool} deepSlice
+     * @param {string} keep - which side to keep : left | right | both
      * 
      * @return {object<EmagJS.Core.Render.Shape>} 
      */
-    sliceShape(line, shape) {
+    sliceShape(line, listShape, deepSlice = true, keep = 'both') {
 
-        // save reference to this
-        let intersection = this
+        let collision = new CollisionHandler()
 
-        // check line with shape intersection
-        this.check(line, shape)
+        let newPieces = []
 
-        // if less than 2 points
-        if (intersection.points.length < 2)
-            return false
+        listShape.map((shape, i) => {
 
-        // intersection points
-        let intersectionPoint1 = intersection.points[0]
-        let intersectionPoint2 = intersection.points[1]
+            // if deep slice or unsliced shape
+            if (deepSlice || shape.newPiece == undefined) {
 
-        // left and right points
-        let leftPoints = []
-        let rightPoints = []
-        // shape points
-        let shapePoints = shape.getVertices()
+                // if line intersect shape
+                if (collision.check(line, shape)) {
 
-        // get left and right points
-        shapePoints.map((point) => {
+                    // if there are 2 intersection points
+                    if (collision.points.length > 1) {
 
-            // vector from line start to shape point
-            let lineStartToPoint = point.clone().subtract(line.start)
+                        // intersections points
+                        let p1 = collision.points[0]
+                        let p2 = collision.points[1]
 
-            // point is left from line
-            if (lineStartToPoint.cross(line.plane) > 0) {
-                leftPoints.push(point.subtract(shape.position))
-            } else {
-                // point is right from line
-                rightPoints.push(point.subtract(shape.position))
+                        // line plane
+                        let linePlane = line.plane
+
+                        // points on left side of line
+                        let leftPoints = []
+                        // left points centroid
+                        let leftPointsCentroid = new Vector()
+                        // points on right side of line
+                        let rightPoints = []
+                        // right points centroid
+                        let rightPointsCentroid = new Vector()
+
+                        // shape points
+                        shape.getVertices().map((point) => {
+
+                            // vector from line start to point
+                            let pointToLineStart = point.clone().subtract(line.start)
+
+                            // dot product from line start to point vector with line right normal
+                            // < 0 left from line
+                            // > 0 right from line
+                            let side = pointToLineStart.dot(linePlane.rightNormal)
+
+                            // left point
+                            if (side < 0) {
+                                // calculate left points centroid
+                                leftPointsCentroid.x += point.x
+                                leftPointsCentroid.y += point.y
+                                // add point to left list
+                                leftPoints.push(point)
+                            } else { // right points
+                                // calculate right points centroid
+                                rightPointsCentroid.x += point.x
+                                rightPointsCentroid.y += point.y
+                                // add point to right list
+                                rightPoints.push(point)
+                            }
+
+                        })
+
+                        // add intersection points to left centroid calculation
+                        leftPointsCentroid.x += p1.x
+                        leftPointsCentroid.y += p1.y
+                        leftPointsCentroid.x += p2.x
+                        leftPointsCentroid.y += p2.y
+                        // add intersection points to left points
+                        leftPoints.push(p1, p2)
+                        // divide by total left points
+                        leftPointsCentroid.x /= leftPoints.length
+                        leftPointsCentroid.y /= leftPoints.length
+
+                        // add intersection points to right centroid calculation
+                        rightPointsCentroid.x += p1.x
+                        rightPointsCentroid.y += p1.y
+                        rightPointsCentroid.x += p2.x
+                        rightPointsCentroid.y += p2.y
+                        // add intersection points to right points
+                        rightPoints.push(p1, p2)
+                        // divide by total right points
+                        rightPointsCentroid.x /= rightPoints.length
+                        rightPointsCentroid.y /= rightPoints.length
+
+                        // left shape new points
+                        let leftShapePoints = []
+                        leftPoints.map((point) => {
+                            // vector from left point to left centroid
+                            let newPoint = point.clone().subtract(leftPointsCentroid)
+                            // add new point to left shape points list
+                            leftShapePoints.push(newPoint)
+                        })
+
+                        // sort left shape points by angle
+                        leftShapePoints.sort((a, b) => a.angle - b.angle)
+
+                        // creates new shape object
+                        let leftShape = new Shape(new Polygon(leftShapePoints), leftPointsCentroid, 1, 1, shape.fillColor, shape.lineWidth, shape.lineColor)
+                        // left shape flags
+                        leftShape.newPiece = true
+                        leftShape.leftSide = true
+
+                        // right shape new points
+                        let rightShapePoints = []
+                        rightPoints.map((point) => {
+                            // vector from right point to right centroid
+                            let newPoint = point.clone().subtract(rightPointsCentroid)
+                            // add new point to right shape points list
+                            rightShapePoints.push(newPoint)
+                        })
+
+                        // sort right shape points by angle
+                        rightShapePoints.sort((a, b) => a.angle - b.angle)
+
+                        // creates new shape object
+                        let rightShape = new Shape(new Polygon(rightShapePoints), rightPointsCentroid, 1, 1, shape.fillColor, shape.lineWidth, shape.lineColor)
+                        // right shape flags
+                        rightShape.newPiece = true
+                        rightShape.rightSide = true
+
+                        // add left and right shape to new pieces list
+                        if (keep == 'both' || keep == 'left')
+                            newPieces.push(leftShape)
+                        if (keep == 'both' || keep == 'right')
+                            newPieces.push(rightShape)
+
+                        // add left shape to polygons list
+                        if (keep == 'both' || keep == 'left')
+                            listShape.push(leftShape)
+                        // add right shape to polygons list
+                        if (keep == 'both' || keep == 'right')
+                            listShape.push(rightShape)
+
+                        // flag sliced shape
+                        shape.sliced = true
+                        shape.newPiece = false
+
+                    }
+                }
             }
-
         })
 
-        // add intersection points
-        leftPoints.push(intersectionPoint1.clone().subtract(shape.position), intersectionPoint2.clone().subtract(shape.position))
-        rightPoints.push(intersectionPoint1.subtract(shape.position), intersectionPoint2.subtract(shape.position))
-
-        // sort points by angle
-        leftPoints.sort((a, b) => a.angle - b.angle)
-        rightPoints.sort((a, b) => a.angle - b.angle)
-
-        // create shapes
-        let shape1 = new Shape(new Polygon(leftPoints), shape.position.clone(), 1, 1, shape.fillColor, shape.lineWidth, shape.lineColor)
-        let shape2 = new Shape(new Polygon(rightPoints), shape.position.clone(), 1, 1, shape.fillColor, shape.lineWidth, shape.lineColor)
-
-        return {
-            leftShape: shape1,
-            rightShape: shape2
-        }
+        return newPieces.length ? newPieces : false
 
     }
 
