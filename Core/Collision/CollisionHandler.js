@@ -457,6 +457,7 @@ class CollisionHandler {
                         // left shape flags
                         leftShape.newPiece = true
                         leftShape.leftSide = true
+                        leftShape.originalShape = shape
 
                         // right shape new points
                         let rightShapePoints = []
@@ -475,6 +476,7 @@ class CollisionHandler {
                         // right shape flags
                         rightShape.newPiece = true
                         rightShape.rightSide = true
+                        rightShape.originalShape = shape
 
                         // add left and right shape to new pieces list
                         if (keep == 'both' || keep == 'left')
@@ -492,7 +494,7 @@ class CollisionHandler {
                         // flag sliced shape
                         shape.sliced = true
                         shape.newPiece = false
-
+                        
                     }
                 }
             }
