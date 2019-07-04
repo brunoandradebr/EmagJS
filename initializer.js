@@ -68,6 +68,7 @@ preloadFileClassScript.onload = (e) => {
         { frameRate: root + 'Core/Common/Misc/FrameRate.js' },
         { objectPool: root + 'Core/Common/Misc/ObjectPool.js' },
         { spatialSpace: root + 'Core/Common/Misc/SpatialSpace.js' },
+        { chaikin: root + 'Core/Common/Misc/Chaikin.js' },
         { timer: root + 'Core/Common/Misc/Timer.js' },
         { eventEmmiter: root + 'Core/Common/Misc/EventEmitter.js' },
         { dialogSystem: root + 'Core/Common/Misc/DialogSystem.js' },
