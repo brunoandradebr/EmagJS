@@ -94,8 +94,6 @@ class Button extends Sprite {
     /**
      * get touchdown - if touching the button area
      * 
-     * TODO - mouse
-     * 
      * @return {bool}
      */
     get touchdown() {
@@ -117,24 +115,47 @@ class Button extends Sprite {
         let buttonHeight = this.height * sceneScale
 
         // for each touch pointer
-        for (let i in touches) {
+        if (MOBILE) {
+            for (let i in touches) {
 
-            let touch = touches[i]
+                let touch = touches[i]
 
-            // touch is an object, so 'length' property is listed as well
-            if (typeof (touch) == 'number')
-                continue
+                // touch is an object, so 'length' property is listed as well
+                if (typeof (touch) == 'number')
+                    continue
+
+                // offset touch position
+                let x = touch.clientX - this.scene.offsetX
+                let y = touch.clientY - this.scene.offsetY
+
+                // adjusts if camera is moving
+                if (this.scene.camera) {
+                    if (this.scene.camera.x >= 0)
+                        x = touch.clientX - (this.scene.offsetX - this.scene.camera.x * this.scene.scale)
+                    if (this.scene.camera.y >= 0)
+                        y = touch.clientY - (this.scene.offsetY - this.scene.camera.y * this.scene.scale)
+                }
+
+                // touching button area
+                if (x > ((buttonX - buttonWidth * 0.5) - this.offsetLeft) && x < ((buttonX + buttonWidth * 0.5) + this.offsetRight)) {
+                    if (y > ((buttonY - buttonHeight * 0.5) - this.offsetTop) && y < ((buttonY + buttonHeight * 0.5) + this.offsetBottom)) {
+                        _pointerDown = true
+                    }
+                }
+
+            }
+        } else {
 
             // offset touch position
-            let x = touch.clientX - this.scene.offsetX
-            let y = touch.clientY - this.scene.offsetY
+            let x = mouse.x - this.scene.offsetX
+            let y = mouse.y - this.scene.offsetY
 
             // adjusts if camera is moving
             if (this.scene.camera) {
                 if (this.scene.camera.x >= 0)
-                    x = touch.clientX - (this.scene.offsetX - this.scene.camera.x * this.scene.scale)
+                    x = mouse.x - (this.scene.offsetX - this.scene.camera.x * this.scene.scale)
                 if (this.scene.camera.y >= 0)
-                    y = touch.clientY - (this.scene.offsetY - this.scene.camera.y * this.scene.scale)
+                    y = mouse.y - (this.scene.offsetY - this.scene.camera.y * this.scene.scale)
             }
 
             // touching button area

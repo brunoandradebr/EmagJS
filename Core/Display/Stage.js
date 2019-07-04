@@ -87,6 +87,9 @@ class Stage {
 
             e.preventDefault();
 
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+
             mousedown = true
 
         });
