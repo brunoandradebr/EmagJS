@@ -107,6 +107,10 @@ class CollisionHandler {
         if (AConstructor == 'Vector' && BConstructor == 'Shape')
             return this.pointToShapeCollision(A, B)
 
+        // collision between Point and Circle
+        if (AConstructor == 'Vector' && BConstructor == 'Circle')
+            return this.pointToCircleCollision(A, B)
+
         // collision between Circle and Line
         if (AConstructor == 'Circle' && BConstructor == 'Line')
             return this.circleToLineCollision(A, B)
@@ -494,7 +498,7 @@ class CollisionHandler {
                         // flag sliced shape
                         shape.sliced = true
                         shape.newPiece = false
-                        
+
                     }
                 }
             }
@@ -977,6 +981,27 @@ class CollisionHandler {
         this.points[0] = point
 
         return true
+    }
+
+    /**
+     * Checks if a point intersects a Circle
+     * 
+     * @param {EmagJS.Core.Math.Vector} A 
+     * @param {EmagJS.Core.Render.Circle} B
+     * 
+     * @return {bool} 
+     */
+    pointToCircleCollision(A = Vector, B = Circle) {
+
+        let dx = B.position.x - A.x
+        let dy = B.position.y - A.y
+
+        let distance = dx * dx + dy * dy
+
+        if (distance < B.radius * B.radius) return true
+
+        return false
+
     }
 
     /**
