@@ -59,16 +59,66 @@ class Keyboard {
          * @type {integer}
          */
         this.D = 68
-        
+
         /**
          * @type {integer}
          */
         this.W = 87
-        
+
         /**
          * @type {integer}
          */
         this.R = 82
+
+        /**
+         * @type {integer}
+         */
+        this.num0 = 48
+
+        /**
+         * @type {integer}
+         */
+        this.num1 = 49
+
+        /**
+         * @type {integer}
+         */
+        this.num2 = 50
+
+        /**
+         * @type {integer}
+         */
+        this.num3 = 51
+
+        /**
+         * @type {integer}
+         */
+        this.num4 = 52
+
+        /**
+         * @type {integer}
+         */
+        this.num5 = 53
+
+        /**
+         * @type {integer}
+         */
+        this.num6 = 54
+
+        /**
+         * @type {integer}
+         */
+        this.num7 = 55
+
+        /**
+         * @type {integer}
+         */
+        this.num8 = 56
+
+        /**
+         * @type {integer}
+         */
+        this.num9 = 57
 
         /**
          * keys pool
@@ -90,6 +140,16 @@ class Keyboard {
         this.addKey(this.D)
         this.addKey(this.W)
         this.addKey(this.R)
+        this.addKey(this.num0)
+        this.addKey(this.num1)
+        this.addKey(this.num2)
+        this.addKey(this.num3)
+        this.addKey(this.num4)
+        this.addKey(this.num5)
+        this.addKey(this.num6)
+        this.addKey(this.num7)
+        this.addKey(this.num8)
+        this.addKey(this.num9)
 
         // keydown listener
         window.addEventListener('keydown', (e) => {
