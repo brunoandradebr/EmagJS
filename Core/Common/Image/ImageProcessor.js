@@ -80,11 +80,11 @@ class ImageProcessor {
     modifyPixels() {
 
         // draw modified pixels to local graphics context
-        this.context.putImageData(this.imageData, 0, 0);
+        this.context.putImageData(this.imageData, 0, 0)
 
         // create a new image object with modified pixels
-        let newImage = new Image();
-        newImage.src = this.canvas.toDataURL('image/png');
+        let newImage = new Image()
+        newImage.src = this.canvas.toDataURL('image/png')
         newImage.width = this.width
         newImage.height = this.height
 
@@ -108,13 +108,16 @@ class ImageProcessor {
         // tint pixels
         for (let i = 0; i < this.imageArray.length; i += 4) {
 
-            let _r = this.imageArray[i + 0];
-            let _g = this.imageArray[i + 1];
-            let _b = this.imageArray[i + 2];
+            let _r = this.imageArray[i + 0]
+            let _g = this.imageArray[i + 1]
+            let _b = this.imageArray[i + 2]
+            let _a = this.imageArray[i + 3]
 
-            this.imageArray[i + 0] = r ? _r + r : _r;
-            this.imageArray[i + 1] = g ? _g + g : _g;
-            this.imageArray[i + 2] = b ? _b + b : _b;
+            if (_a == 0) continue
+
+            this.imageArray[i + 0] = r ? _r + r : _r
+            this.imageArray[i + 1] = g ? _g + g : _g
+            this.imageArray[i + 2] = b ? _b + b : _b
 
         }
 
@@ -142,9 +145,13 @@ class ImageProcessor {
         // tint pixels
         for (let i = 0; i < this.imageArray.length; i += 4) {
 
-            let imageR = this.imageArray[i + 0];
-            let imageG = this.imageArray[i + 1];
-            let imageB = this.imageArray[i + 2];
+            let imageR = this.imageArray[i + 0]
+            let imageG = this.imageArray[i + 1]
+            let imageB = this.imageArray[i + 2]
+            let imageA = this.imageArray[i + 3]
+
+            if (imageA == 0)
+                continue
 
             let redRange = imageR >= targetR - (255 * factor) && imageR <= targetR + (255 * factor)
             let greenRange = imageG >= targetG - (255 * factor) && imageG <= targetG + (255 * factor)
@@ -307,10 +314,10 @@ class ImageProcessor {
             for (let i = 0; i < originalImage.imageArray.length; i += 4) {
 
                 // each pixel component (rgba)
-                let imageR = originalImage.imageArray[i + 0];
-                let imageG = originalImage.imageArray[i + 1];
-                let imageB = originalImage.imageArray[i + 2];
-                let imageA = originalImage.imageArray[i + 3];
+                let imageR = originalImage.imageArray[i + 0]
+                let imageG = originalImage.imageArray[i + 1]
+                let imageB = originalImage.imageArray[i + 2]
+                let imageA = originalImage.imageArray[i + 3]
 
                 // transparent pixel
                 if (imageA == 0) continue
@@ -366,10 +373,10 @@ class ImageProcessor {
         for (let i = 0; i < this.imageArray.length; i += 4) {
 
             // each pixel component (rgba)
-            let imageR = this.imageArray[i + 0];
-            let imageG = this.imageArray[i + 1];
-            let imageB = this.imageArray[i + 2];
-            let imageA = this.imageArray[i + 3];
+            let imageR = this.imageArray[i + 0]
+            let imageG = this.imageArray[i + 1]
+            let imageB = this.imageArray[i + 2]
+            let imageA = this.imageArray[i + 3]
 
             // transparent pixel
             if (imageA == 0) continue
@@ -420,9 +427,9 @@ class ImageProcessor {
         for (let i = 0; i < this.imageArray.length; i += 4) {
 
             // each pixel component (rgba)
-            let imageR = this.imageArray[i + 0];
-            let imageG = this.imageArray[i + 1];
-            let imageB = this.imageArray[i + 2];
+            let imageR = this.imageArray[i + 0]
+            let imageG = this.imageArray[i + 1]
+            let imageB = this.imageArray[i + 2]
 
             r += imageR
             g += imageG
@@ -458,9 +465,12 @@ class ImageProcessor {
         // tint pixels
         for (let i = 0; i < this.imageArray.length; i += 4) {
 
-            let imageR = this.imageArray[i + 0];
-            let imageG = this.imageArray[i + 1];
-            let imageB = this.imageArray[i + 2];
+            let imageR = this.imageArray[i + 0]
+            let imageG = this.imageArray[i + 1]
+            let imageB = this.imageArray[i + 2]
+            let imageA = this.imageArray[i + 3]
+
+            if (imageA == 0) continue
 
             let redRange = imageR >= targetR - (255 * factor) && imageR <= targetR + (255 * factor)
             let greenRange = imageG >= targetG - (255 * factor) && imageG <= targetG + (255 * factor)
@@ -485,16 +495,18 @@ class ImageProcessor {
 
         for (let i = 0; i < this.imageArray.length; i += 4) {
 
-            let _r = this.imageArray[i + 0];
-            let _g = this.imageArray[i + 1];
-            let _b = this.imageArray[i + 2];
-            let _a = this.imageArray[i + 2];
+            let _r = this.imageArray[i + 0]
+            let _g = this.imageArray[i + 1]
+            let _b = this.imageArray[i + 2]
+            let _a = this.imageArray[i + 2]
 
-            let middle = (_r + _b + _g) / (3 * factor);
+            if (_a == 0) continue
 
-            this.imageArray[i + 0] = middle;
-            this.imageArray[i + 1] = middle;
-            this.imageArray[i + 2] = middle;
+            let middle = (_r + _b + _g) / (3 * factor)
+
+            this.imageArray[i + 0] = middle
+            this.imageArray[i + 1] = middle
+            this.imageArray[i + 2] = middle
 
         }
 
@@ -511,14 +523,16 @@ class ImageProcessor {
 
         for (var i = 0; i < this.imageArray.length; i += 4) {
 
-            var _r = this.imageArray[i + 0];
-            var _g = this.imageArray[i + 1];
-            var _b = this.imageArray[i + 2];
-            var _a = this.imageArray[i + 3];
+            var _r = this.imageArray[i + 0]
+            var _g = this.imageArray[i + 1]
+            var _b = this.imageArray[i + 2]
+            var _a = this.imageArray[i + 3]
 
-            this.imageArray[i + 0] = 255 - _r;
-            this.imageArray[i + 1] = 255 - _g;
-            this.imageArray[i + 2] = 255 - _b;
+            if (_a == 0) continue
+
+            this.imageArray[i + 0] = 255 - _r
+            this.imageArray[i + 1] = 255 - _g
+            this.imageArray[i + 2] = 255 - _b
 
         }
 
