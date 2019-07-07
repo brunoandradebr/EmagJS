@@ -179,7 +179,7 @@ class ImageProcessor {
      * 
      * @return {void} 
      */
-    stroke(r = 0, g = 0, b = 0, edge = false) {
+    stroke(r = 0, g = 0, b = 0, edge = false, size = 1) {
 
         // clear temporary index pixel array
         this.tmpPixels.length = 0
@@ -188,6 +188,9 @@ class ImageProcessor {
 
             // current pixel alpha channel
             let currentPixelA = this.imageArray[i + 3];
+
+            // pixel not filled, skip
+            if (currentPixelA == 0) continue
 
             // get nearest pixels
 
@@ -219,54 +222,49 @@ class ImageProcessor {
             let bottomRightPixel = (i + 4 * this.width) + 4
             let bottomRightPixelA = this.imageArray[bottomRightPixel + 3]
 
-            // if pixel is filled
-            if (currentPixelA) {
+            // get current pixel column index
+            let currentPixelColumn = i / 4 % this.width
 
-                // get current pixel column index
-                let currentPixelColumn = i / 4 % this.width
+            // get top pixel index
+            if (!topPixelA) {
+                this.tmpPixels[topPixel] = topPixel
+            }
 
-                // get top pixel index
-                if (!topPixelA) {
-                    this.tmpPixels[topPixel] = topPixel
+            // get left pixel index
+            if (!leftPixelA && currentPixelColumn != 0) {
+                this.tmpPixels[leftPixel] = leftPixel
+            }
+
+            // get right pixel index
+            if (!rightPixelA && currentPixelColumn < this.width - 1) {
+                this.tmpPixels[rightPixel] = rightPixel
+            }
+
+            // get bottom pixel index
+            if (!bottomPixelA) {
+                this.tmpPixels[bottomPixel] = bottomPixel
+            }
+
+            if (edge) {
+
+                // get top right pixel index
+                if (!topRightPixelA && currentPixelColumn < this.width - 1) {
+                    this.tmpPixels[topRightPixel] = topRightPixel
                 }
 
-                // get left pixel index
-                if (!leftPixelA && currentPixelColumn != 0) {
-                    this.tmpPixels[leftPixel] = leftPixel
+                // get top left pixel index
+                if (!topLeftPixelA && currentPixelColumn != 0) {
+                    this.tmpPixels[topLeftPixel] = topLeftPixel
                 }
 
-                // get right pixel index
-                if (!rightPixelA && currentPixelColumn < this.width - 1) {
-                    this.tmpPixels[rightPixel] = rightPixel
+                // get bottom right pixel index
+                if (!bottomRightPixelA && currentPixelColumn < this.width - 1) {
+                    this.tmpPixels[bottomRightPixel] = bottomRightPixel
                 }
 
-                // get bottom pixel index
-                if (!bottomPixelA) {
-                    this.tmpPixels[bottomPixel] = bottomPixel
-                }
-
-                if (edge) {
-
-                    // get top right pixel index
-                    if (!topRightPixelA && currentPixelColumn < this.width - 1) {
-                        this.tmpPixels[topRightPixel] = topRightPixel
-                    }
-
-                    // get top left pixel index
-                    if (!topLeftPixelA && currentPixelColumn != 0) {
-                        this.tmpPixels[topLeftPixel] = topLeftPixel
-                    }
-
-                    // get bottom right pixel index
-                    if (!bottomRightPixelA && currentPixelColumn < this.width - 1) {
-                        this.tmpPixels[bottomRightPixel] = bottomRightPixel
-                    }
-
-                    // get bottom left pixel index
-                    if (!bottomLeftPixelA && currentPixelColumn != 0) {
-                        this.tmpPixels[bottomLeftPixel] = bottomLeftPixel
-                    }
-
+                // get bottom left pixel index
+                if (!bottomLeftPixelA && currentPixelColumn != 0) {
+                    this.tmpPixels[bottomLeftPixel] = bottomLeftPixel
                 }
 
             }
