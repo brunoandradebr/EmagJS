@@ -179,7 +179,7 @@ class ImageProcessor {
      * 
      * @return {void} 
      */
-    stroke(r = 0, g = 0, b = 0, edge = false, size = 1) {
+    stroke(r = 0, g = 0, b = 0, size = 1, edge = false) {
 
         // clear temporary index pixel array
         this.tmpPixels.length = 0
@@ -227,44 +227,132 @@ class ImageProcessor {
 
             // get top pixel index
             if (!topPixelA) {
+
                 this.tmpPixels[topPixel] = topPixel
+
+                // if stroke size > 1, fill neighbor empty pixels
+                if (size > 1) {
+                    for (let j = 1; j < size; j++) {
+                        let neighbor = topPixel - (j * (4 * this.width))
+                        if (!this.imageArray[neighbor + 3])
+                            this.tmpPixels[neighbor] = 'debug'
+                    }
+                }
+
             }
 
             // get left pixel index
             if (!leftPixelA && currentPixelColumn != 0) {
+
                 this.tmpPixels[leftPixel] = leftPixel
+
+                // if stroke size > 1, fill neighbor empty pixels
+                if (size > 1) {
+                    for (let j = 1; j < size; j++) {
+                        let neighbor = leftPixel - (j * 4)
+                        if (!this.imageArray[neighbor + 3] && (((neighbor / 4) % this.width) < currentPixelColumn))
+                            this.tmpPixels[neighbor] = 'debug'
+                    }
+                }
+
             }
 
             // get right pixel index
             if (!rightPixelA && currentPixelColumn < this.width - 1) {
+
                 this.tmpPixels[rightPixel] = rightPixel
+
+                // if stroke size > 1, fill neighbor empty pixels
+                if (size > 1) {
+                    for (let j = 1; j < size; j++) {
+                        let neighbor = rightPixel + (j * 4)
+                        if (!this.imageArray[neighbor + 3] && (((neighbor / 4) % this.width) > currentPixelColumn))
+                            this.tmpPixels[neighbor] = 'debug'
+                    }
+                }
+
             }
 
             // get bottom pixel index
             if (!bottomPixelA) {
+
                 this.tmpPixels[bottomPixel] = bottomPixel
+
+                // if stroke size > 1, fill neighbor empty pixels
+                if (size > 1) {
+                    for (let j = 1; j < size; j++) {
+                        let neighbor = bottomPixel + (j * (4 * this.width))
+                        if (!this.imageArray[neighbor + 3])
+                            this.tmpPixels[neighbor] = 'debug'
+                    }
+                }
+
             }
 
             if (edge) {
 
                 // get top right pixel index
                 if (!topRightPixelA && currentPixelColumn < this.width - 1) {
+
                     this.tmpPixels[topRightPixel] = topRightPixel
+
+                    // if stroke size > 1, fill neighbor empty pixels
+                    if (size > 1) {
+                        for (let j = 1; j < size; j++) {
+                            let neighbor = topRightPixel - (j * ((4 * this.width) - 4))
+                            if (!this.imageArray[neighbor + 3] && (((neighbor / 4) % this.width) > currentPixelColumn))
+                                this.tmpPixels[neighbor] = 'debug'
+                        }
+                    }
+
                 }
 
                 // get top left pixel index
                 if (!topLeftPixelA && currentPixelColumn != 0) {
+
                     this.tmpPixels[topLeftPixel] = topLeftPixel
+
+                    // if stroke size > 1, fill neighbor empty pixels
+                    if (size > 1) {
+                        for (let j = 1; j < size; j++) {
+                            let neighbor = topLeftPixel - (j * ((4 * this.width) + 4))
+                            if (!this.imageArray[neighbor + 3] && (((neighbor / 4) % this.width) < currentPixelColumn))
+                                this.tmpPixels[neighbor] = 'debug'
+                        }
+                    }
+
                 }
 
                 // get bottom right pixel index
                 if (!bottomRightPixelA && currentPixelColumn < this.width - 1) {
+
                     this.tmpPixels[bottomRightPixel] = bottomRightPixel
+
+                    // if stroke size > 1, fill neighbor empty pixels
+                    if (size > 1) {
+                        for (let j = 1; j < size; j++) {
+                            let neighbor = bottomRightPixel + (j * ((4 * this.width) + 4))
+                            if (!this.imageArray[neighbor + 3] && (((neighbor / 4) % this.width) > currentPixelColumn))
+                                this.tmpPixels[neighbor] = 'debug'
+                        }
+                    }
+
                 }
 
                 // get bottom left pixel index
                 if (!bottomLeftPixelA && currentPixelColumn != 0) {
+
                     this.tmpPixels[bottomLeftPixel] = bottomLeftPixel
+
+                    // if stroke size > 1, fill neighbor empty pixels
+                    if (size > 1) {
+                        for (let j = 1; j < size; j++) {
+                            let neighbor = bottomLeftPixel + (j * ((4 * this.width) - 4))
+                            if (!this.imageArray[neighbor + 3] && (((neighbor / 4) % this.width) < currentPixelColumn))
+                                this.tmpPixels[neighbor] = 'debug'
+                        }
+                    }
+
                 }
 
             }
