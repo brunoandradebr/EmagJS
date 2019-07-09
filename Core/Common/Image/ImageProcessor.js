@@ -371,7 +371,22 @@ class ImageProcessor {
 
     }
 
-    mapPoints() {
+    /**
+     * Maps image pixels to points
+     * 
+     * Can filter pixel map by specific color
+     * If color not set, map outline pixels
+     * 
+     * Returns a pair of x and y coordinates, each pair is a point
+     *                 x  y   x   y   x   y   ...
+     * position, ex : [0, 0, 20, 30, 80, 100, ...]
+     * 
+     * @param {number} scale 
+     * @param {array<integer>} color
+     * 
+     * @return {array<number, number>} 
+     */
+    mapPixelToPoint(scale = 1, color = null) {
 
         // clear temporary index pixel array
         this.tmpPixels.length = 0
@@ -384,6 +399,18 @@ class ImageProcessor {
             // pixel not filled, skip
             if (currentPixelA == 0) continue
 
+            // if searching by color and current pixel color
+            // is different from search color, skip
+            if (color) {
+
+                let currentPixelR = this.imageArray[i + 0]
+                let currentPixelG = this.imageArray[i + 1]
+                let currentPixelB = this.imageArray[i + 2]
+
+                if (currentPixelR != color[0] || currentPixelG != color[1] || currentPixelB != color[2]) continue
+
+            }
+
             // top pixel
             let topPixelA = this.imageArray[i - 4 * this.width + 3]
             // left pixel
@@ -393,9 +420,88 @@ class ImageProcessor {
             // bottom pixel
             let bottomPixelA = this.imageArray[i + (4 * this.width) + 3]
 
+            // get outline points
             if (topPixelA == 0 || rightPixelA == 0 || bottomPixelA == 0 || leftPixelA == 0) {
 
-                this.tmpPixels[i] = [i % this.width, i / this.height]
+                let pixelIndex = i / 4
+                let x = (-this.width * scale * 0.5) + pixelIndex % this.width * scale
+                let y = (-this.height * scale * 0.5) + pixelIndex / this.width * scale
+
+                this.tmpPixels.push(x, y)
+
+            }
+
+            // if searching by color
+            if (color) {
+
+                // color to filter pixels
+                let r = color[0]
+                let g = color[1]
+                let b = color[2]
+
+                // top pixel rgb
+                let topPixelR = this.imageArray[i - 4 * this.width + 0]
+                let topPixelG = this.imageArray[i - 4 * this.width + 1]
+                let topPixelB = this.imageArray[i - 4 * this.width + 2]
+
+                // if top pixel is differente from filter color, get it
+                if (topPixelR != r || topPixelG != g || topPixelB != b) {
+
+                    let pixelIndex = i / 4
+                    let x = (-this.width * scale * 0.5) + pixelIndex % this.width * scale
+                    let y = (-this.height * scale * 0.5) + pixelIndex / this.width * scale
+
+                    this.tmpPixels.push(x, y)
+
+                }
+
+                // right pixel rgb
+                let rightPixelR = this.imageArray[i + 4 + 0]
+                let rightPixelG = this.imageArray[i + 4 + 1]
+                let rightPixelB = this.imageArray[i + 4 + 2]
+
+                // if right pixel is differente from filter color, get it
+                if (rightPixelR != r || rightPixelG != g || rightPixelB != b) {
+
+                    let pixelIndex = i / 4
+                    let x = (-this.width * scale * 0.5) + pixelIndex % this.width * scale
+                    let y = (-this.height * scale * 0.5) + pixelIndex / this.width * scale
+
+                    this.tmpPixels.push(x, y)
+
+                }
+
+                // bottom pixel rgb
+                let bottomPixelR = this.imageArray[i + (4 * this.width) + 0]
+                let bottomPixelG = this.imageArray[i + (4 * this.width) + 1]
+                let bottomPixelB = this.imageArray[i + (4 * this.width) + 2]
+
+                // if bottom pixel is differente from filter color, get it
+                if (bottomPixelR != r || bottomPixelG != g || bottomPixelB != b) {
+
+                    let pixelIndex = i / 4
+                    let x = (-this.width * scale * 0.5) + pixelIndex % this.width * scale
+                    let y = (-this.height * scale * 0.5) + pixelIndex / this.width * scale
+
+                    this.tmpPixels.push(x, y)
+
+                }
+
+                // left pixel rgb
+                let leftPixelR = this.imageArray[i - 4 + 0]
+                let leftPixelG = this.imageArray[i - 4 + 1]
+                let leftPixelB = this.imageArray[i - 4 + 2]
+
+                // if left pixel is differente from filter color, get it
+                if (leftPixelR != r || leftPixelG != g || leftPixelB != b) {
+
+                    let pixelIndex = i / 4
+                    let x = (-this.width * scale * 0.5) + pixelIndex % this.width * scale
+                    let y = (-this.height * scale * 0.5) + pixelIndex / this.width * scale
+
+                    this.tmpPixels.push(x, y)
+
+                }
 
             }
 
