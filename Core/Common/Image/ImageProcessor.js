@@ -371,6 +371,48 @@ class ImageProcessor {
 
     }
 
+    mapPoints() {
+
+        // clear temporary index pixel array
+        this.tmpPixels.length = 0
+
+        for (let i = 0; i < this.imageArray.length; i += 4) {
+
+            // current pixel alpha channel
+            let currentPixelA = this.imageArray[i + 3];
+
+            // pixel not filled, skip
+            if (currentPixelA == 0) continue
+
+            // top pixel
+            let topPixelA = this.imageArray[i - 4 * this.width + 3]
+            // left pixel
+            let leftPixelA = this.imageArray[i - 4 + 3]
+            // right pixel
+            let rightPixelA = this.imageArray[i + 4 + 3]
+            // bottom pixel
+            let bottomPixelA = this.imageArray[i + (4 * this.width) + 3]
+
+            if (topPixelA == 0 || rightPixelA == 0 || bottomPixelA == 0 || leftPixelA == 0) {
+
+                this.tmpPixels.push(i)
+
+            }
+
+        }
+
+        // fill all pixels found
+        this.tmpPixels.map((pixel, i) => {
+            this.imageArray[i + 0] = 255
+            this.imageArray[i + 1] = 0
+            this.imageArray[i + 2] = 0
+            this.imageArray[i + 3] = 255
+        })
+
+        return this.modifyPixels()
+
+    }
+
     /**
      * Creates shades image based on colors array
      * 
