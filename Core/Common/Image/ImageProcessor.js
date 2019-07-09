@@ -395,21 +395,13 @@ class ImageProcessor {
 
             if (topPixelA == 0 || rightPixelA == 0 || bottomPixelA == 0 || leftPixelA == 0) {
 
-                this.tmpPixels.push(i)
+                this.tmpPixels[i] = [i % this.width, i / this.height]
 
             }
 
         }
 
-        // fill all pixels found
-        this.tmpPixels.map((pixel, i) => {
-            this.imageArray[i + 0] = 255
-            this.imageArray[i + 1] = 0
-            this.imageArray[i + 2] = 0
-            this.imageArray[i + 3] = 255
-        })
-
-        return this.modifyPixels()
+        return this.tmpPixels
 
     }
 
