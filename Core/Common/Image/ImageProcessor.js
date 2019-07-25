@@ -431,7 +431,7 @@ class ImageProcessor {
                     let x = (-this.width * scale * 0.5) + pixelIndex % this.width * scale
                     let y = (-this.height * scale * 0.5) + pixelIndex / this.width * scale
 
-                    this.tmpPixels.push(x, y)
+                    this.tmpPixels.push(x | 0, y | 0)
 
                 }
 
