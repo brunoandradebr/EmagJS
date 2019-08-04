@@ -54,6 +54,8 @@ class IK {
             // physic body
             node.body = new Body(node)
 
+            node.index = i
+
             this.nodes.push(node)
         }
 
