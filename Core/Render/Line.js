@@ -86,7 +86,7 @@ class Line {
      * 
      * @return {EmagJS.Core.Render.Line} 
      */
-    static fromAngle(angle = 0, length = 50, start = new Vector()) {
+    static fromAngle(angle = 0, length = 50, start = new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y)) {
 
         let end = start.clone().add(Vector.fromAngle(angle, length));
 
