@@ -41,7 +41,7 @@ class Touch {
             this.addButton(scene, 'RIGHT', 75, scene.height - 28, 32, 32, { top: 80, bottom: 80, right: 80 })
             this.addButton(scene, 'A', scene.width - 75, scene.height - 28, 32, 32, { top: 80, bottom: 80, left: 80 })
             this.addButton(scene, 'B', scene.width - 37, scene.height - 28, 32, 32, { top: 80, bottom: 80, right: 80 })
-            this.addButton(scene, 'C', scene.width - 37, 80, 32, 32)
+            this.addButton(scene, 'C', scene.width - 37, scene.height - 28 * 2 - 10, 32, 32)
             this.addButton(scene, 'D', scene.width - 37, 30, 32, 32)
         }
 
