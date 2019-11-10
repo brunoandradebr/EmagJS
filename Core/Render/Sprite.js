@@ -128,6 +128,11 @@ class Sprite {
         this.animationFPS = 0
 
         /**
+         * @type {number}
+         */
+        this.animationSpeedScale = 1
+
+        /**
          * @type {bool}
          */
         this.animationPaused = false;
@@ -237,30 +242,35 @@ class Sprite {
         this.animationElapsedTime += dt * 0.001
         this.animationStartTime = window.performance.now()
 
-        // animation tick
-        if (this.animationElapsedTime >= this.animationFPS) {
+        let animationSpeedScale = this.animationSpeedScale != 1 ? 10 - this.animationSpeedScale * 10 : 1
 
-            // playing
-            if (this.currentFrame < this.currentAnimation.length - 1) {
-                this.animationElapsedTime = 0
-                this.currentFrame++
-            } else {
-                // completed animation
-                if (this.currentAnimation.repeate > 1)
-                    this.currentFrame = 0
+        if (animationSpeedScale != 10) {
 
-                this.animationElapsedTime = 0
-                this.currentAnimationLoopCount++
+            // animation tick
+            if (this.animationElapsedTime >= this.animationFPS * (animationSpeedScale)) {
+
+                // playing
+                if (this.currentFrame < this.currentAnimation.length - 1) {
+                    this.animationElapsedTime = 0
+                    this.currentFrame++
+                } else {
+                    // completed animation
+                    if (this.currentAnimation.repeate > 1)
+                        this.currentFrame = 0
+
+                    this.animationElapsedTime = 0
+                    this.currentAnimationLoopCount++
+
+                }
+
+                if (this.currentFrame == this.animations[this.currentAnimation.label].length - 1) {
+                    this.currentAnimation.lastFrame = true
+                } else {
+                    this.currentAnimation.lastFrame = false
+                }
+
 
             }
-
-            if (this.currentFrame == this.animations[this.currentAnimation.label].length - 1) {
-                this.currentAnimation.lastFrame = true
-            } else {
-                this.currentAnimation.lastFrame = false
-            }
-
-
         }
 
     }
