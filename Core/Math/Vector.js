@@ -336,7 +336,8 @@ class Vector {
      * @return {EmagJS.Core.Math.Vector}
      */
     get normalize() {
-        return this.multiplyScalar(1 / this.length);
+        let l = this.length ? this.length : 1
+        return this.multiplyScalar(1 / l);
     }
 
     /**
