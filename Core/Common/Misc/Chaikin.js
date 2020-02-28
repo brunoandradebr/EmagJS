@@ -46,6 +46,11 @@ class Chaikin {
         this.points = null
 
         /**
+         * Curve temporary lines
+         */
+        this.tmp_lines = null
+
+        /**
          * @type {string}
          */
         this.lineColor = 'lightgreen'
@@ -105,6 +110,36 @@ class Chaikin {
             this.points = nPoints
 
         }
+
+    }
+
+    get lines() {
+
+        if (this.tmp_lines === null) {
+            this.tmp_lines = new Array(this.points.length - 1)
+            for (let i = 0; i < this.tmp_lines.length; i++) {
+                this.tmp_lines[i] = new Line()
+            }
+        }
+
+        let points = this.points
+        let length = points.length
+
+        for (let i = 0; i < length; i++) {
+
+            if (!points[i + 1]) continue
+
+            let p1 = points[i]
+            let p2 = points[i + 1]
+
+            this.tmp_lines[i].start.x = p1.x
+            this.tmp_lines[i].start.y = p1.y
+            this.tmp_lines[i].end.x = p2.x
+            this.tmp_lines[i].end.y = p2.y
+
+        }
+
+        return this.tmp_lines
 
     }
 
