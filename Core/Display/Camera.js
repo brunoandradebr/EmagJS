@@ -113,10 +113,14 @@ class Camera {
      * Fixes a object inside camera
      * 
      * @param {object} object 
+     * @param {number} x - x position to fix inside camera view
+     * @param {number} y - y position to fix inside camera view
      * 
      * @return {void}
      */
-    fix(object) {
+    fix(object, x = 0, y = 0) {
+        object.position.x = x
+        object.position.y = y
         if (this.x > 0) object.position.x += this.x
         if (this.y > 0) object.position.y += this.y
     }
