@@ -54,11 +54,11 @@ class CollisionHandler {
      * 
      * @param {*} A           - Any interactive object
      * @param {*} B           - Any interactive object
-     * @param {object} offset - An object with offset information { x: 0, y: 0 }
+     * @param {any} collisionSettings - Extra information to collision check method
      * 
      * @return {*}
      */
-    check(A, B, offset) {
+    check(A, B, collisionSettings) {
 
         // clear collision manifold
         this.points.length = 0;
@@ -81,7 +81,7 @@ class CollisionHandler {
 
         // collision between Lines
         if (AConstructor == 'Line' && BConstructor == 'Line')
-            return this.lineToLineCollision(A, B, offset)
+            return this.lineToLineCollision(A, B, collisionSettings)
 
         // collision between Line and Shape
         if (AConstructor == 'Line' && BConstructor == 'Shape')
@@ -89,7 +89,7 @@ class CollisionHandler {
 
         // collision between bounding box
         if (AConstructor == 'Object' && BConstructor == 'Object')
-            return this.boundingBoxToBoundingBoxCollision(A, B, offset)
+            return this.boundingBoxToBoundingBoxCollision(A, B, collisionSettings)
 
         // collision between Circles
         if (AConstructor == 'Circle' && BConstructor == 'Circle')
@@ -97,7 +97,7 @@ class CollisionHandler {
 
         // collision between Circle and screen boundary
         if (AConstructor == 'Circle' && B == 'screen')
-            return this.circleToScreenCollision(A, offset)
+            return this.circleToScreenCollision(A, collisionSettings)
 
         // collision between Circle and Shape
         if (AConstructor == 'Circle' && BConstructor == 'Shape')
@@ -113,7 +113,7 @@ class CollisionHandler {
 
         // collision between Circle and Line
         if (AConstructor == 'Circle' && BConstructor == 'Line')
-            return this.circleToLineCollision(A, B)
+            return this.circleToLineCollision(A, B, collisionSettings)
 
     }
 
@@ -869,10 +869,11 @@ class CollisionHandler {
      * 
      * @param {EmagJS.Core.Render.Circle} A
      * @param {EmagJS.Core.Render.Line} B
+     * @param {bool} checkLineEdges
      * 
      * @return {bool}
      */
-    circleToLineCollision(A = Circle, B = Line) {
+    circleToLineCollision(A = Circle, B = Line, checkLineEdges = true) {
 
         let linePlane = B.plane
         let lineNormal = linePlane.normalize.leftNormal
@@ -889,28 +890,36 @@ class CollisionHandler {
         // circle is colliding with line edges
         if (isVoronoiRegion) {
 
-            let closestPoint
+            if (checkLineEdges) {
 
-            // circle is near line start point
-            if (projection < 0) {
-                closestPoint = B.start
+                let closestPoint
+
+                // circle is near line start point
+                if (projection < 0) {
+                    closestPoint = B.start
+                } else {
+                    closestPoint = B.end
+                }
+
+                let distanceToCenter = A.position.clone().subtract(closestPoint)
+
+                let isColliding = distanceToCenter.lengthSquared < A.radius * A.radius
+
+                if (isColliding) {
+                    this.points[0] = closestPoint
+                    this.normal = distanceToCenter.clone().normalize
+                    this.overlap = A.radius - distanceToCenter.length
+                    this.mtv.x = this.normal.x * this.overlap
+                    this.mtv.y = this.normal.y * this.overlap
+                }
+
+                return isColliding
+
             } else {
-                closestPoint = B.end
+
+                return false
+
             }
-
-            let distanceToCenter = A.position.clone().subtract(closestPoint)
-
-            let isColliding = distanceToCenter.lengthSquared < A.radius * A.radius
-
-            if (isColliding) {
-                this.points[0] = closestPoint
-                this.normal = distanceToCenter.clone().normalize
-                this.overlap = A.radius - distanceToCenter.length
-                this.mtv.x = this.normal.x * this.overlap
-                this.mtv.y = this.normal.y * this.overlap
-            }
-
-            return isColliding
 
         } else {
 
