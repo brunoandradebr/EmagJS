@@ -54,6 +54,8 @@ class IK {
             // physic body
             node.body = new Body(node)
 
+            node.body.friction = .99
+
             node.index = i
 
             this.nodes.push(node)
@@ -230,7 +232,7 @@ class IK {
                 node.body.update(dt)
 
             // apply friction to nodes
-            node.body.velocity.multiplyScalar(.99)
+            node.body.velocity.multiplyScalar(node.body.friction)
 
             // constraint screen edges - TODO - pass to collision handler
             if (node.body.position.x > DEVICE_WIDTH - node.radius) {
