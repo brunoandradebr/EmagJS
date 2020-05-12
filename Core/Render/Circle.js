@@ -29,6 +29,18 @@ class Circle {
         this.radius = radius
 
         /**
+         * @type {number}
+         */
+        this.angle = 0
+
+        /**
+         * transformation matrix
+         * 
+         * @type {EmagJS.Core.Math.Matrix}
+         */
+        this.matrix = new Matrix()
+
+        /**
          * @type {string}
          */
         this.fillColor = fillColor
@@ -126,9 +138,15 @@ class Circle {
             graphics.shadowOffsetY = this.shadowOffsetY
         }
 
+        // transformation matrix
+        let m = this.matrix.m
+        graphics.transform(m[0][0], m[0][1], m[1][0], m[1][1], this.position.x, this.position.y)
+
         // draw circle
         graphics.beginPath()
-        graphics.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+        graphics.arc(0, 0, this.radius, 0, Math.PI * 2)
+        graphics.moveTo(0, 0)
+        graphics.lineTo(this.radius, 0)
         graphics.closePath()
 
         // fill circle
