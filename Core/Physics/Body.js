@@ -57,7 +57,7 @@ class Body {
     /**
      * @type {number}
      */
-    this.friction = .99
+    this.friction = 1
 
     /**
      * @type {number}
