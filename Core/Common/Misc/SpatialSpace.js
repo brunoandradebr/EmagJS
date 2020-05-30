@@ -593,7 +593,7 @@ class SpatialSpace {
 
                 // reset initial block line color
                 this.debugBlocks.map((debugBlock) => {
-                    debugBlock.lineColor = 'rgba(0,120,255,0.2)'
+                    debugBlock.lineColor = 'rgba(0,255,155,0.7)'
                 })
 
                 // highlight colliding areas
