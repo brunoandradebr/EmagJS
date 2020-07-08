@@ -72,6 +72,7 @@ preloadFileClassScript.onload = (e) => {
         { timer: root + 'Core/Common/Misc/Timer.js' },
         { eventEmmiter: root + 'Core/Common/Misc/EventEmitter.js' },
         { dialogSystem: root + 'Core/Common/Misc/DialogSystem.js' },
+        { particleSystem: root + 'Core/Common/Misc/ParticleSystem.js' },
         // SOUND
         { soundFx: root + 'Core/Sound/SoundFx.js' },
         // INPUT
