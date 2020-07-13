@@ -1,33 +1,41 @@
 class ParticleSystem {
 
-    constructor() {
+    constructor(particleDefinition) {
+
+        this.particleDefinition = particleDefinition
 
         this.particles = []
 
         this.externalForces = []
 
-        this.timer = new Timer(300)
+        this.timer = new Timer(100)
 
         this.particlePool = new ObjectPool(
             () => {
-                const particle = new Sprite(new Vector(0, 0), 2, 2, 'orange', 0)
+                const particle = new Sprite(
+                    this.particleDefinition.position.clone(),
+                    this.particleDefinition.width,
+                    this.particleDefinition.height,
+                    this.particleDefinition.fillColor,
+                    this.particleDefinition.lineWidth,
+                    this.particleDefinition.lineColor
+                )
+                particle.image = this.particleDefinition.image
                 particle.body = new Body(particle)
-                particle.compositeOperation = 'lighter'
-                particle.shadowBlur = 2
-                particle.shadowColor = 'red'
+                particle.compositeOperation = this.particleDefinition.compositeOperation || 'lighter'
+                particle.shadowBlur = this.particleDefinition.shadowBlur || 0
+                particle.shadowColor = this.particleDefinition.shadowColor || 'transparent'
                 return particle
             },
             (particle) => {
-                const size = 10
-                particle.width = particle.height = size
-                const x = DEVICE_CENTER_X + random(0)
-                const y = DEVICE_CENTER_Y + random(0)
+                const x = this.particleDefinition.position.x + random(0)
+                const y = this.particleDefinition.position.y + random(0)
                 particle.position.update(x, y)
                 particle.body.position.update(x, y)
-                particle.body.velocity.update(0, -10)
-                particle.body.mass = 1
-                particle.lifeSpan = 1
-                particle.lifeFade = .018
+                particle.body.velocity.update(0, -8)
+                particle.body.mass = this.particleDefinition.mass || 1
+                particle.lifeSpan = this.particleDefinition.lifeSpan || 1
+                particle.lifeFade = this.particleDefinition.lifeFade || .018
                 return particle
             }
         )
