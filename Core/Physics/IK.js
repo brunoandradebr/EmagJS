@@ -238,29 +238,29 @@ class IK {
             if (node.body.position.x > DEVICE_WIDTH - node.radius) {
                 if (node.body.velocity.x > 0) {
                     node.body.position.x = DEVICE_WIDTH - node.radius
-                    node.body.velocity.x *= -0.5
-                    node.body.velocity.y *= -0.5
+                    node.body.velocity.x *= -node.body.bounce
+                    node.body.velocity.y *= -node.body.bounce
                 }
             }
             if (node.body.position.x < node.radius) {
                 if (node.body.velocity.x < 0) {
                     node.body.position.x = node.radius
-                    node.body.velocity.x *= -0.5
-                    node.body.velocity.y *= -0.5
+                    node.body.velocity.x *= -node.body.bounce
+                    node.body.velocity.y *= -node.body.bounce
                 }
             }
             if (node.body.position.y > DEVICE_HEIGHT - node.radius) {
                 if (node.body.velocity.y > 0) {
                     node.body.position.y = DEVICE_HEIGHT - node.radius
-                    node.body.velocity.y *= -0.5
-                    node.body.velocity.x *= -0.5
+                    node.body.velocity.y *= -node.body.bounce
+                    node.body.velocity.x *= -node.body.bounce
                 }
             }
             if (node.body.position.y < node.radius) {
                 if (node.body.velocity.y < 0) {
                     node.body.position.y = node.radius
-                    node.body.velocity.y *= -0.5
-                    node.body.velocity.x *= -0.5
+                    node.body.velocity.y *= -node.body.bounce
+                    node.body.velocity.x *= -node.body.bounce
                 }
             }
 
