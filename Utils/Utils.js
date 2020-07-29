@@ -242,6 +242,21 @@ const randomInArea = (x, y, width, height = width) => {
 
 }
 
+const lerp = (min, max, t) => {
+
+    if (min.constructor.name === 'Array' && max.constructor.name === 'Array') {
+        const newArray = []
+
+        min.map((minArr, i) => {
+            newArray[i] = min[i] + ((max[i] - min[i]) * t)
+        })
+
+        return newArray
+    }
+
+    return min + ((max - min) * t)
+}
+
 /**
  * Converts hex color to rgb
  * 
