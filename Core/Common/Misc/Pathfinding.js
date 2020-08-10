@@ -1,3 +1,7 @@
+/**
+ * @author Bruno Andrade <bruno.faria.andrade@gmail.com>
+ */
+
 class Pathfinding {
 
     constructor(graph = new Graph) {
