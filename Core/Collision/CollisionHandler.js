@@ -739,13 +739,13 @@ class CollisionHandler {
 
         let f = s1 / s2;
 
-        if (f > 0 && f <= 1 - offset) {
+        if (f > 0 && f <= 1) {
 
             let collisionPoint = A.start.clone().add(A.plane.clone().multiplyScalar(f));
 
             let dot = collisionPoint.clone().subtract(B.start).dot(B.plane);
 
-            if (dot >= 0 && dot <= B.plane.lengthSquared) {
+            if (dot >= offset && dot <= B.plane.lengthSquared - offset) {
                 this.points[0] = collisionPoint;
                 return true;
             }
