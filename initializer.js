@@ -69,6 +69,8 @@ preloadFileClassScript.onload = (e) => {
         { objectPool: root + 'Core/Common/Misc/ObjectPool.js' },
         { spatialSpace: root + 'Core/Common/Misc/SpatialSpace.js' },
         { chaikin: root + 'Core/Common/Misc/Chaikin.js' },
+        { graph: root + 'Core/Common/Misc/Graph.js' },
+        { pathfinding: root + 'Core/Common/Misc/Pathfinding.js' },
         { timer: root + 'Core/Common/Misc/Timer.js' },
         { eventEmmiter: root + 'Core/Common/Misc/EventEmitter.js' },
         { dialogSystem: root + 'Core/Common/Misc/DialogSystem.js' },
