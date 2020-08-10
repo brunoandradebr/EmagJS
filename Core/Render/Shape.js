@@ -197,7 +197,7 @@ class Shape {
      * 
      * @return {bool} 
      */
-    contains(point = Vector) {
+    contains(point = Vector, threshold = -0.3) {
 
         let lines = this.getLines()
         let lineLenght = lines.length
@@ -209,7 +209,7 @@ class Shape {
             let aux = point.clone().subtract(line.start)
             let dot = aux.dot(line.normal)
 
-            if (dot >= 0)
+            if (dot >= threshold)
                 return false
 
         }
