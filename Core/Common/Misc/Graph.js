@@ -66,6 +66,10 @@ class Graph {
         })
     }
 
+    getNode(id) {
+        return this.nodes.filter(node => node.id === id)[0]
+    }
+
     fromPolygon(polygons, offset = 0) {
 
         this.polygons = polygons
