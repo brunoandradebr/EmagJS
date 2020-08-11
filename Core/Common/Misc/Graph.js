@@ -9,6 +9,8 @@ class Graph {
         this.collision = new CollisionHandler()
 
         this.nodes = []
+        this.polygons = []
+        this.offset = 0
 
         this.tmpLines = []
         this.tmpPoints = []
@@ -64,17 +66,43 @@ class Graph {
         })
     }
 
-    fromPolygon(polygons) {
+    fromPolygon(polygons, offset = 0) {
+
+        this.polygons = polygons
+
+        if (offset > 0) {
+
+            this.offset = offset
+
+            const modifiedPolygons = []
+
+            polygons.map((polygon) => {
+                const clonedPoints = polygon.polygon.points.slice().map((point) => point)
+                const clone = new Shape(
+                    new Polygon(clonedPoints),
+                    polygon.position.clone(),
+                    polygon.width + this.offset,
+                    polygon.height + this.offset,
+                    'rgba(100, 80, 255, 0.05)',
+                    2,
+                    'rgba(100, 80, 255, 0.08)'
+                )
+                modifiedPolygons.push(clone)
+            })
+
+            this.polygons = modifiedPolygons
+
+        }
 
         this.tmpLines.length = 0
-        polygons.map((polygon) => {
+        this.polygons.map((polygon) => {
             polygon.getLines().map((line) => {
                 this.tmpLines.push(line)
             })
         })
 
         this.tmpPoints.length = 0
-        polygons.map((polygon) => {
+        this.polygons.map((polygon) => {
             polygon.getVertices().map((point) => {
                 this.tmpPoints.push(point)
             })
@@ -98,7 +126,7 @@ class Graph {
                 this.tmpLine.end = pointB
 
                 let isValid = true
-                polygons.map((polygon) => {
+                this.polygons.map((polygon) => {
                     if (polygon.contains(this.tmpLine.center)) {
                         isValid = false
                     }
@@ -124,6 +152,9 @@ class Graph {
 
     draw(graphics) {
 
+        if (this.polygons)
+            this.polygons.map((polygon) => polygon.draw(graphics))
+
         this.nodes.map((node) => {
 
             graphics.beginPath()
@@ -141,7 +172,7 @@ class Graph {
 
             // draw node id
             graphics.fillStyle = node.id === 'start' ? 'royalblue' : node.id === 'end' ? 'orange' : 'rgba(0, 0, 0, 0.8)'
-            graphics.arc(node.position.x, node.position.y, 8, 0, 2 * Math.PI)
+            graphics.arc(node.position.x, node.position.y, (node.id === 'start' || node.id === 'end') && (this.offset && this.offset * 0.5 >= 10) ? this.offset * 0.5 : 10, 0, 2 * Math.PI)
             graphics.fill()
             const width = graphics.measureText(node.id).width
             graphics.fillStyle = 'black'

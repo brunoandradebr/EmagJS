@@ -36,6 +36,21 @@ class Pathfinding {
         let unvisited = [this._getNode(start, graph)]
         const endNode = this._getNode(end, graph)
 
+        // if start or end node are inside graph polygons
+        if (graph.polygons.length) {
+
+            let notReachable = false
+
+            graph.polygons.map((polygon) => {
+                if (polygon.contains(unvisited[0].position, .1) || polygon.contains(endNode.position, .1))
+                    notReachable = true
+            })
+
+            if (notReachable)
+                return this.path = []
+
+        }
+
         unvisited[0].g = 0
 
         while (unvisited.length) {
