@@ -62,18 +62,18 @@ class Pathfinding {
             if (currentNode.id == end) {
 
                 // make the path!
-                const path = [{ id: endNode.id, position: endNode.position }]
+                const path = [{ id: endNode.id, position: endNode.position.clone() }]
 
                 let currentStep = endNode
 
                 while (currentStep.parent) {
-                    path.push({ id: currentStep.parent.id, position: currentStep.parent.position })
+                    path.push({ id: currentStep.parent.id, position: currentStep.parent.position.clone() })
                     currentStep = currentStep.parent
                 }
 
                 this.path = path.reverse()
 
-                return
+                return this.path
 
             } else {
 
@@ -114,7 +114,7 @@ class Pathfinding {
 
         }
 
-        this.path = []
+        return this.path = []
 
     }
 
