@@ -92,6 +92,10 @@ class FieldView {
          */
         this.tmpSegmentLine = new Line(new Vector, new Vector)
 
+        this.tmpPolygonsToCheckCollision = []
+
+        this.tmpLinesToCheckIntersection = []
+
     }
 
     /**
@@ -118,6 +122,9 @@ class FieldView {
      */
     _addPoints() {
 
+        this.tmpPolygonsToCheckCollision.length = 0
+        this.tmpLinesToCheckIntersection.length = 0
+
         this.points.length = 0
 
         // add field of view polygon points
@@ -136,12 +143,32 @@ class FieldView {
         this.polygon.getLines().map((line) => {
             this.polygons.map((polygon) => {
                 if (this.collisionHandler.check(line, polygon)) {
+
                     this.collisionHandler.points.map((cp) => {
                         this.points.push(cp)
                     })
+
+                    if (!this.tmpPolygonsToCheckCollision.includes(polygon))
+                        this.tmpPolygonsToCheckCollision.push(polygon)
                 }
             })
         })
+
+        this.tmpPolygonsToCheckCollision.map((polygon) => {
+            polygon.getLines().map((line) => {
+                this.tmpLinesToCheckIntersection.push(line)
+            })
+        })
+
+        for (let i = 0; i < this.tmpLinesToCheckIntersection.length; i++) {
+            const lineA = this.tmpLinesToCheckIntersection[i]
+            for (let j = i + 1; j < this.tmpLinesToCheckIntersection.length; j++) {
+                const lineB = this.tmpLinesToCheckIntersection[j]
+                if (this.collisionHandler.check(lineA, lineB)) {
+                    this.points.push(this.collisionHandler.points[0])
+                }
+            }
+        }
 
     }
 
