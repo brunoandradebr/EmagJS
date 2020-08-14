@@ -69,6 +69,11 @@ class Keyboard {
          * @type {integer}
          */
         this.R = 82
+        
+        /**
+         * @type {integer}
+         */
+        this.ESC = 27
 
         /**
          * @type {integer}
@@ -140,6 +145,7 @@ class Keyboard {
         this.addKey(this.D)
         this.addKey(this.W)
         this.addKey(this.R)
+        this.addKey(this.ESC)
         this.addKey(this.num0)
         this.addKey(this.num1)
         this.addKey(this.num2)
