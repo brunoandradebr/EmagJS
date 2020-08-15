@@ -20,6 +20,13 @@ class VisibilityPolygon {
          * @type {string}
          */
         this.shadowColor = 'rgba(0, 0, 0, 0.6)'
+        
+        /**
+         * shadow penumbra color
+         * 
+         * @type {string}
+         */
+        this.penumbraColor = 'white'
 
         /**
          * inside color radius
@@ -58,15 +65,17 @@ class VisibilityPolygon {
          */
         this.rays = []
 
-        this.tmpPointToSegmentLine = new Line(new Vector, new Vector)
-        this.tmpSegmentLine = new Line(new Vector, new Vector)
-
         /**
          * Collision handler object to check ray to polygon intersection
          * 
          * @type {EmagJS.Core.Collision.CollisionHandler}
          */
         this.collisionHandler = collisionHandler
+
+        this.tmpLinesToCheckIntersection = []
+        this.tmpPointsToCastRays = []
+        this.tmpPointToSegmentLine = new Line(new Vector, new Vector)
+        this.tmpSegmentLine = new Line(new Vector, new Vector)
 
     }
 
@@ -146,8 +155,10 @@ class VisibilityPolygon {
      */
     castRays() {
 
-        // clear previous rays
+        // clear previous data
         this.rays.length = 0
+        this.tmpPointsToCastRays.length = 0
+        this.tmpLinesToCheckIntersection.length = 0
 
         // for each polygon
         this.polygons.map((polygon) => {
@@ -155,23 +166,45 @@ class VisibilityPolygon {
             // for each polygon line
             polygon.getLines().map((line) => {
 
-                // create a line from it's position to polygon line end
-                let ray = new Line(this.position, line.end)
+                // save line to further intersection check
+                this.tmpLinesToCheckIntersection.push(line)
 
-                // create a left ray very close ray
-                let leftRay = ray.clone()
-                leftRay.rotate((leftRay.angle * toDegree) - 0.1)
-                leftRay.scale(2048)
-
-                // create a right ray very close ray
-                let rightRay = ray.clone()
-                rightRay.rotate((rightRay.angle * toDegree) + 0.1)
-                rightRay.scale(2048)
-
-                // add rays to rays pool
-                this.rays.push(ray, leftRay, rightRay)
+                this.tmpPointsToCastRays.push(line.end)
 
             })
+
+        })
+
+        // get extra points from polygons intersection
+        for (let i = 0; i < this.tmpLinesToCheckIntersection.length; i++) {
+            const lineA = this.tmpLinesToCheckIntersection[i]
+            for (let j = i + 1; j < this.tmpLinesToCheckIntersection.length; j++) {
+                const lineB = this.tmpLinesToCheckIntersection[j]
+                if (this.collisionHandler.check(lineA, lineB)) {
+                    if (!this.tmpPointsToCastRays.includes(this.collisionHandler[0]))
+                        this.tmpPointsToCastRays.push(this.collisionHandler.points[0])
+                }
+            }
+        }
+
+        // cast rays to all valid points
+        this.tmpPointsToCastRays.map((point) => {
+
+            // create a line from it's position to point
+            let ray = new Line(this.position, point)
+
+            // create a left ray very close ray
+            let leftRay = ray.clone()
+            leftRay.rotate((leftRay.angle * toDegree) - 0.1)
+            leftRay.scale(2048)
+
+            // create a right ray very close ray
+            let rightRay = ray.clone()
+            rightRay.rotate((rightRay.angle * toDegree) + 0.1)
+            rightRay.scale(2048)
+
+            // add rays to rays pool
+            this.rays.push(ray, leftRay, rightRay)
 
         })
 
@@ -212,7 +245,7 @@ class VisibilityPolygon {
 
         if (this.shadowBlur) {
             graphics.shadowBlur = this.shadowBlur
-            graphics.shadowColor = 'white'
+            graphics.shadowColor = this.penumbraColor
         }
 
         let gradient = graphics.createRadialGradient(this.position.x, this.position.y, this.colorRadius0, this.position.x, this.position.y, this.colorRadius1)
