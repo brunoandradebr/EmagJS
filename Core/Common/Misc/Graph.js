@@ -82,7 +82,7 @@ class Graph {
         return this.nodes.filter(node => node.id === id)[0]
     }
 
-    fromPolygon(polygons, offset = 0) {
+    fromPolygon(polygons, offset = 1) {
 
         this.polygons = polygons
 
