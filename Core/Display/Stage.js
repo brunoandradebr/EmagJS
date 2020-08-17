@@ -153,7 +153,7 @@ class Stage {
 
             }
 
-        });
+        }, { passive: false });
 
         /**
          * Touch move event - updates mouse vector and pointers
@@ -178,7 +178,7 @@ class Stage {
 
             }
 
-        });
+        }, { passive: false });
 
         /**
          * Touch end event - updates pointers
