@@ -15,6 +15,7 @@ class Graph {
         this.tmpLines = []
         this.tmpPoints = []
         this.tmpLine = new Line()
+        this.tmpCircle = new Circle(new Vector, this.offset * 0.5, 'transparent', 2, 'white')
 
     }
 
@@ -30,6 +31,17 @@ class Graph {
 
         if (position)
             toUpdate.position.update(position)
+
+        // avoid end point to enter polygon
+        if (id === 'end' && this.polygons) {
+            this.tmpCircle.position.update(toUpdate.position)
+            this.tmpCircle.radius = this.offset * 0.5
+            this.polygons.map((polygon) => {
+                if (this.collision.check(this.tmpCircle, polygon)) {
+                    toUpdate.position.add(this.collision.mtv)
+                }
+            })
+        }
 
         // remove updated node from it's connections
         toUpdate.connections.map((connectedId) => {
