@@ -983,7 +983,8 @@ class CollisionHandler {
 
         // MTV
         this.overlap = minDot
-        this.mtv = normal.multiplyScalar(minDot)
+        this.mtv.x = normal.x * minDot
+        this.mtv.y = normal.y * minDot
 
         // point of collision
         let point = A.clone().add(this.mtv)
@@ -1025,24 +1026,37 @@ class CollisionHandler {
      */
     circleToShapeCollision(A = Circle, B = Shape) {
 
-        let lines = B.getLines()
-        let maxProjection = -Infinity
-        let closestLine = lines[0]
+        if (B.contains(A.position)) {
 
-        lines.map((line) => {
+            const pointToShapeCollision = this.pointToShapeCollision(A.position, B)
 
-            let circleToLineStart = A.position.clone().subtract(line.start)
-            let projection = circleToLineStart.dot(line.plane.leftNormal)
-
-            if (projection >= maxProjection) {
-                maxProjection = projection
-                closestLine = line
+            if (pointToShapeCollision) {
+                this.mtv.x += this.normal.x * A.radius
+                this.mtv.y += this.normal.y * A.radius
             }
 
-        })
+            return pointToShapeCollision
 
-        return this.circleToLineCollision(A, closestLine)
+        } else {
 
+            let lines = B.getLines()
+            let maxProjection = -Infinity
+            let closestLine = lines[0]
+
+            lines.map((line) => {
+
+                let circleToLineStart = A.position.clone().subtract(line.start)
+                let projection = circleToLineStart.dot(line.plane.leftNormal)
+
+                if (projection >= maxProjection) {
+                    maxProjection = projection
+                    closestLine = line
+                }
+
+            })
+            
+            return this.circleToLineCollision(A, closestLine)
+        }
     }
 
     /**
