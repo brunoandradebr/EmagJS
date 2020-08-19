@@ -36,6 +36,9 @@ class Pathfinding {
         let unvisited = [this._getNode(start, graph)]
         const endNode = this._getNode(end, graph)
 
+        if (endNode == undefined) return this.path = []
+        if (unvisited[0].obstacle) return this.path = []
+
         // if start or end node are inside graph polygons
         if (graph.polygons.length) {
 
