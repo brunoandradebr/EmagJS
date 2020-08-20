@@ -18,6 +18,10 @@ class Graph {
         this.tmpLine = new Line()
         this.tmpCircle = new Circle(new Vector, this.offset * 0.5, 'transparent', 2, 'white')
 
+        // when working with graph from grid
+        this.position = new Vector
+        this.tileSize = 40
+
     }
 
     addNode(position, id, connections = [], isObstacle = false) {
@@ -93,12 +97,22 @@ class Graph {
         return this.nodes.filter(node => node.id === id)[0]
     }
 
+    getNodeAt(x, y) {
+        const nodeX = Math.round((x - this.position.x) / this.tileSize)
+        const nodeY = Math.round((y - this.position.y) / this.tileSize)
+        return this.getNode(`${nodeX}_${nodeY}`)
+    }
+
     fromGrid(grid, position, tileSize = 40) {
 
         const gridW = grid[0].length
         const gridH = grid.length
 
         const center = position ? position : new Vector((DEVICE_CENTER_X) - ((gridW * tileSize * 0.5) - (tileSize * 0.5)) | 0, (DEVICE_CENTER_Y) - ((gridH * tileSize * 0.5) - (tileSize * 0.5)) | 0)
+
+        this.tileSize = tileSize
+        this.position.x = center.x
+        this.position.y = center.y
 
         for (let y = 0; y < gridH; y++) {
             for (let x = 0; x < gridW; x++) {
