@@ -45,7 +45,7 @@ class Pathfinding {
             let notReachable = false
 
             graph.polygons.map((polygon) => {
-                if (polygon.contains(unvisited[0].position) || polygon.contains(endNode.position))
+                if (polygon.contains(endNode.position))
                     notReachable = true
             })
 
