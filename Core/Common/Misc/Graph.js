@@ -98,9 +98,16 @@ class Graph {
     }
 
     getNodeAt(x, y) {
-        const nodeX = Math.round((x - this.position.x) / this.tileSize)
-        const nodeY = Math.round((y - this.position.y) / this.tileSize)
-        return this.getNode(`${nodeX}_${nodeY}`)
+        // if passed vector as coordinates
+        if (arguments.length === 1) {
+            const nodeX = Math.round((x.x - this.position.x) / this.tileSize)
+            const nodeY = Math.round((x.y - this.position.y) / this.tileSize)
+            return this.getNode(`${nodeX}_${nodeY}`)
+        } else {
+            const nodeX = Math.round((x - this.position.x) / this.tileSize)
+            const nodeY = Math.round((y - this.position.y) / this.tileSize)
+            return this.getNode(`${nodeX}_${nodeY}`)
+        }
     }
 
     fromGrid(grid, position, tileSize = 40) {
