@@ -96,6 +96,8 @@ class FieldView {
 
         this.tmpLinesToCheckIntersection = []
 
+        this.tmpCircles = []
+
     }
 
     /**
@@ -124,6 +126,7 @@ class FieldView {
 
         this.tmpPolygonsToCheckCollision.length = 0
         this.tmpLinesToCheckIntersection.length = 0
+        this.tmpCircles.length = 0
 
         this.points.length = 0
 
@@ -154,6 +157,12 @@ class FieldView {
             })
         })
 
+        this.polygons.map((polygon) => {
+            if (this.polygon.contains(polygon.centroid))
+                if (!this.tmpPolygonsToCheckCollision.includes(polygon))
+                    this.tmpPolygonsToCheckCollision.push(polygon)
+        })
+
         this.tmpPolygonsToCheckCollision.map((polygon) => {
             polygon.getLines().map((line) => {
                 this.tmpLinesToCheckIntersection.push(line)
@@ -168,6 +177,13 @@ class FieldView {
                     this.points.push(this.collisionHandler.points[0])
                 }
             }
+        }
+
+        if (this.debug) {
+            this.points.map((point) => {
+                const circle = new Circle(point, 5, 'transparent', 1, '#f46')
+                this.tmpCircles.push(circle)
+            })
         }
 
     }
@@ -286,8 +302,10 @@ class FieldView {
     draw(graphics) {
 
         // draw field view polygon
-        if (this.debug)
+        if (this.debug) {
+            this.tmpCircles.map(circle => circle.draw(graphics))
             this.polygon.draw(graphics)
+        }
 
         if (this.compositeOperation || this.shadowBlur)
             graphics.save()
