@@ -367,93 +367,93 @@ class Entity2 extends Sprite {
         }
 
         // walk left
-        // if (this.input.holding('LEFT') && !this.rolling) {
-        //     this.direction.x = -1
-        //     this.matrix.identity()
-        //     this.matrix.scale(-1, 1)
-        //     this.body.applyForce(-this.body.speedX, 0)
-        // }
+        if (this.input.holding('LEFT') && !this.rolling) {
+            this.direction.x = -1
+            this.matrix.identity()
+            this.matrix.scale(-1, 1)
+            this.body.applyForce(-this.body.speedX, 0)
+        }
 
         // // walk right
-        // if (this.input.holding('RIGHT') && !this.rolling) {
-        //     this.direction.x = 1
-        //     this.matrix.identity()
-        //     this.matrix.scale(1, 1)
-        //     this.body.applyForce(this.body.speedX, 0)
-        // }
+        if (this.input.holding('RIGHT') && !this.rolling) {
+            this.direction.x = 1
+            this.matrix.identity()
+            this.matrix.scale(1, 1)
+            this.body.applyForce(this.body.speedX, 0)
+        }
 
-        // // roll
-        // this.rollTimer.start
-        // if (this.onGround && this.input.doublePressed('LEFT') && !this.rolling) {
-        //     this.rolling = true
-        //     this.rollTimer.reset
-        // }
-        // if (this.onGround && this.input.doublePressed('RIGHT') && !this.rolling) {
-        //     this.rolling = true
-        //     this.rollTimer.reset
-        // }
-        // if (this.rolling) {
-        //     if (this.rollTimer.count < 1) {
-        //         this.body.applyForce(this.direction.x * this.body.speedX * this.body.rollSpeed, 0)
-        //     } else {
-        //         this.rolling = false
-        //     }
-        // }
+        // roll
+        this.rollTimer.start
+        if (this.onGround && this.input.doublePressed('LEFT') && !this.rolling) {
+            this.rolling = true
+            this.rollTimer.reset
+        }
+        if (this.onGround && this.input.doublePressed('RIGHT') && !this.rolling) {
+            this.rolling = true
+            this.rollTimer.reset
+        }
+        if (this.rolling) {
+            if (this.rollTimer.count < 1) {
+                this.body.applyForce(this.direction.x * this.body.speedX * this.body.rollSpeed, 0)
+            } else {
+                this.rolling = false
+            }
+        }
 
         // collision check here...
         this.checkPlatformCollision(this.collisionHandler, this.platforms)
 
         // jump
-        // if (this.input.pressed('SPACE') && this.canJump && !this.rolling) {
+        if (this.input.pressed('SPACE') && this.canJump && !this.rolling) {
 
-        //     this.body.velocity.y = 0
-        //     this.body.applyForce(0, -this.body.jump)
+            this.body.velocity.y = 0
+            this.body.applyForce(0, -this.body.jump)
 
-        //     this.jumping = true
-        //     this.jumpCount++
+            this.jumping = true
+            this.jumpCount++
 
-        // }
+        }
 
-        // if (this.jumpCount >= this.maxJumpCount) {
-        //     this.canJump = false
-        // }
+        if (this.jumpCount >= this.maxJumpCount) {
+            this.canJump = false
+        }
 
         // // leaving platform (falling)
-        // if (!this.currentPlatform && this.body.velocity.y > 0.3) {
+        if (!this.currentPlatform && this.body.velocity.y > 0.3) {
 
-        //     this.jumping = true
+            this.jumping = true
 
-        //     if (this.jumpCount == 0)
-        //         this.canJump = false
-        // }
+            if (this.jumpCount == 0)
+                this.canJump = false
+        }
 
-        // if (this.jumping) {
-        //     if (!this.input.holding('SPACE')) {
-        //         if (this.body.velocity.y < 0) {
-        //             this.body.velocity.y += .2
-        //         }
-        //     }
-        // }
+        if (this.jumping) {
+            if (!this.input.holding('SPACE')) {
+                if (this.body.velocity.y < 0) {
+                    this.body.velocity.y += .2
+                }
+            }
+        }
 
-        // if (this.rolling) {
-        //     this.setAnimation('roll')
-        // } else {
-        //     if (this.onGround) {
-        //         if (this.input.holding('LEFT') || this.input.holding('RIGHT')) {
-        //             this.setAnimation('walk')
-        //         } else {
-        //             this.setAnimation('stand')
-        //         }
-        //     } else {
-        //         if (this.body.velocity.y > 0) {
-        //             this.setAnimation('fall')
-        //         } else if (this.body.velocity.y == 0) {
-        //             this.setAnimation('stand')
-        //         } else {
-        //             this.setAnimation('jump')
-        //         }
-        //     }
-        // }
+        if (this.rolling) {
+            this.setAnimation('roll')
+        } else {
+            if (this.onGround) {
+                if (this.input.holding('LEFT') || this.input.holding('RIGHT')) {
+                    this.setAnimation('walk')
+                } else {
+                    this.setAnimation('stand')
+                }
+            } else {
+                if (this.body.velocity.y > 0) {
+                    this.setAnimation('fall')
+                } else if (this.body.velocity.y == 0) {
+                    this.setAnimation('stand')
+                } else {
+                    this.setAnimation('jump')
+                }
+            }
+        }
 
         // update collision mask after collision tests
         this.collisionMasks['foot'].position.update(this.body.position.x, this.body.position.y + this.height * 0.5 - this.collisionMasks['foot'].radius)
