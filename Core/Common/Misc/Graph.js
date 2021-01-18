@@ -110,7 +110,7 @@ class Graph {
         }
     }
 
-    fromGrid(grid, position, tileSize = 40) {
+    fromGrid(grid, position, tileSize = 40, diagonals = false) {
 
         const gridW = grid[0].length
         const gridH = grid.length
@@ -136,6 +136,15 @@ class Graph {
                     tileConnections.push(`${x}_${y + 1}`)
                 if (y - 1 >= 0)
                     tileConnections.push(`${x}_${y - 1}`)
+
+                if (diagonals) {
+                    if (x + 1 < gridW && y + 1 < gridH) {
+                        tileConnections.push(`${x + 1}_${y + 1}`)
+                        tileConnections.push(`${x - 1}_${y + 1}`)
+                        tileConnections.push(`${x - 1}_${y - 1}`)
+                        tileConnections.push(`${x + 1}_${y - 1}`)
+                    }
+                }
 
                 const tilePosition = new Vector(center.x + x * tileSize, center.y + y * tileSize)
 
