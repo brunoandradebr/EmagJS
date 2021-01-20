@@ -262,7 +262,7 @@ class Graph {
                 // draw connection lines
                 node.connections.map((connectedId) => {
                     const connected = this.nodes.filter(node => node.id == connectedId)[0]
-                    if (!connected.obstacle) {
+                    if (connected && !connected.obstacle) {
                         graphics.moveTo(node.position.x, node.position.y)
                         graphics.lineTo(connected.position.x, connected.position.y)
                     }
