@@ -138,12 +138,14 @@ class Graph {
                     tileConnections.push(`${x}_${y - 1}`)
 
                 if (diagonals) {
-                    if (x + 1 < gridW && y + 1 < gridH) {
+                    if (x + 1 < gridW && y + 1 < gridH)
                         tileConnections.push(`${x + 1}_${y + 1}`)
+                    if (x - 1 >= 0 && y + 1 < gridH)
                         tileConnections.push(`${x - 1}_${y + 1}`)
+                    if (x - 1 > 0 && y - 1 > 0)
                         tileConnections.push(`${x - 1}_${y - 1}`)
+                    if (x + 1 < gridW && y - 1 > 0)
                         tileConnections.push(`${x + 1}_${y - 1}`)
-                    }
                 }
 
                 const tilePosition = new Vector(center.x + x * tileSize, center.y + y * tileSize)
@@ -262,7 +264,7 @@ class Graph {
                 // draw connection lines
                 node.connections.map((connectedId) => {
                     const connected = this.nodes.filter(node => node.id == connectedId)[0]
-                    if (connected && !connected.obstacle) {
+                    if (!connected.obstacle) {
                         graphics.moveTo(node.position.x, node.position.y)
                         graphics.lineTo(connected.position.x, connected.position.y)
                     }
