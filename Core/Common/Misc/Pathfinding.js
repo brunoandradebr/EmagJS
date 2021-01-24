@@ -5,7 +5,11 @@
 class Pathfinding {
 
     constructor(graph = new Graph) {
+
         this.path = []
+
+        this.lineColor = null
+
     }
 
     _getNode(id, graph) {
@@ -125,12 +129,16 @@ class Pathfinding {
         if (this.path.length) {
             graphics.save()
             graphics.beginPath()
-            let gradient = graphics.createLinearGradient(this.path[0].position.x, this.path[0].position.y, this.path[this.path.length - 1].position.x, this.path[this.path.length - 1].position.y)
-            gradient.addColorStop(0, 'purple')
-            gradient.addColorStop(0.5, 'royalblue')
-            gradient.addColorStop(0.7, 'cyan')
-            gradient.addColorStop(1, '#eee')
-            graphics.strokeStyle = gradient
+            if (this.lineColor == null) {
+                let gradient = graphics.createLinearGradient(this.path[0].position.x, this.path[0].position.y, this.path[this.path.length - 1].position.x, this.path[this.path.length - 1].position.y)
+                gradient.addColorStop(0, 'purple')
+                gradient.addColorStop(0.5, 'royalblue')
+                gradient.addColorStop(0.7, 'cyan')
+                gradient.addColorStop(1, '#eee')
+                graphics.strokeStyle = gradient
+            } else {
+                graphics.strokeStyle = this.lineColor
+            }
             graphics.lineWidth = 3
             graphics.lineCap = 'butt'
             for (let i = 0; i < this.path.length; i++) {
