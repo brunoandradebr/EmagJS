@@ -125,6 +125,37 @@ class Pathfinding {
 
     }
 
+    drawPath(graphics, path = [], settings = {}) {
+
+        if (path.length) {
+            graphics.save()
+            graphics.beginPath()
+            if (!settings.lineColor) {
+                let gradient = graphics.createLinearGradient(path[0].position.x, path[0].position.y, path[path.length - 1].position.x, path[path.length - 1].position.y)
+                gradient.addColorStop(0, 'purple')
+                gradient.addColorStop(0.5, 'royalblue')
+                gradient.addColorStop(0.7, 'cyan')
+                gradient.addColorStop(1, '#eee')
+                graphics.strokeStyle = gradient
+            } else {
+                graphics.strokeStyle = settings.lineColor
+            }
+            graphics.lineWidth = 3
+            graphics.lineCap = 'butt'
+            for (let i = 0; i < path.length; i++) {
+                if (path[i + 1]) {
+                    const currentStep = path[i].position
+                    const nextStep = path[i + 1].position
+                    graphics.moveTo(currentStep.x, currentStep.y)
+                    graphics.lineTo(nextStep.x, nextStep.y)
+                }
+            }
+            graphics.closePath()
+            graphics.stroke()
+            graphics.restore()
+        }
+    }
+
     draw(graphics) {
         if (this.path.length) {
             graphics.save()
