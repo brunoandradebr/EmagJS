@@ -184,11 +184,11 @@ class CollisionHandler {
             } else {
 
                 // check if line end is right from object center imaginary line (perpendicular to line)
-                if (objectToLineEnd.cross(lineNormal) < 0) {
+                if (objectToLineEnd.cross(lineNormal).z < 0) {
                     projection = lineNormal.multiplyScalar(object.radius)
 
                     // if line end is above object, reverse projection
-                    if (objectToLineEnd.cross(objectToLineStart) > 0)
+                    if (objectToLineEnd.cross(objectToLineStart).z > 0)
                         projection.reverse
 
                     pointInCircle = object.position.clone().add(projection)
@@ -242,7 +242,7 @@ class CollisionHandler {
                     // get point in line
                     pointInLine = line.start.clone().add(pointInObjectProjection)
                     // update flag
-                    lineNotFacingObject = pointInObjectProjection.cross(line.normal) > 0
+                    lineNotFacingObject = pointInObjectProjection.cross(line.normal).z > 0
                 }
 
             })
@@ -734,8 +734,8 @@ class CollisionHandler {
 
         let aux = B.start.clone().subtract(A.start);
 
-        let s1 = aux.cross(B.plane);
-        let s2 = A.plane.cross(B.plane);
+        let s1 = aux.cross(B.plane).z;
+        let s2 = A.plane.cross(B.plane).z;
 
         let f = s1 / s2;
 
@@ -777,8 +777,8 @@ class CollisionHandler {
 
             let aux = line.start.clone().subtract(A.start);
 
-            let s1 = aux.cross(line.plane);
-            let s2 = A.plane.cross(line.plane);
+            let s1 = aux.cross(line.plane).z;
+            let s2 = A.plane.cross(line.plane).z;
 
             let f = s1 / s2;
 

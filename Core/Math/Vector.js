@@ -2,385 +2,205 @@
  * @author Bruno Andrade <bruno.faria.andrade@gmail.com>
  */
 
-
-/**
- * Vector 2D
- */
 class Vector {
 
-    /**
-     * 
-     * @param {number} x 
-     * @param {number} y 
-     */
-    constructor(x = 0, y = 0) {
+    constructor(x = 0, y = 0, z = 0) {
 
-        /**
-         * @type {number}
-         */
-        this.x = x;
-
-        /**
-         * @type {number}
-         */
-        this.y = y;
+        this.x = x
+        this.y = y
+        this.z = z
 
     }
 
-    /**
-     * Creates a vector from an angle
-     * 
-     * @param {number}  angle - angle in dregrees
-     * @param {number} length - vector length
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     static fromAngle(angle, length = 50) {
-        return new Vector(Math.cos(angle * toRad) * length, -Math.sin(angle * toRad) * length);
+        return new Vector(Math.cos(angle * toRad) * length, -Math.sin(angle * toRad) * length)
     }
 
-    /**
-     * Creates a vector from an array
-     * 
-     * @param {array} arr
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     static fromArray(arr) {
-        return new Vector(arr[0], arr[1])
+        return new Vector(arr[0], arr[1], arr[2])
     }
 
-    /**
-     * Creates a random vector
-     * 
-     * @param {number} length 
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     static random(length = 1) {
-        return this.fromAngle((Math.random() * PI * 2) * toDegree, length);
+        return this.fromAngle((Math.random() * PI * 2) * toDegree, length)
     }
 
-    /**
-     * Calculates the minimum angle between two vectors
-     * 
-     * @param {EmagJS.Core.Math.Vector} v1 
-     * @param {EmagJS.Core.Math.Vector} v2
-     * 
-     * @return {number} 
-     */
     static angleBetween(v1, v2) {
-
-        let dot = v1.clone().normalize.dot(v2.clone().normalize);
-
-        return Math.acos(dot);
-
+        let dot = v1.clone().normalize.dot(v2.clone().normalize)
+        return Math.acos(dot)
     }
 
-    /**
-     * Clones a vector
-     * 
-     * @param {EmagJS.Core.Math.Vector} to
-     * 
-     * @return {EmagJS.Core.Math.Vector | void}
-     */
     clone(to = null) {
         if (to) {
-            to.x = this.x;
-            to.y = this.y;
+            to.x = this.x
+            to.y = this.y
+            to.z = this.z
         } else {
-            return new Vector(this.x, this.y);
+            return new Vector(this.x, this.y, this.z)
         }
     }
 
-    /**
-     * Updates a vector by another vector or by two scalars
-     * 
-     * @param {EmagJS.Core.Math.Vector} v 
-     * 
-     * @return {EmagJS.Core.Math.Vector} 
-     */
     update(v = new Vector()) {
 
         if (arguments.length > 1) {
 
             if (arguments[0] != null)
-                this.x = arguments[0];
+                this.x = arguments[0]
 
             if (arguments[1] != null)
-                this.y = arguments[1];
+                this.y = arguments[1]
+
+            if (arguments[2] != null)
+                this.y = arguments[2]
+
         } else {
             if (arguments[0].constructor.name == 'Vector') {
-                this.x = v.x;
-                this.y = v.y;
+                this.x = v.x
+                this.y = v.y
+                this.z = v.z
             } else {
-                this.x = arguments[0];
+                this.x = arguments[0]
             }
         }
 
-        return this;
+        return this
     }
 
-    /**
-     * Adds a vector by another vector
-     * 
-     * @param {EmagJS.Core.Math.Vector} v 
-     * @param {EmagJS.Core.Math.Vector} to 
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     add(v, to = this) {
 
-        to.x = this.x + v.x;
-        to.y = this.y + v.y;
+        to.x = this.x + v.x
+        to.y = this.y + v.y
+        to.z = this.z + v.z
 
-        return to;
+        return to
     }
 
-    /**
-    * Adds a scalar to vector
-    * 
-    * @param {number} s 
-    * @param {EmagJS.Core.Math.Vector} to
-    * 
-    * @return {EmagJS.Core.Math.Vector} 
-    */
     addScalar(s, to = this) {
-        to.x = this.x + s;
-        to.y = this.y + s;
-        return to;
+        to.x = this.x + s
+        to.y = this.y + s
+        to.z = this.z + s
+        return to
     }
 
-    /**
-     * Subtracts a vector by another vector
-     * 
-     * @param {EmagJS.Core.Math.Vector} v 
-     * @param {EmagJS.Core.Math.Vector} to
-     * 
-     * @return {EmagJS.Core.Math.Vector} 
-     */
     subtract(v, to = this) {
-        to.x = this.x - v.x;
-        to.y = this.y - v.y;
-        return to;
+        to.x = this.x - v.x
+        to.y = this.y - v.y
+        to.z = this.z - v.z
+        return to
     }
 
-    /**
-     * Subtracts a vector by a scalar
-     * 
-     * @param {number} s 
-     * @param {EmagJS.Core.Math.Vector} to 
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     subtractScalar(s, to = this) {
-        to.x = this.x - s;
-        to.y = this.y - s;
-        return to;
+        to.x = this.x - s
+        to.y = this.y - s
+        to.z = this.z - s
+        return to
     }
 
-    /**
-     * Multiplies a vector by another vector
-     * 
-     * @param {EmagJS.Core.Math.Vector} v 
-     * @param {EmagJS.Core.Math.Vector} to 
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     multiply(v, to = this) {
-        to.x = this.x * v.x;
-        to.y = this.y * v.y;
-        return to;
+        to.x = this.x * v.x
+        to.y = this.y * v.y
+        to.z = this.z * v.z
+        return to
     }
 
-    /**
-     * Multiplies a vector by a scalar
-     * 
-     * @param {number} s 
-     * @param {EmagJS.Core.Math.Vector} to
-     * 
-     * @return {EmagJS.Core.Math.Vector} 
-     */
     multiplyScalar(s, to = this) {
-        to.x = this.x * s;
-        to.y = this.y * s;
-        return to;
+        to.x = this.x * s
+        to.y = this.y * s
+        to.z = this.z * s
+        return to
     }
 
-    /**
-     * Divides a vector by another vector
-     * 
-     * @param {EmagJS.Core.Math.Vector} v 
-     * @param {EmagJS.Core.Math.Vector} to 
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     divide(v, to = this) {
-        to.x = this.x / v.x;
-        to.y = this.y / v.y;
-        return to;
+        to.x = this.x / v.x
+        to.y = this.y / v.y
+        to.z = this.z / v.z
+        return to
     }
 
-    /**
-     * Divides a vector by a scalar
-     * 
-     * @param {number} s 
-     * @param {EmagJS.Core.Math.Vector} to 
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     divideScalar(s, to = this) {
-        to.x = this.x / s;
-        to.y = this.y / s;
-        return to;
+        to.x = this.x / s
+        to.y = this.y / s
+        to.z = this.z / s
+        return to
     }
 
-    /**
-     * Calculates the dot product between two vectors
-     * 
-     * @param {EmagJS.Core.Math.Vector} v
-     * 
-     * @return {number} 
-     */
     dot(v) {
-        return this.x * v.x + this.y * v.y;
+        return this.x * v.x + this.y * v.y + this.z * v.z
     }
 
-    /**
-     * Calculates the cross product between two vectors - same as perpendicular product
-     * 
-     * @param {EmagJS.Core.Math.Vector} v 
-     * 
-     * @return {number}
-     */
     cross(v) {
-        return this.x * v.y - this.y * v.x;
+        const x = this.y * v.z - this.z * v.y
+        const y = this.z * v.x - this.x * v.z
+        const z = this.x * v.y - this.y * v.x
+        return new Vector(x, y, z)
     }
 
-    /**
-     * Rotates a vector by an angle(in degrees)
-     * 
-     * @param {number} angle 
-     * @param {number} startAngle 
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     rotate(angle, startAngle = 0) {
 
-        let length = this.length;
+        let length = this.length
 
-        let _angle = startAngle + angle;
+        let _angle = startAngle + angle
 
-        this.x = Math.cos(_angle * toRad);
-        this.y = -Math.sin(_angle * toRad);
+        this.x = Math.cos(_angle * toRad)
+        this.y = -Math.sin(_angle * toRad)
 
-        this.multiplyScalar(length);
+        this.multiplyScalar(length)
 
-        return this;
+        return this
 
     }
 
-    /**
-     * Projects a vector into another
-     * 
-     * @param {EmagJS.Core.Math.Vector} v 
-     * @param {EmagJS.Core.Math.Vector} to
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     project(v, to = new Vector()) {
 
-        let vNormal = v.clone().normalize;
+        let vNormal = v.clone().normalize
 
-        let mag = this.dot(vNormal);
+        let mag = this.dot(vNormal)
 
-        to.x = vNormal.x * mag;
-        to.y = vNormal.y * mag;
+        to.x = vNormal.x * mag
+        to.y = vNormal.y * mag
+        to.z = vNormal.z * mag
 
-        return to;
+        return to
 
     }
 
-    /**
-     * get reverse - reverses vector
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     get reverse() {
-        this.x *= -1;
-        this.y *= -1;
-        return this;
+        this.x *= -1
+        this.y *= -1
+        this.z *= -1
+        return this
     }
 
-    /**
-     * get length - calculates vector's length
-     * 
-     * @return {number}
-     */
     get length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z)
     }
 
-    /**
-     * get lengthSquared - calculates vector's squared length
-     * 
-     * @return {number}
-     */
     get lengthSquared() {
-        return this.x * this.x + this.y * this.y;
+        return this.x * this.x + this.y * this.y + this.z * this.z
     }
 
-    /**
-     * get normalize - unit vector
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     get normalize() {
         let l = this.length ? this.length : 1
-        return this.multiplyScalar(1 / l);
+        return this.multiplyScalar(1 / l)
     }
 
-    /**
-     * get leftNormal - vector's left normal
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     get leftNormal() {
-        return new Vector(this.y, -this.x);
+        return new Vector(this.y, -this.x)
     }
 
-    /**
-     * get rightNormal - vector's right normal
-     * 
-     * @return {EmagJS.Core.Math.Vector}
-     */
     get rightNormal() {
-        return new Vector(-this.y, this.x);
+        return new Vector(-this.y, this.x)
     }
 
-    /**
-     * get angle - vector's angle in radians
-     * 
-     * @return {number}
-     */
     get angle() {
 
-        let angle = -Math.atan2(this.y, this.x);
+        let angle = -Math.atan2(this.y, this.x)
 
-        if (angle < 0) angle = angle + (PI * 2);
+        if (angle < 0) angle = angle + (PI * 2)
 
-        return angle;
+        return angle
 
     }
 
-    /**
-     * Draw the vector
-     * 
-     * @param {CanvasRenderingContext2D} graphics 
-     * @param {object}                   definition
-     * 
-     * @return {void}
-     */
     debug(graphics, definition = {}) {
 
         let option = {
@@ -389,7 +209,7 @@ class Vector {
             center: new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y)
         }
 
-        Object.assign(option, definition);
+        Object.assign(option, definition)
 
         let endX = option.center.x + this.x
         let endY = option.center.y + this.y
@@ -398,18 +218,18 @@ class Vector {
         let leftLine = Vector.fromAngle((this.angle * toDegree) + 130, this.x * this.x + this.y * this.y > 10 * 10 ? 10 : 5)
         let rightLine = Vector.fromAngle((this.angle * toDegree) - 130, this.x * this.x + this.y * this.y > 10 * 10 ? 10 : 5)
 
-        graphics.strokeStyle = option.lineColor;
-        graphics.lineWidth = option.lineWidth;
+        graphics.strokeStyle = option.lineColor
+        graphics.lineWidth = option.lineWidth
 
-        graphics.beginPath();
-        graphics.moveTo(option.center.x, option.center.y);
-        graphics.lineTo(endX, endY);
+        graphics.beginPath()
+        graphics.moveTo(option.center.x, option.center.y)
+        graphics.lineTo(endX, endY)
         // draw arrow
-        graphics.moveTo(endX, endY);
-        graphics.lineTo(endX + leftLine.x, endY + leftLine.y);
-        graphics.moveTo(endX, endY);
-        graphics.lineTo(endX + rightLine.x, endY + rightLine.y);
-        graphics.stroke();
+        graphics.moveTo(endX, endY)
+        graphics.lineTo(endX + leftLine.x, endY + leftLine.y)
+        graphics.moveTo(endX, endY)
+        graphics.lineTo(endX + rightLine.x, endY + rightLine.y)
+        graphics.stroke()
 
     }
 }
