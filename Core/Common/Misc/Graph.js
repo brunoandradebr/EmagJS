@@ -110,6 +110,24 @@ class Graph {
         }
     }
 
+    getRandomValidNode(x = null, y = null, radius = 200) {
+
+        let validNodes = this.nodes.filter((node) => !node.obstacle)
+
+        if (x != null && y != null) {
+            validNodes = validNodes.filter((node) => {
+                const dx = node.position.x - x
+                const dy = node.position.y - y
+                const dist = dx * dx + dy * dy
+                const nearNode = dist < radius * radius
+                return nearNode
+            })
+        }
+
+        const rndIndex = Math.random() * validNodes.length | 0
+        return validNodes[rndIndex]
+    }
+
     fromGrid(grid, position, tileSize = 40, diagonals = false) {
 
         const gridW = grid[0].length
