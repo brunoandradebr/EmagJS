@@ -404,8 +404,12 @@ class SpatialSpace {
 
         }
 
+        const areaIds = this.tmpGetAreaArray.map((object) => object.spatialID)
+
+        const noDuplicates = this.tmpGetAreaArray.filter((object, index) => !areaIds.includes(object.spatialID, index + 1))
+
         // return grid areas
-        return this.tmpGetAreaArray
+        return noDuplicates
 
     }
 
