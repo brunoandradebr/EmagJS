@@ -15,12 +15,19 @@ class VisibilityPolygon {
         this.fillColor = fillColor
 
         /**
+         * light color 2
+         * 
+         * @type {string}
+         */
+        this.fillColor2 = "rgba(255,255,255,0)"
+
+        /**
          * shadow color
          * 
          * @type {string}
          */
         this.shadowColor = 'rgba(0, 0, 0, 0.6)'
-        
+
         /**
          * shadow penumbra color
          * 
@@ -250,7 +257,7 @@ class VisibilityPolygon {
 
         let gradient = graphics.createRadialGradient(this.position.x, this.position.y, this.colorRadius0, this.position.x, this.position.y, this.colorRadius1)
         gradient.addColorStop(0, this.fillColor);
-        gradient.addColorStop(1, "rgba(255,255,255,0)");
+        gradient.addColorStop(1, this.fillColor2);
 
         graphics.fillStyle = gradient
         graphics.beginPath()
