@@ -43,7 +43,8 @@ const trace = function () {
                 if (!content[0]) is2dArray = false
 
                 if (is2dArray) {
-                    console.log('%c ' + (is2dArray ? '2D ' : '') + content.constructor.name + ' ' + content.length + 'x' + content[0].length + ' ', typeStyle('#4834d4'), content)
+                    const total = content.length * content[0].length
+                    console.log('%c ' + (is2dArray ? '2D ' : '') + content.constructor.name + ' ' + content.length + 'x' + content[0].length + ' (' + (total >= 1000 ? total / 1000 : total) + ')', typeStyle('#4834d4'), content)
                 } else {
                     console.log('%c ' + (is2dArray ? '2D ' : '') + content.constructor.name + ' ' + content.length + ' ', typeStyle('#4834d4'), content)
                 }
