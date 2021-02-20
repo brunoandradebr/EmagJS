@@ -259,6 +259,24 @@ const lerp = (min, max, t) => {
 }
 
 /**
+ * Map values min max to a new min max representation
+ * 
+ * ex: clamp(50, 0, 100, 0, 1) // returns 0.5
+ * 
+ * @param {number} v   - current value 
+ * @param {number} min - current min value
+ * @param {number} max - current max value
+ * @param {number} min2 - mapped min value
+ * @param {number} max2 - mapped max value
+ * 
+ * @return {number}
+ */
+const clamp = (v, min, max, min2, max2) => {
+    const t = v / (max - min)
+    return max2 > min2 && min2 > 0 ? (max2 - min2) * t : min2 + (max2 - min2) * t
+}
+
+/**
  * Converts hex color to rgb
  * 
  * @global
