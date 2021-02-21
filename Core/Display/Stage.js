@@ -12,6 +12,8 @@
  * @global
  */
 let mouse = new Vector(DEVICE_CENTER_X, DEVICE_CENTER_Y)
+mouse.movimentX = 0
+mouse.movimentY = 0
 
 /**
  * Mouse down flag
@@ -66,6 +68,8 @@ class Stage {
 
         this.target = target
 
+        this.lockPointer = false
+
         /**
          * @type {HTMLElement}
          */
@@ -91,6 +95,9 @@ class Stage {
             mouse.y = e.clientY;
 
             mousedown = true
+
+            if (!document.pointerLockElement && this.lockPointer)
+                this.container.requestPointerLock()
 
         });
 
@@ -126,6 +133,8 @@ class Stage {
 
             mouse.x = e.clientX;
             mouse.y = e.clientY;
+            mouse.movimentX = e.movementX
+            mouse.movimentY = e.movementY
 
         });
 
