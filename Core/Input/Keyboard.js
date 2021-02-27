@@ -169,8 +169,6 @@ class Keyboard {
 
             let code = e.keyCode
 
-            trace(code)
-
             // just pressed a key
             if (this.keys[code] && this.keys[code].isReleased) {
                 this.keys[code].isDown = true
