@@ -74,7 +74,12 @@ class Keyboard {
          * @type {integer}
          */
         this.ESC = 27
-
+        
+        /**
+         * @type {integer}
+         */
+        this.SHIFT = 16
+        
         /**
          * @type {integer}
          */
@@ -146,6 +151,8 @@ class Keyboard {
         this.addKey(this.W)
         this.addKey(this.R)
         this.addKey(this.ESC)
+        this.addKey(this.CONTROL)
+        this.addKey(this.SHIFT)
         this.addKey(this.num0)
         this.addKey(this.num1)
         this.addKey(this.num2)
@@ -161,6 +168,8 @@ class Keyboard {
         window.addEventListener('keydown', (e) => {
 
             let code = e.keyCode
+
+            trace(code)
 
             // just pressed a key
             if (this.keys[code] && this.keys[code].isReleased) {
