@@ -217,6 +217,17 @@ class Touch {
             this.buttons['D'].position.y = buttonHeight
         }
 
+        if (this.leftStick.active) {
+            this.leftStick.area.center.update(this.scene.width * 0.25, this.scene.height * 0.5)
+            this.leftStick.area.width = this.scene.width * 0.5
+            this.leftStick.area.height = this.scene.height
+        }
+        if (this.rightStick.active) {
+            this.rightStick.area.center.update(this.scene.width * 0.75, this.scene.height * 0.5)
+            this.rightStick.area.width = this.scene.width * 0.5
+            this.rightStick.area.height = this.scene.height
+        }
+
     }
 
     /**
