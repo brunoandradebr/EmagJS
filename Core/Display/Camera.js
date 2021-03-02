@@ -83,7 +83,7 @@ class Camera {
      * 
      * @return {void}
      */
-    update() {
+    update(dt = 1) {
 
         let centerX = this.x + this.width * 0.5
         let centerY = this.y + this.height * 0.5
@@ -101,8 +101,8 @@ class Camera {
         let distanceX = (targetCenterX + ((targetDirectionX || 1) * this.offsetHorizontal)) - centerX
         let distanceY = (targetCenterY + ((targetDirectionY || 1) * this.offsetVertical)) - centerY
 
-        this.x += distanceX * this.speed
-        this.y += distanceY * this.speed
+        this.x += distanceX * this.speed * dt
+        this.y += distanceY * this.speed * dt
 
         // avoid floats
         this.x = this.x | 0
