@@ -273,7 +273,10 @@ const lerp = (min, max, t) => {
  */
 const clamp = (v, min, max, min2, max2) => {
     const t = v / (max - min)
-    return max2 > min2 && min2 > 0 ? (max2 - min2) * t : min2 + (max2 - min2) * t
+    const mapped = max2 > min2 && min2 > 0 ? (max2 - min2) * t : min2 + (max2 - min2) * t
+    if (mapped < min2) return min2
+    if (mapped > max2) return max2
+    return mapped
 }
 
 /**
