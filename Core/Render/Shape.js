@@ -191,6 +191,29 @@ class Shape {
     }
 
     /**
+     * get polygon area
+     * 
+     * @return {Number}
+     */
+    get area() {
+
+        let area = 0
+
+        const points = this.points
+        const pointsLength = points.length
+
+        for (let i = 0; i < pointsLength; i++) {
+            const pointA = points[i]
+            const pointB = points[i + 1] ? points[i + 1] : points[0]
+            area += (pointA.x * pointB.y - pointA.y * pointB.x)
+        }
+
+        area *= .5
+
+        return area < 0 ? -area : area
+    }
+
+    /**
      * Checks if a point is inside polygon
      * 
      * @param {EmagJS.Core.Math.Vector} point
