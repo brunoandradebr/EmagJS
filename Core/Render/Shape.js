@@ -209,6 +209,7 @@ class Shape {
         }
 
         area *= .5
+        area *= 0.01 // smaller numbers like 100 not 1000
 
         return area < 0 ? -area : area
     }

@@ -356,12 +356,11 @@ class CollisionHandler {
      * 
      * @param {EmagJS.Core.Render.Line} line 
      * @param {EmagJS.Core.Render.Shape} shape
-     * @param {bool} deepSlice
-     * @param {string} keep - which side to keep : left | right | both
+     * @param {string} keep - which side to keep : left | right | both | biggest | smaller
      * 
      * @return {object<EmagJS.Core.Render.Shape>} 
      */
-    sliceShape(line, listShape, deepSlice = true, keep = 'both') {
+    sliceShape(line, listShape, keep = 'both') {
 
         let collision = new CollisionHandler()
 
@@ -369,8 +368,7 @@ class CollisionHandler {
 
         listShape.map((shape, i) => {
 
-            // if deep slice or unsliced shape
-            if (deepSlice || shape.newPiece == undefined) {
+            if (shape.newPiece == undefined) {
 
                 // if line intersect shape
                 if (collision.check(line, shape)) {
@@ -487,13 +485,10 @@ class CollisionHandler {
                             newPieces.push(leftShape)
                         if (keep == 'both' || keep == 'right')
                             newPieces.push(rightShape)
-
-                        // add left shape to polygons list
-                        if (keep == 'both' || keep == 'left')
-                            listShape.push(leftShape)
-                        // add right shape to polygons list
-                        if (keep == 'both' || keep == 'right')
-                            listShape.push(rightShape)
+                        if (keep == 'biggest')
+                            newPieces.push(leftShape.area > rightShape.area ? leftShape : rightShape)
+                        if (keep == 'smaller')
+                            newPieces.push(leftShape.area < rightShape.area ? leftShape : rightShape)
 
                         // flag sliced shape
                         shape.sliced = true
@@ -1054,7 +1049,7 @@ class CollisionHandler {
                 }
 
             })
-            
+
             return this.circleToLineCollision(A, closestLine)
         }
     }
