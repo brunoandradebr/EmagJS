@@ -521,8 +521,8 @@ class CollisionHandler {
         let ANormals = A.getNormals();
 
         // for each A shape normals
-        ANormals.forEach((normal) => {
-
+        for (let normal of ANormals) {
+            
             // get shapes projection on normal - min and max point on normal axis
             let aProjection = A.getSupportPoints(normal.x, normal.y);
             let bProjection = B.getSupportPoints(normal.x, normal.y);
@@ -535,6 +535,7 @@ class CollisionHandler {
             // if there is a gap between projections
             if (bMinProjection > aMaxProjection || bMaxProjection < aMinProjection) {
                 isColliding = false;
+                continue
             }
 
             // shapes are colliding. calculates penetration length
@@ -571,12 +572,14 @@ class CollisionHandler {
                     axis.reverse;
             }
 
-        });
+        }
+
+        if (!isColliding) return false
 
         let BNormals = B.getNormals();
 
         // for each A shape normals
-        BNormals.forEach((normal) => {
+        for (let normal of BNormals) {
 
             // get shapes projection on normal - min and max point on normal axis
             let aProjection = A.getSupportPoints(normal.x, normal.y);
@@ -590,6 +593,7 @@ class CollisionHandler {
             // if there is a gap between projections
             if (bMinProjection > aMaxProjection || bMaxProjection < aMinProjection) {
                 isColliding = false;
+                continue
             }
 
             // shapes are colliding. calculates penetration length
@@ -627,7 +631,7 @@ class CollisionHandler {
                     axis.reverse;
             }
 
-        });
+        }
 
         this.overlap = minOverlap;
         this.normal = axis;
