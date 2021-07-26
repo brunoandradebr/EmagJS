@@ -46,6 +46,21 @@ class CollisionHandler {
          */
         this.mtv = new Vector();
 
+        /**
+         * Temporary vector to avoid garbage collector
+         * 
+         * @type {EmagJS.Core.Math.Vector}
+         */
+        this.tmpPoint1 = new Vector();
+        this.tmpPoint2 = new Vector();
+
+        /**
+         * Temporary points used in SAT
+         * 
+         * @type {array}
+         */
+        this.tmpPoints = [];
+
     }
 
 
@@ -67,6 +82,9 @@ class CollisionHandler {
         this.overlap = 0;
         this.normal.x = 0;
         this.normal.y = 0;
+        this.tmpPoint1.x = this.tmpPoint1.y = 0
+        this.tmpPoint2.x = this.tmpPoint2.y = 0
+        this.tmpPoints.length = 0
 
         let AConstructor = A.extends ? A.extends : A.constructor.name
         let BConstructor = B.extends ? B.extends : B.constructor.name
@@ -522,7 +540,7 @@ class CollisionHandler {
 
         // for each A shape normals
         for (let normal of ANormals) {
-            
+
             // get shapes projection on normal - min and max point on normal axis
             let aProjection = A.getSupportPoints(normal.x, normal.y);
             let bProjection = B.getSupportPoints(normal.x, normal.y);
@@ -637,33 +655,94 @@ class CollisionHandler {
         this.normal = axis;
         this.normal.multiplyScalar(minOverlap, this.mtv);
 
-        // contact point -- TODO - better func -- SAT normal is different from collision point normal
-        // let BPointsInsideA = [];
-        // B.points.forEach((point) => {
-        //     if (A.contains(point))
-        //         BPointsInsideA.push(point);
-        // })
-        // let APointsInsideB = [];
-        // A.points.forEach((point) => {
-        //     if (B.contains(point))
-        //         APointsInsideB.push(point);
-        // })
+        // get points of collision
 
-        // let points = [...BPointsInsideA, ...APointsInsideB]
+        // get all points of A that are opposite to collision normal
+        const AVertices = A.getVertices()
+        let pointsOppositeToCollisionNormal = []
+        for (let point of AVertices) {
+            const dx = point.x - A.position.x
+            const dy = point.y - A.position.y
+            const dot = dx * axis.x + dy * axis.y
+            if (dot < 0) {
+                pointsOppositeToCollisionNormal.push(point)
+            }
+        }
 
-        // let minProjection = Infinity;
-        // points.forEach((point) => {
+        // only consider points that are inside other polygon
+        for (let point of pointsOppositeToCollisionNormal) {
+            if (B.contains(point))
+                this.tmpPoints.push(point)
+        }
 
-        //     let dot = point.dot(this.normal);
+        // if there are more than two points inside other polygon
+        // consider all point's centroid
+        const nPointsInsideB = this.tmpPoints.length
+        if (nPointsInsideB > 1) {
+            for (let point of this.tmpPoints) {
+                this.tmpPoint1.x += point.x
+                this.tmpPoint1.y += point.y
+            }
+            const inverLength = 1 / nPointsInsideB
+            this.tmpPoint1.x *= inverLength
+            this.tmpPoint1.y *= inverLength
+            this.points.push(this.tmpPoint1)
+        } else if (nPointsInsideB === 1) {
+            this.tmpPoint1.x = this.tmpPoints[0].x
+            this.tmpPoint1.y = this.tmpPoints[0].y
+            this.points.push(this.tmpPoint1)
+        }
 
-        //     if (dot < minProjection) {
-        //         minProjection = dot;
-        //         this.points[0] = point;
-        //     }
+        // get all points of B that are opposite to collision normal
+        const BVertices = B.getVertices()
+        pointsOppositeToCollisionNormal.length = 0
+        for (let point of BVertices) {
+            const dx = point.x - B.position.x
+            const dy = point.y - B.position.y
+            const dot = dx * -axis.x + dy * -axis.y
+            if (dot < 0) {
+                pointsOppositeToCollisionNormal.push(point)
+            }
+        }
 
-        // })
+        this.tmpPoints.length = 0
 
-        return isColliding;
+        // only consider points that are inside other polygon
+        for (let point of pointsOppositeToCollisionNormal) {
+            if (A.contains(point))
+                this.tmpPoints.push(point)
+        }
+
+        // if there are more than two points inside other polygon
+        // consider all point's centroid
+        const nPointsInsideA = this.tmpPoints.length
+        if (nPointsInsideA > 1) {
+            for (let point of this.tmpPoints) {
+                this.tmpPoint2.x += point.x
+                this.tmpPoint2.y += point.y
+            }
+            const inverLength = 1 / nPointsInsideA
+            this.tmpPoint2.x *= inverLength
+            this.tmpPoint2.y *= inverLength
+            this.points.push(this.tmpPoint2)
+        } else if (nPointsInsideA === 1) {
+            this.tmpPoint2.x = this.tmpPoints[0].x
+            this.tmpPoint2.y = this.tmpPoints[0].y
+            this.points.push(this.tmpPoint2)
+        }
+
+        this.pointA = this.tmpPoint1
+        this.pointB = this.tmpPoint2
+
+        if (this.pointA.x == this.pointA.y == this.pointA.z == 0) {
+            this.pointA = this.pointB
+        }
+        
+        if (this.pointB.x == this.pointB.y == this.pointB.z == 0) {
+            this.pointB = this.pointA
+        }
+
+        return isColliding
 
     }
 
