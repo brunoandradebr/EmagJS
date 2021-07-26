@@ -671,7 +671,7 @@ class CollisionHandler {
 
         // only consider points that are inside other polygon
         for (let point of pointsOppositeToCollisionNormal) {
-            if (B.contains(point))
+            if (B.contains(point, 0.1))
                 this.tmpPoints.push(point)
         }
 
@@ -709,7 +709,7 @@ class CollisionHandler {
 
         // only consider points that are inside other polygon
         for (let point of pointsOppositeToCollisionNormal) {
-            if (A.contains(point))
+            if (A.contains(point, 0.1))
                 this.tmpPoints.push(point)
         }
 
