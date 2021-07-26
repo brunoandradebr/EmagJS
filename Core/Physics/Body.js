@@ -52,6 +52,11 @@ class Body {
         /**
          * @type {number}
          */
+        this.inertia = 1;
+
+        /**
+         * @type {number}
+         */
         this.bounce = 0.5;
 
         /**
@@ -79,6 +84,24 @@ class Body {
     }
 
     /**
+     * Returns inverse mass
+     * 
+     * @return {number}
+     */
+    get invMass() {
+        return this.mass > 0 ? 1 / this.mass : 0
+    }
+
+    /**
+     * Returns inverse inertia
+     * 
+     * @return {number}
+     */
+    get invInertia() {
+        return this.inertia > 0 ? 1 / this.inertia : 0
+    }
+
+    /**
      * Applies force to it
      * 
      * @param {number}                  - scalar force, applies to both x and y ex: apply(1, 1)  
@@ -88,27 +111,29 @@ class Body {
      */
     applyForce() {
 
-        let force
+        let forceX = 0
+        let forceY = 0
 
         // if applying a scalar force
         if (arguments.length > 1) {
-            force = new Vector(arguments[0], arguments[1])
+            forceX = arguments[0]
+            forceY = arguments[1]
         } else {
             // applying a vector force
-            force = arguments[0]
+            forceX = arguments[0].x
+            forceY = arguments[0].y
         }
 
-        // get inverse mass
-        let mass = this.mass > 0 ? 1 / this.mass : 0;
+        let invMass = this.invMass
 
         // integrates force to acceleration
-        this.acceleration.x += force.x * mass;
-        this.acceleration.y += force.y * mass;
+        this.acceleration.x += forceX * invMass;
+        this.acceleration.y += forceY * invMass;
 
     }
 
     applyTorque(torque) {
-        this.angularAcceleration += torque
+        this.angularAcceleration += torque * this.invInertia
     }
 
     /**
