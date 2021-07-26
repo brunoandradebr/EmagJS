@@ -110,9 +110,9 @@ class Vector {
     }
 
     divide(v, to = this) {
-        to.x = this.x / v.x
-        to.y = this.y / v.y
-        to.z = this.z / v.z
+        to.x = v.x ? this.x / v.x : 0
+        to.y = v.y ? this.y / v.y : 0
+        to.z = v.z ? this.z / v.z : 0
         return to
     }
 
@@ -128,10 +128,14 @@ class Vector {
     }
 
     cross(v) {
-        const x = this.y * v.z - this.z * v.y
-        const y = this.z * v.x - this.x * v.z
-        const z = this.x * v.y - this.y * v.x
-        return new Vector(x, y, z)
+        if (v.constructor.name === 'Vector') {
+            const x = this.y * v.z - this.z * v.y
+            const y = this.z * v.x - this.x * v.z
+            const z = this.x * v.y - this.y * v.x
+            return new Vector(x, y, z)
+        } else {
+            return new Vector(-v * this.y, v * this.x, 0)
+        }
     }
 
     rotate(angle, startAngle = 0) {
