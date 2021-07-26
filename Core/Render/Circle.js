@@ -106,6 +106,15 @@ class Circle {
         }
     }
 
+    rotateZ(angle) {
+        this.matrix.rotateZ(-angle)
+        this.angle = -angle
+    }
+
+    scale(xScale, yScale = xScale) {
+        this.matrix.scale(xScale, yScale)
+    }
+
     /**
      * 
      * @param {CanvasRenderingContext2D} graphics 
