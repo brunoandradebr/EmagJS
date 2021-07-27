@@ -69,17 +69,22 @@ class Keyboard {
          * @type {integer}
          */
         this.R = 82
-        
+
         /**
          * @type {integer}
          */
         this.ESC = 27
-        
+
+        /**
+         * @type {integer}
+         */
+        this.CONTROL = 17
+
         /**
          * @type {integer}
          */
         this.SHIFT = 16
-        
+
         /**
          * @type {integer}
          */
