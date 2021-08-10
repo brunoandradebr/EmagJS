@@ -671,26 +671,9 @@ class CollisionHandler {
 
         // only consider points that are inside other polygon
         for (let point of pointsOppositeToCollisionNormal) {
-            if (B.contains(point, 0.1))
-                this.tmpPoints.push(point)
-        }
-
-        // if there are more than two points inside other polygon
-        // consider all point's centroid
-        const nPointsInsideB = this.tmpPoints.length
-        if (nPointsInsideB > 1) {
-            for (let point of this.tmpPoints) {
-                this.tmpPoint1.x += point.x
-                this.tmpPoint1.y += point.y
+            if (B.contains(point, 0.1)) {
+                this.points.push(point)
             }
-            const inverLength = 1 / nPointsInsideB
-            this.tmpPoint1.x *= inverLength
-            this.tmpPoint1.y *= inverLength
-            this.points.push(this.tmpPoint1)
-        } else if (nPointsInsideB === 1) {
-            this.tmpPoint1.x = this.tmpPoints[0].x
-            this.tmpPoint1.y = this.tmpPoints[0].y
-            this.points.push(this.tmpPoint1)
         }
 
         // get all points of B that are opposite to collision normal
@@ -705,41 +688,11 @@ class CollisionHandler {
             }
         }
 
-        this.tmpPoints.length = 0
-
         // only consider points that are inside other polygon
         for (let point of pointsOppositeToCollisionNormal) {
-            if (A.contains(point, 0.1))
-                this.tmpPoints.push(point)
-        }
-
-        // if there are more than two points inside other polygon
-        // consider all point's centroid
-        const nPointsInsideA = this.tmpPoints.length
-        if (nPointsInsideA > 1) {
-            for (let point of this.tmpPoints) {
-                this.tmpPoint2.x += point.x
-                this.tmpPoint2.y += point.y
+            if (A.contains(point, 0.1)) {
+                this.points.push(point)
             }
-            const inverLength = 1 / nPointsInsideA
-            this.tmpPoint2.x *= inverLength
-            this.tmpPoint2.y *= inverLength
-            this.points.push(this.tmpPoint2)
-        } else if (nPointsInsideA === 1) {
-            this.tmpPoint2.x = this.tmpPoints[0].x
-            this.tmpPoint2.y = this.tmpPoints[0].y
-            this.points.push(this.tmpPoint2)
-        }
-
-        this.pointA = this.tmpPoint1
-        this.pointB = this.tmpPoint2
-
-        if (this.pointA.x == this.pointA.y == this.pointA.z == 0) {
-            this.pointA = this.pointB
-        }
-        
-        if (this.pointB.x == this.pointB.y == this.pointB.z == 0) {
-            this.pointB = this.pointA
         }
 
         return isColliding
