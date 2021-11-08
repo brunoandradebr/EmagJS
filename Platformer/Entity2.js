@@ -21,6 +21,14 @@ class Entity2 extends Sprite {
     constructor(position = new Vector(100, 100), width = 32, height = 32, fillColor = 'transparent', lineWidth = 2) {
         super(position, width, height, fillColor, lineWidth)
 
+        if (!this.collisionHandler)
+            this.collisionHandler = new CollisionHandler()
+
+        if (!this.input)
+            this.input = new Input(new Keyboard)
+
+        this.platforms = []
+
         // sprite sheet
         this.image = new SpriteSheet(assets.images.hero, 32, 32)
         // animations
@@ -53,6 +61,7 @@ class Entity2 extends Sprite {
         this.collisionMasks['body'] = new Shape(new Square, new Vector, 10, 25, 'transparent', 1, 'purple')
         this.collisionMasks['foot'] = new Circle(new Vector, 5, 'transparent', 1, 'red')
         this.collisionMasks['footRay'] = new Line(this.collisionMasks['foot'].position, new Vector)
+        this.collisionMasks['footRay'].lineColor = 'cyan'
         this.collisionMasks['head'] = new Circle(new Vector, 5, 'transparent', 1, 'blue')
         this.collisionMasks['headRay'] = new Line(this.collisionMasks['head'].position, new Vector)
         // timers
@@ -199,7 +208,7 @@ class Entity2 extends Sprite {
 
         // update collision masks before collision tests
         this.collisionMasks['foot'].position.update(this.body.position.x, this.body.position.y + this.height * 0.5 - this.collisionMasks['foot'].radius)
-        this.collisionMasks['footRay'].end.update(this.collisionMasks['foot'].position.x, this.collisionMasks['foot'].position.y + 11)
+        this.collisionMasks['footRay'].end.update(this.collisionMasks['foot'].position.x, this.collisionMasks['foot'].position.y + this.body.velocity.y + 10)
         this.collisionMasks['head'].position.update(this.body.position.x, this.body.position.y - this.collisionMasks['head'].radius)
         this.collisionMasks['headRay'].end.update(this.collisionMasks['head'].position.x, this.collisionMasks['head'].position.y - 11)
         this.collisionMasks['body'].position.update(this.collisionMasks['foot'].position.x, this.collisionMasks['foot'].position.y - this.collisionMasks['body'].height * 0.5 + this.collisionMasks['foot'].radius)
@@ -235,9 +244,10 @@ class Entity2 extends Sprite {
                 }
 
             } else {
-
                 if (this.collisionHandler.check(this.collisionMasks['footRay'], platform)) {
                     this.currentPlatform = platform
+                    // save collision "time"; the y point where entity foot ray and platform has crossed
+                    this.collisionTime = this.collisionHandler.closestPoint.y
                 } else {
                     if (platform.angle == 180) {
                         if (this.collisionHandler.check(this.collisionMasks['body'], platform)) {
@@ -266,10 +276,17 @@ class Entity2 extends Sprite {
         // check platform with foot circle
         if (this.currentPlatform) {
 
+            // if entity foot passed collision time, force it back to collision point
+            if ((this.collisionMasks['foot'].position.y + this.body.velocity.y) > this.collisionTime) {
+                this.body.velocity.y = 0
+                this.body.position.y = (this.currentPlatform.position.y - this.height * 0.5) + ((this.currentPlatform.position.x - this.body.position.x) * this.currentPlatform.slope)
+            }
+
             // if colliding
             if (this.collisionHandler.check(this.collisionMasks['foot'], this.currentPlatform)) {
 
                 if (this.body.velocity.y > 0) {
+
                     this.body.velocity.y = Math.abs(this.body.velocity.x)
                     this.body.position.y = (this.currentPlatform.position.y - this.height * 0.5) + ((this.currentPlatform.position.x - this.body.position.x) * this.currentPlatform.slope)
 
@@ -329,12 +346,6 @@ class Entity2 extends Sprite {
                     this.body.velocity.multiply(this.body.friction)
 
                 if (this.input.pressed('LEFT')) {
-                    this.state = 'WALK'
-                    this.turnLeft()
-                    this.body.applyForce(-this.body.speedX, 0)
-                }
-
-                if (this.input.pressed('X', 'A', 'CROSS')) {
                     this.state = 'WALK'
                     this.turnLeft()
                     this.body.applyForce(-this.body.speedX, 0)
@@ -457,7 +468,7 @@ class Entity2 extends Sprite {
 
         // update collision mask after collision tests
         this.collisionMasks['foot'].position.update(this.body.position.x, this.body.position.y + this.height * 0.5 - this.collisionMasks['foot'].radius)
-        this.collisionMasks['footRay'].end.update(this.collisionMasks['foot'].position.x, this.collisionMasks['foot'].position.y + 11)
+        this.collisionMasks['footRay'].end.update(this.collisionMasks['foot'].position.x, this.collisionMasks['foot'].position.y + this.body.velocity.y + 10)
         this.collisionMasks['head'].position.update(this.body.position.x, this.body.position.y - this.collisionMasks['head'].radius)
         this.collisionMasks['headRay'].end.update(this.collisionMasks['head'].position.x, this.collisionMasks['head'].position.y - 11)
         this.collisionMasks['body'].position.update(this.collisionMasks['foot'].position.x, this.collisionMasks['foot'].position.y - this.collisionMasks['body'].height * 0.5 + this.collisionMasks['foot'].radius)
