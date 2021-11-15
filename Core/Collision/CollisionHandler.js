@@ -47,6 +47,13 @@ class CollisionHandler {
         this.mtv = new Vector();
 
         /**
+         * "Time" of impact
+         * 
+         * @type {Number}
+         */
+        this.TOI = 1;
+
+        /**
          * Temporary vector to avoid garbage collector
          * 
          * @type {EmagJS.Core.Math.Vector}
@@ -778,6 +785,8 @@ class CollisionHandler {
 
             if (dot >= offset && dot <= B.plane.lengthSquared - offset) {
                 this.points[0] = collisionPoint;
+                this.TOI = f
+                this.overlap = A.end.clone().subtract(collisionPoint).length
                 return true;
             }
 
