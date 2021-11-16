@@ -26,7 +26,7 @@ class Text {
         /**
          * @type {EmagJS.Core.Math.Vector}
          */
-        this.position = position || new Vector(0, 0)
+        this.position = position ? position.clone() : new Vector(0, 0)
 
         /**
          * @type {string}
@@ -92,6 +92,20 @@ class Text {
         this.tmpGraphics.font = this.size + 'px ' + this.font
 
         return this.tmpGraphics.measureText(this.text).width
+    }
+
+    /**
+     * Measures text height
+     * 
+     * @return {number}
+     */
+    get height() {
+
+        this.tmpGraphics.font = this.size + 'px ' + this.font
+
+        const metrics = this.tmpGraphics.measureText(this.text)
+
+        return metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
     }
 
     /**
