@@ -243,6 +243,30 @@ const randomInArea = (x, y, width, height = width) => {
 
 }
 
+/**
+ * Creates a random array inside an circle
+ * 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} radius 
+ * 
+ * @return {EmagJS.Core.Math.Vector}
+ */
+const randomInCircle = (x, y, radius) => {
+
+    // creates a random point at device center
+    let pointInCircle = Vector.fromAngle(random(360, false), random(radius, false))
+    // move random point to origin (0, 0) upper left corner
+    pointInCircle.x -= DEVICE_CENTER_X
+    pointInCircle.y -= DEVICE_CENTER_Y
+    // than move to x and y
+    pointInCircle.x += x
+    pointInCircle.y += y
+
+    return pointInCircle
+
+}
+
 const lerp = (min, max, t) => {
 
     if (min.constructor.name === 'Array' && max.constructor.name === 'Array') {
