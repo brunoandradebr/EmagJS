@@ -263,6 +263,77 @@ const randomInCircle = (x, y, radius) => {
 
 }
 
+
+
+
+
+
+
+const _convexHullDirections = []
+
+// pre compute 180 directions. starting from 315 degree (45 degrees pointing bottom right in unit circle)
+// goes counter clockwise
+for (let i = 315; i > 135; i--) {
+    const x = -Math.cos(i * toRad)
+    const y = Math.sin(i * toRad)
+    _convexHullDirections.push([x, y])
+}
+
+const _convexHullDirectionsLength = _convexHullDirections.length
+
+/**
+ * Returns the convex hull of a set of points
+ * 
+ * @param {array<EmagJS.Core.Math.Vector>} points
+ * 
+ * @return {array<EmagJS.Core.Math.Vector>}
+ */
+const getConvexHull = (points) => {
+
+    const pointsLength = points.length
+
+    const farPoints = []
+    const nearPoints = []
+
+    for (let i = 0; i < _convexHullDirectionsLength; i++) {
+
+        const direction = _convexHullDirections[i];
+
+        let maxPoint = points[0]
+        let maxProjection = -Infinity
+        let minPoint = points[0]
+        let minProjection = Infinity
+
+        for (let j = 0; j < pointsLength; j++) {
+
+            const point = points[j]
+
+            const projection = point.x * direction[0] + point.y * direction[1]
+
+            if (projection >= maxProjection) {
+                maxPoint = point
+                maxProjection = projection
+            }
+
+            if (projection <= minProjection) {
+                minPoint = point
+                minProjection = projection
+            }
+
+        }
+
+        if (!farPoints.includes(maxPoint) && !nearPoints.includes(maxPoint))
+            farPoints.push(maxPoint)
+
+        if (!farPoints.includes(minPoint) && !nearPoints.includes(minPoint))
+            nearPoints.push(minPoint)
+
+    }
+
+    return [...nearPoints, ...farPoints]
+
+}
+
 const lerp = (min, max, t) => {
 
     if (min.constructor.name === 'Array' && max.constructor.name === 'Array') {
@@ -395,7 +466,3 @@ function keepAspectRatio(width, height) {
     return DEVICE_WIDTH > DEVICE_HEIGHT ? Math.round(aspectWidth) : Math.round(aspectHeight)
 
 }
-
-
-
-
