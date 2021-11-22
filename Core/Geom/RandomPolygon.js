@@ -6,32 +6,27 @@
 /**
  * Random polygon
  * 
- * @param {number} nVertices number of points
+ * @param {number} quality how squarish is the polygon.
  * 
  * @extends EmagJS.Core.Geom.Polygon
  */
 class RandomPolygon extends Polygon {
 
-    constructor(nVertices = 9) {
+    constructor(quality = 30) {
 
         super()
 
-        const points = []
+        if (quality < 15) quality = 15
 
-        for (let i = 0; i < nVertices; i++) {
-
-            const r = random(Date.now())
-
-            const x = Math.cos(r + i)
-            const y = Math.sin(r + i)
-
-            const point = new Vector(x, y, 0)
-
-            points.push(point)
-
+        const randomPoints = []
+        for (let i = 0; i < quality; i++) {
+            const x = clamp(random(100, false), 0, 100, -.5, .5)
+            const y = clamp(random(100, false), 0, 100, -.5, .5)
+            const point = new Vector(x, y)
+            randomPoints.push(point)
         }
 
-        points.sort((a, b) => b.angle - a.angle)
+        const points = getConvexHull(randomPoints)
 
         /**
          * @type {array<EmagJS.Core.Math.Vector>}
