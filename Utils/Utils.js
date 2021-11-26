@@ -264,8 +264,32 @@ const randomInCircle = (x, y, radius) => {
 }
 
 
+/**
+ * 
+ * @param {array<EmagJS.Core.Math.Vector>} points 
+ * @param {EmagJS.Core.Math.Vector} direction 
+ * 
+ * @return {EmagJS.Core.Math.Vector} 
+ */
+const support = (points, direction) => {
 
+    const pointsLength = points.length
 
+    let maxProjection = -Infinity
+    let maxPoint = points[0]
+
+    for (let i = 0; i < pointsLength; i++) {
+        const point = points[i]
+        const projection = point.dot(direction)
+        if (projection >= maxProjection) {
+            maxProjection = projection
+            maxPoint = point
+        }
+    }
+
+    return maxPoint
+
+}
 
 
 
