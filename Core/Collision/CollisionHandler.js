@@ -560,7 +560,7 @@ class CollisionHandler {
             // if there is a gap between projections
             if (bMinProjection > aMaxProjection || bMaxProjection < aMinProjection) {
                 isColliding = false;
-                continue
+                break
             }
 
             // shapes are colliding. calculates penetration length
@@ -618,7 +618,7 @@ class CollisionHandler {
             // if there is a gap between projections
             if (bMinProjection > aMaxProjection || bMaxProjection < aMinProjection) {
                 isColliding = false;
-                continue
+                break
             }
 
             // shapes are colliding. calculates penetration length
@@ -657,6 +657,8 @@ class CollisionHandler {
             }
 
         }
+
+        if(!isColliding) return false
 
         this.overlap = minOverlap;
         this.normal = axis;
