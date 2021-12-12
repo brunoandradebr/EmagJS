@@ -115,6 +115,14 @@ class Circle {
         this.matrix.scale(xScale, yScale)
     }
 
+    contains(point) {
+        const dx = point.x - this.position.x
+        const dy = point.y - this.position.y
+        const distance = dx * dx + dy * dy
+        const radii = this.radius * this.radius
+        return (distance <= radii)
+    }
+
     /**
      * 
      * @param {CanvasRenderingContext2D} graphics 
