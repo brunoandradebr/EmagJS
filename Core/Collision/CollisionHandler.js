@@ -126,7 +126,7 @@ class CollisionHandler {
 
         // collision between Circle and Shape
         if (AConstructor == 'Circle' && BConstructor == 'Shape')
-            return this.circleToShapeCollision(A, B)
+            return this.circleToShapeCollision(A, B, collisionSettings)
 
         // collision between Point and Shape
         if (AConstructor == 'Vector' && BConstructor == 'Shape')
@@ -658,7 +658,7 @@ class CollisionHandler {
 
         }
 
-        if(!isColliding) return false
+        if (!isColliding) return false
 
         this.overlap = minOverlap;
         this.normal = axis;
@@ -1063,10 +1063,11 @@ class CollisionHandler {
      * 
      * @param {EmagJS.Core.Render.Circle} A 
      * @param {EmagJS.Core.Render.Shape} B
+     * @param {EmagJS.Core.Render.Shape} checkLineEdges
      * 
      * @return {bool}
      */
-    circleToShapeCollision(A = Circle, B = Shape) {
+    circleToShapeCollision(A = Circle, B = Shape, checkLineEdges = true) {
 
         if (B.contains(A.position)) {
 
@@ -1097,7 +1098,7 @@ class CollisionHandler {
 
             })
 
-            return this.circleToLineCollision(A, closestLine)
+            return this.circleToLineCollision(A, closestLine, checkLineEdges)
         }
     }
 
