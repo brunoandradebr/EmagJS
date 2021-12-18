@@ -1,6 +1,6 @@
 # EmagJS 
 A game engine made from scratch (no engine, no lib) for the purpose of studying game development.
-It's using canvas API with 2d context (Software rendering).
+It's using canvas API with 2d context (Software rendering). 
 
 ### examples
 <a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
