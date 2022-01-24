@@ -49,6 +49,9 @@ preloadFileClassScript.onload = (e) => {
         { square: root + 'Core/Geom/Square.js' },
         { rectangle: root + 'Core/Geom/Rectangle.js' },
         { triangle: root + 'Core/Geom/Triangle.js' },
+        // COMMOMN/GAMEPAD 
+        { gamepad: root + 'Core/Input/Gamepad.js' },
+        { keyboard: root + 'Core/Input/Keyboard.js' },
         // DISPLAY
         { stage: root + 'Core/Display/Stage.js' },
         { movie: root + 'Core/Display/Movie.js' },
@@ -78,8 +81,6 @@ preloadFileClassScript.onload = (e) => {
         // SOUND
         { soundFx: root + 'Core/Sound/SoundFx.js' },
         // INPUT
-        { gamepad: root + 'Core/Input/Gamepad.js' },
-        { keyboard: root + 'Core/Input/Keyboard.js' },
         { touch: root + 'Core/Input/Touch.js' },
         { stick: root + 'Core/Input/Stick.js' },
         { button: root + 'Core/Input/Button.js' },

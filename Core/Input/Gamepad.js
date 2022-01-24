@@ -2,6 +2,15 @@
  * @author Bruno Andrade <bruno.faria.andrade@gmail.com>
  */
 
+// TODO - pressed and doublePressed does not fire when both are registered. ex:
+//       if(scene.input.pressed('RIGHT')).... if(scene.input.doublePressed('RIGHT'))...
+
+const cachedButtons = [
+    {},
+    {},
+    {},
+    {},
+]
 
 /**
  * Gamepad - joystick manager
@@ -107,6 +116,8 @@ class Gamepad {
      */
     getLastConnectedPad() {
 
+        this.getConnectedGamepads()
+
         let gamepad
 
         if (this.pad1.gamepad) {
@@ -120,6 +131,24 @@ class Gamepad {
         }
 
         return gamepad
+
+    }
+
+    /**
+     * Get last connected gamepad at gamepad list by pad index
+     * 
+     * @return {EmagJS.Core.Input.GamepadInterface} 
+     */
+    getLastConnectedPadAt(padIndex = 0) {
+
+        this.getConnectedGamepads()
+
+        switch (padIndex) {
+            case 0: return this.pad1; break
+            case 1: return this.pad2; break
+            case 2: return this.pad3; break
+            case 3: return this.pad4; break
+        }
 
     }
 
@@ -145,19 +174,6 @@ class GamepadInterface {
          * @type {Gamepad}
          */
         this.gamepad = gamepad
-
-        /**
-         * Special cases buttons, like left and right thumb sticks.
-         * Maps when "pressed" left, right, up or down, on analog
-         */
-        this.specialButtons = {}
-
-        /**
-         * keep pressed buttons history
-         * 
-         * @type {object}
-         */
-        this.cachedButtons = {}
 
         /**
          * gamepad left axes
@@ -341,9 +357,12 @@ class GamepadInterface {
         let newPress = false
 
         // holding button and not yet cached
-        if (pressedButton.pressed && this.cachedButtons[button] == false) {
+        if (pressedButton.pressed && (!cachedButtons[this.gamepad.index][button] || (cachedButtons[this.gamepad.index][button] && cachedButtons[this.gamepad.index][button].pressed == false))) {
             // cache pressed button
-            this.cachedButtons[button] = true
+            cachedButtons[this.gamepad.index][button] = {
+                pressed: true,
+                lastTime: window.performance.now()
+            }
             // flag that a new press happened
             newPress = true
         }
@@ -351,7 +370,10 @@ class GamepadInterface {
         // if not holding button
         if (!pressedButton.pressed)
             // update cached button value
-            this.cachedButtons[button] = false
+            cachedButtons[this.gamepad.index][button] = {
+                ...cachedButtons[this.gamepad.index][button],
+                pressed: false,
+            }
 
         // return new press
         return newPress
@@ -395,25 +417,47 @@ class GamepadInterface {
         let doublePressed = false
 
         // holding button and not yet cached
-        if (pressedButton.pressed && this.cachedButtons[button] == false) {
+        if (pressedButton.pressed && (!cachedButtons[this.gamepad.index][button] || (cachedButtons[this.gamepad.index][button] && cachedButtons[this.gamepad.index][button].pressed == false))) {
 
-            // cache pressed button
-            this.cachedButtons[button] = true
+            if (cachedButtons[this.gamepad.index][button]) {
 
-            // if pressed twice
-            if (window.performance.now() - pressedButton.lastPressedTime < 200) {
-                // flag that a double pressed happened
-                doublePressed = true
+                // if pressed twice
+                if (window.performance.now() - cachedButtons[this.gamepad.index][button].lastTime < 200) {
+                    // flag that a double pressed happened
+                    doublePressed = true
+
+                    // update last pressed time
+                    cachedButtons[this.gamepad.index][button] = {
+                        pressed: true,
+                        lastTime: 0
+                    }
+
+                } else {
+
+                    // update last pressed time
+                    cachedButtons[this.gamepad.index][button] = {
+                        pressed: true,
+                        lastTime: window.performance.now()
+                    }
+
+                }
+            } else {
+                // update last pressed time
+                cachedButtons[this.gamepad.index][button] = {
+                    pressed: true,
+                    lastTime: window.performance.now()
+                }
             }
 
-            // update last pressed time
-            pressedButton.lastPressedTime = window.performance.now()
         }
 
         // if not holding button
         if (!pressedButton.pressed)
             // update cached button value
-            this.cachedButtons[button] = false
+            cachedButtons[this.gamepad.index][button] = {
+                ...cachedButtons[this.gamepad.index][button],
+                pressed: false,
+            }
 
         return doublePressed
     }
@@ -476,11 +520,6 @@ class GamepadInterface {
         // like button_0_0_1 that's left thumb, right direction
         let button = 'button_' + thumbIndex + '_' + axisIndex + '_' + direction
 
-        // register the special button - stick direction based
-        if (!this.specialButtons[button]) {
-            this.specialButtons[button] = {}
-        }
-
         // left or right thumb
         let thumb = this.getAxis(thumbIndex)
         // horizontal or vertical axis
@@ -492,9 +531,12 @@ class GamepadInterface {
         let newPress = false
 
         // holding button and not yet cached
-        if (pressed && this.cachedButtons[button] == false) {
+        if (pressed && (!cachedButtons[this.gamepad.index][button] || (cachedButtons[this.gamepad.index][button] && cachedButtons[this.gamepad.index][button].pressed == false))) {
             // cache pressed button
-            this.cachedButtons[button] = true
+            cachedButtons[this.gamepad.index][button] = {
+                pressed: true,
+                lastTime: window.performance.now()
+            }
             // flag that a new press happened
             newPress = true
         }
@@ -502,7 +544,10 @@ class GamepadInterface {
         // if not holding button
         if (!pressed)
             // update cached button value
-            this.cachedButtons[button] = false
+            cachedButtons[this.gamepad.index][button] = {
+                ...cachedButtons[this.gamepad.index][button],
+                pressed: false,
+            }
 
         // return new press
         return newPress
@@ -523,11 +568,6 @@ class GamepadInterface {
         // like button_0_0_1 that's left thumb, right direction
         let button = 'button_' + thumbIndex + '_' + axisIndex + '_' + direction
 
-        // register the special button - stick direction based
-        if (!this.specialButtons[button]) {
-            this.specialButtons[button] = {}
-        }
-
         // left or right thumb
         let thumb = this.getAxis(thumbIndex)
         // horizontal or vertical axis
@@ -539,25 +579,47 @@ class GamepadInterface {
         let doublePressed = false
 
         // holding button and not yet cached
-        if (pressed && this.cachedButtons[button] == false) {
+        if (pressed && (!cachedButtons[this.gamepad.index][button] || (cachedButtons[this.gamepad.index][button] && cachedButtons[this.gamepad.index][button].pressed == false))) {
 
-            // cache pressed button
-            this.cachedButtons[button] = true
+            if (cachedButtons[this.gamepad.index][button]) {
 
-            // if pressed twice
-            if (window.performance.now() - this.specialButtons[button].lastPressedTime < 200) {
-                // flag that a double pressed happened
-                doublePressed = true
+                if (window.performance.now() - cachedButtons[this.gamepad.index][button].lastTime < 200) {
+                    // flag that a double pressed happened
+                    doublePressed = true
+
+                    // update last pressed time
+                    cachedButtons[this.gamepad.index][button] = {
+                        pressed: true,
+                        lastTime: 0
+                    }
+
+                } else {
+
+                    // update last pressed time
+                    cachedButtons[this.gamepad.index][button] = {
+                        pressed: true,
+                        lastTime: window.performance.now()
+                    }
+
+                }
+
+            } else {
+                // update last pressed time
+                cachedButtons[this.gamepad.index][button] = {
+                    pressed: true,
+                    lastTime: window.performance.now()
+                }
             }
 
-            // update last pressed time
-            this.specialButtons[button].lastPressedTime = window.performance.now()
         }
 
         // if not holding button
         if (!pressed)
             // update cached button value
-            this.cachedButtons[button] = false
+            cachedButtons[this.gamepad.index][button] = {
+                ...cachedButtons[this.gamepad.index][button],
+                pressed: false,
+            }
 
         return doublePressed
     }

@@ -33,10 +33,13 @@ let touches = {}
 
 touches.length = 0
 
-
-
-
-
+/**
+ * keep track of all connected gamepads
+ * 
+ * @type {object}
+ * @global
+ */
+let gamepad = new Gamepad()
 
 
 /**
