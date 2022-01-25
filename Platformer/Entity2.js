@@ -415,7 +415,7 @@ class Entity2 extends Sprite {
         this.checkPlatformCollision(this.collisionHandler, this.platforms)
 
         // jump
-        if (this.input.pressed('SPACE') && this.canJump && !this.rolling) {
+        if (this.input.pressed('SPACE', 'SPACE', 'CROSS') && this.canJump && !this.rolling) {
 
             this.body.velocity.y = 0
             this.body.applyForce(0, -this.body.jump)
@@ -439,7 +439,7 @@ class Entity2 extends Sprite {
         }
 
         if (this.jumping) {
-            if (!this.input.holding('SPACE')) {
+            if (!this.input.holding('SPACE', 'SPACE', 'CROSS')) {
                 if (this.body.velocity.y < 0) {
                     this.body.velocity.y += .2
                 }
