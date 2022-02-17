@@ -46,7 +46,7 @@ class ImageProcessor {
          * 
          * @type {CanvasRenderingContext2D}
          */
-        this.context = this.canvas.getContext('2d')
+        this.context = this.canvas.getContext('2d', { willReadFrequently: true })
 
         // draw to the canvas to get source data
         this.context.drawImage(this.source, 0, 0)
