@@ -76,6 +76,11 @@ class Sprite {
     this.alpha = 1
 
     /**
+     * @type {bool}
+     */
+    this.smoothPixel = false
+
+    /**
      * @type {number}
      */
     this.angle = 0
@@ -298,10 +303,10 @@ class Sprite {
     graphics.globalAlpha = this.alpha
 
     // pixelated
-    graphics.mozImageSmoothingEnabled = false
-    graphics.webkitImageSmoothingEnabled = false
-    graphics.msImageSmoothingEnabled = false
-    graphics.imageSmoothingEnabled = false
+    graphics.mozImageSmoothingEnabled = this.smoothPixel
+    graphics.webkitImageSmoothingEnabled = this.smoothPixel
+    graphics.msImageSmoothingEnabled = this.smoothPixel
+    graphics.imageSmoothingEnabled = this.smoothPixel
 
     // composite operation
     graphics.globalCompositeOperation = this.compositeOperation || 'none'

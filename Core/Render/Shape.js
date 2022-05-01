@@ -107,6 +107,11 @@ class Shape {
         // initial scale
         this.scale(this.width, this.height)
 
+        this.texture = new Sprite(this.position)
+        this.texture.lineWidth = 0
+        this.texture.fillColor = 'transparent'
+        this.textureScale = 2
+
         // initial transformation
         this.transform()
 
@@ -292,6 +297,11 @@ class Shape {
         this.polygon.points.forEach((point, i) => {
             this.points[i] = this.matrix.transform(point)
         });
+
+        if (this.texture.image) {
+            this.texture.matrix.m = this.matrix.m
+            this.texture.matrix.scale(this.textureScale * (1 / this.texture.width), this.textureScale * (1 / this.texture.height))
+        }
 
         // reset matrix
         this.matrix.identity()
@@ -511,6 +521,12 @@ class Shape {
         // stroke shape
         if (this.lineWidth > 0)
             graphics.stroke();
+
+
+        if (this.texture.image) {
+            graphics.clip()
+            this.texture.draw(graphics)
+        }
 
         graphics.restore();
 
