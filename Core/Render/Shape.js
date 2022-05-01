@@ -107,9 +107,18 @@ class Shape {
         // initial scale
         this.scale(this.width, this.height)
 
+        /**
+         * shape's texture
+         * 
+         * @type {EmagJS.Core.Render.Sprite}
+         */
         this.texture = new Sprite(this.position)
         this.texture.lineWidth = 0
         this.texture.fillColor = 'transparent'
+
+        /**
+         * @type {number}
+         */
         this.textureScale = 2
 
         // initial transformation
