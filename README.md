@@ -2,6 +2,9 @@
 A game engine made from scratch (no engine, no lib) for the purpose of studying game development.
 It's using canvas API with 2d context (Software rendering). 
 
+### Demos
+[Cloth Simulation](https://brunoandradebr.github.io/EmagJS/Demos/4/)
+
 ### examples
 <a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
 <a target="_blank" href="http://www.acobaia.com.br/framework/example2">Preload example</a> <br>
