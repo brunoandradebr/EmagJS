@@ -3,7 +3,7 @@ A game engine made from scratch (no engine, no lib) for the purpose of studying 
 It's using canvas API with 2d context (Software rendering). 
 
 ### Demos
-[Cloth Simulation](https://brunoandradebr.github.io/EmagJS/Demos/4/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/4/thumb.png" width="250" />](https://brunoandradebr.github.io/EmagJS/Demos/4/)
 
 ### examples
 <a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
