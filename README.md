@@ -3,13 +3,17 @@ A game engine made from scratch (no engine, no lib) for the purpose of studying 
 It's using canvas API with 2d context (Software rendering). 
 
 ### Demos
-[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/4/thumb.png" width="250" />](https://brunoandradebr.github.io/EmagJS/Demos/4/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/1/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/1/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/2/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/2/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/3/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/3/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/4/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/4/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/5/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/5/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/6/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/6/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/7/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/7/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/8/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/8/)
+[<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/9/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/9/)
 
-### examples
-<a target="_blank" href="http://www.acobaia.com.br/framework/example">Hello world example</a> <br>
-<a target="_blank" href="http://www.acobaia.com.br/framework/example2">Preload example</a> <br>
-<a target="_blank" href="http://www.acobaia.com.br/framework/example3">Mask example</a> <br>
-<a target="_blank" href="http://www.acobaia.com.br/prototipos/2/">Pong example</a> 
+<hr/>
 
 ## Usage
 
