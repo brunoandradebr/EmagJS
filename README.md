@@ -2,7 +2,9 @@
 A game engine made from scratch (no engine, no lib) for the purpose of studying game development.
 It's using canvas API with 2d context (Software rendering). 
 
-### Demos
+## Demos
+<i>some demos has debug option pressing "D" or "Space"</i>
+
 [<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/1/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/1/)
 [<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/2/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/2/)
 [<img src="https://raw.githubusercontent.com/brunoandradebr/EmagJS/master/Demos/3/thumb.png" width="250" height="250" />](https://brunoandradebr.github.io/EmagJS/Demos/3/)
