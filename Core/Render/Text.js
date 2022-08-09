@@ -21,7 +21,7 @@ class Text {
         /**
          * @type {string}
          */
-        this.text = text || ''
+        this.text = text ?? ''
 
         /**
          * @type {EmagJS.Core.Math.Vector}
