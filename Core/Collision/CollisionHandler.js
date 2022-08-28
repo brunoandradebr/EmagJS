@@ -152,7 +152,7 @@ class CollisionHandler {
      */
     static bounceScreen(A, scene = Scene) {
 
-        if (A.constructor.name == 'Shape' || A.constructor.name == 'Sprite') {
+        if (A.constructor.name == 'Shape' || A.constructor.name == 'Sprite' || A.constructor.name == 'Circle') {
             if (A.body) {
                 if (A.body.position.x > scene.width) {
                     A.body.position.x = scene.width
