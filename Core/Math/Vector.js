@@ -26,7 +26,9 @@ class Vector {
 
     static angleBetween(v1, v2) {
         let dot = v1.clone().normalize.dot(v2.clone().normalize)
-        return Math.acos(dot)
+        let cross = v1.clone().normalize.dot(v2.clone().normalize.leftNormal)
+        const angle = Math.atan2(cross, dot)
+        return angle > 0 ? angle : 2 * PI + angle
     }
 
     clone(to = null) {
