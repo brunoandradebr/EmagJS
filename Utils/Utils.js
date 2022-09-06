@@ -273,21 +273,43 @@ const randomInCircle = (x, y, radius) => {
  */
 const support = (points, direction) => {
 
-    const pointsLength = points.length
+    if (points[0].constructor.name === 'Circle') {
 
-    let maxProjection = -Infinity
-    let maxPoint = points[0]
+        const pointsLength = points.length
 
-    for (let i = 0; i < pointsLength; i++) {
-        const point = points[i]
-        const projection = point.dot(direction)
-        if (projection >= maxProjection) {
-            maxProjection = projection
-            maxPoint = point
+        let maxProjection = -Infinity
+        let maxPoint = points[0]
+
+        for (let i = 0; i < pointsLength; i++) {
+            const point = points[i]
+            const projection = point.position.dot(direction)
+            if (projection >= maxProjection) {
+                maxProjection = projection
+                maxPoint = point
+            }
         }
-    }
 
-    return maxPoint
+        return maxPoint
+
+    } else {
+
+        const pointsLength = points.length
+
+        let maxProjection = -Infinity
+        let maxPoint = points[0]
+
+        for (let i = 0; i < pointsLength; i++) {
+            const point = points[i]
+            const projection = point.dot(direction)
+            if (projection >= maxProjection) {
+                maxProjection = projection
+                maxPoint = point
+            }
+        }
+
+        return maxPoint
+
+    }
 
 }
 
