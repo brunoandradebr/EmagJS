@@ -28,7 +28,7 @@ class Vector {
         let dot = v1.clone().normalize.dot(v2.clone().normalize)
         let cross = v1.clone().normalize.dot(v2.clone().normalize.leftNormal)
         const angle = Math.atan2(cross, dot)
-        return angle > 0 ? angle : 2 * PI + angle
+        return angle >= 0 ? angle : 2 * PI + angle
     }
 
     clone(to = null) {
@@ -224,6 +224,7 @@ class Vector {
         let leftLine = Vector.fromAngle((this.angle * toDegree) + 130, this.x * this.x + this.y * this.y > 10 * 10 ? 10 : 5)
         let rightLine = Vector.fromAngle((this.angle * toDegree) - 130, this.x * this.x + this.y * this.y > 10 * 10 ? 10 : 5)
 
+        graphics.save()
         graphics.strokeStyle = option.lineColor
         graphics.lineWidth = option.lineWidth
 
@@ -236,6 +237,7 @@ class Vector {
         graphics.moveTo(endX, endY)
         graphics.lineTo(endX + rightLine.x, endY + rightLine.y)
         graphics.stroke()
+        graphics.restore()
 
     }
 }
